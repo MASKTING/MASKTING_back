@@ -92,4 +92,8 @@ public class JwtUtil {
             return false;
         }
     }
+
+    public int getRefreshTokenValidTime() {
+        return (int) refreshTokenValidTime;
+    }
 }

@@ -26,6 +26,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private final JwtUtil jwtUtil;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final CookieUtil cookieUtil;
 
     @Value("${app.auth.redirectUri}")
     private String redirectUri;
@@ -49,8 +50,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             String key = UUID.randomUUID().toString();
             String refreshToken = jwtUtil.createRefreshToken(key);
 
-            CookieUtil.deleteCookie(request, response, "refreshToken");
-            CookieUtil.addCookie(response, "refreshToken", refreshToken, jwtUtil.getRefreshTokenValidTime());
+            cookieUtil.deleteCookie(request, response, "refreshToken");
+            cookieUtil.addCookie(response, "refreshToken", refreshToken, jwtUtil.getRefreshTokenValidTime());
 
             RefreshToken dbRefreshToken = new RefreshToken(key, principal.getUser().getProviderId());
             refreshTokenRepository.save(dbRefreshToken);

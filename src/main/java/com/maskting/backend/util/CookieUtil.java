@@ -1,12 +1,15 @@
 package com.maskting.backend.util;
 
+import org.springframework.stereotype.Component;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
+@Component
 public class CookieUtil {
-    public static Optional<Cookie> getCookie(HttpServletRequest request, String name) {
+    public Optional<Cookie> getCookie(HttpServletRequest request, String name) {
         Cookie[] cookies = request.getCookies();
 
         if (isExistCookie(cookies)) {
@@ -15,7 +18,7 @@ public class CookieUtil {
         return Optional.empty();
     }
 
-    private static Optional<Cookie> findGetCookie(String name, Cookie[] cookies) {
+    private Optional<Cookie> findGetCookie(String name, Cookie[] cookies) {
         for (Cookie cookie : cookies) {
             if (isEquals(name, cookie)) {
                 return Optional.of(cookie);
@@ -24,11 +27,11 @@ public class CookieUtil {
         return Optional.empty();
     }
 
-    private static boolean isExistCookie(Cookie[] cookies) {
+    private boolean isExistCookie(Cookie[] cookies) {
         return cookies != null && cookies.length > 0;
     }
 
-    public static void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
+    public void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
         Cookie cookie = new Cookie(name, value);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
@@ -37,7 +40,7 @@ public class CookieUtil {
         response.addCookie(cookie);
     }
 
-    public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
+    public void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
         Cookie[] cookies = request.getCookies();
 
         if (isExistCookie(cookies)) {
@@ -45,7 +48,7 @@ public class CookieUtil {
         }
     }
 
-    private static void findDeleteCookie(HttpServletResponse response, String name, Cookie[] cookies) {
+    private void findDeleteCookie(HttpServletResponse response, String name, Cookie[] cookies) {
         for (Cookie cookie : cookies) {
             if (isEquals(name, cookie)) {
                 cookie.setValue("");
@@ -56,7 +59,7 @@ public class CookieUtil {
         }
     }
 
-    private static boolean isEquals(String name, Cookie cookie) {
+    private boolean isEquals(String name, Cookie cookie) {
         return name.equals(cookie.getName());
     }
 }

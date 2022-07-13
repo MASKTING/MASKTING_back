@@ -9,6 +9,7 @@ import com.maskting.backend.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -17,6 +18,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.UUID;
 
 
@@ -46,7 +48,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
 
         if (!needJoin(principal)) {
-            String accessToken = jwtUtil.createAccessToken(oAuth2UserInfo.getProviderId());
+            String role = hasAuthority(principal.getAuthorities(), "ROLE_USER") ? "ROLE_USER" : "ROLE_ADMIN";
+            String accessToken = jwtUtil.createAccessToken(oAuth2UserInfo.getProviderId(), role);
             String key = UUID.randomUUID().toString();
             String refreshToken = jwtUtil.createRefreshToken(key);
 
@@ -67,6 +70,19 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private boolean needJoin(UserPrincipal principal) {
         return principal.getUser() == null;
+    }
+
+    private boolean hasAuthority(Collection<? extends GrantedAuthority> authorities, String authority) {
+        if (authorities == null) {
+            return false;
+        }
+
+        for (GrantedAuthority grantedAuthority : authorities) {
+            if (authority.equals(grantedAuthority.getAuthority())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

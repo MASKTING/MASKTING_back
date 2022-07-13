@@ -1,6 +1,5 @@
 package com.maskting.backend.util;
 
-import com.maskting.backend.domain.oauth.UserPrincipal;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Arrays;
@@ -37,24 +37,29 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String createToken(String claim, long time) {
-        Claims claims = Jwts.claims().setSubject(claim);
+    public String createAccessToken(String providerId, String role) {
+        Claims claims = Jwts.claims().setSubject(providerId);
+        Date now = new Date();
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .claim(AUTHORITIES_KEY, role)
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + accessTokenValidTime))
+                .signWith(getSigningKey(secretKey), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    public String createRefreshToken(String key) {
+        Claims claims = Jwts.claims().setSubject(key);
         Date now = new Date();
 
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + time))
+                .setExpiration(new Date(now.getTime() + refreshTokenValidTime))
                 .signWith(getSigningKey(secretKey), SignatureAlgorithm.HS256)
                 .compact();
-    }
-
-    public String createAccessToken(String providerId) {
-        return createToken(providerId, accessTokenValidTime);
-    }
-
-    public String createRefreshToken(String key) {
-        return createToken(key, refreshTokenValidTime);
     }
 
     public Authentication getAuthentication(String token) {
@@ -84,16 +89,15 @@ public class JwtUtil {
         return !claims.getBody().getExpiration().before(new Date());
     }
 
-    public boolean validateToken(String token, UserPrincipal userPrincipal) {
-        try {
-            String providerId = getSubject(token);
-            return providerId.equals(userPrincipal.getName())&& isTokenExpired(token);
-        } catch(Exception e) {
-            return false;
-        }
+    public boolean validateToken(String token) {
+        return getClaimsJws(token).getBody() != null;
     }
 
     public int getRefreshTokenValidTime() {
         return (int) refreshTokenValidTime;
+    }
+
+    public String resolveToken(HttpServletRequest req) {
+        return req.getHeader("accessToken");
     }
 }

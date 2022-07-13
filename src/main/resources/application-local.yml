@@ -6,10 +6,10 @@ spring:
     password: admin
 
   jpa:
-    database-platform: org.hibernate.dialect.MYSQL8Dialect
+    database-platform: org.hibernate.dialect.MySQL57Dialect
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
@@ -18,4 +18,4 @@ spring:
     type: redis
   redis:
     host: 127.0.0.1
-    post: 6379
+    port: 6379

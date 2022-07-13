@@ -47,8 +47,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             String accessToken = jwtUtil.createAccessToken(oAuth2UserInfo.getProviderId());
             String refreshToken = jwtUtil.createRefreshToken(oAuth2UserInfo.getProviderId());
 
-            CookieUtil.deleteCookie(request, response, "refresh_token");
-            CookieUtil.addCookie(response, "refresh_token", refreshToken, jwtUtil.getRefreshTokenValidTime());
+            CookieUtil.deleteCookie(request, response, "refreshToken");
+            CookieUtil.addCookie(response, "refreshToken", refreshToken, jwtUtil.getRefreshTokenValidTime());
             
             RefreshToken dbRefreshToken = new RefreshToken(refreshToken, principal.getUser().getProviderId());
             refreshTokenRepository.save(dbRefreshToken);

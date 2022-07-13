@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
@@ -19,22 +20,23 @@ public class SecurityConfig {
 
     private final OAuth2UserService oAuth2UserService;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                     .cors()
                 .and()
-                    .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
                     .csrf().disable()
                     .formLogin().disable()
                     .httpBasic().disable()
-//                    .authorizeRequests()
-//                    .antMatchers("/api/**").hasAnyAuthority("ROLE_USER")
-//                    .anyRequest().authenticated()
-//                .and()
+                    .sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                    .authorizeRequests()
+                    .antMatchers("/").permitAll()
+                    .anyRequest().authenticated()
+                .and()
                     .oauth2Login()
                     .authorizationEndpoint()
                     .baseUri("/oauth2/authorization")
@@ -45,7 +47,9 @@ public class SecurityConfig {
                     .userInfoEndpoint()
                     .userService(oAuth2UserService)
                 .and()
-                    .successHandler(oAuth2AuthenticationSuccessHandler);
+                    .successHandler(oAuth2AuthenticationSuccessHandler)
+                .and()
+                    .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

@@ -37,8 +37,8 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String createToken(String providerId, long time) {
-        Claims claims = Jwts.claims().setSubject(providerId);
+    public String createToken(String claim, long time) {
+        Claims claims = Jwts.claims().setSubject(claim);
         Date now = new Date();
 
         return Jwts.builder()
@@ -53,8 +53,8 @@ public class JwtUtil {
         return createToken(providerId, accessTokenValidTime);
     }
 
-    public String createRefreshToken(String providerId) {
-        return createToken(providerId, refreshTokenValidTime);
+    public String createRefreshToken(String key) {
+        return createToken(key, refreshTokenValidTime);
     }
 
     public Authentication getAuthentication(String token) {
@@ -67,7 +67,7 @@ public class JwtUtil {
         return new UsernamePasswordAuthenticationToken(user, "", authorities);
     }
 
-    public String getProviderId(String token) {
+    public String getSubject(String token) {
         try {
             return getClaimsJws(token).getBody().getSubject();
         } catch(ExpiredJwtException e) {
@@ -86,7 +86,7 @@ public class JwtUtil {
 
     public boolean validateToken(String token, UserPrincipal userPrincipal) {
         try {
-            String providerId = getProviderId(token);
+            String providerId = getSubject(token);
             return providerId.equals(userPrincipal.getName())&& isTokenExpired(token);
         } catch(Exception e) {
             return false;

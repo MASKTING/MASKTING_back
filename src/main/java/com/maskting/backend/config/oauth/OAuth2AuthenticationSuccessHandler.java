@@ -17,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.UUID;
 
 
 @Component
@@ -45,12 +46,13 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         if (!needJoin(principal)) {
             String accessToken = jwtUtil.createAccessToken(oAuth2UserInfo.getProviderId());
-            String refreshToken = jwtUtil.createRefreshToken(oAuth2UserInfo.getProviderId());
+            String key = UUID.randomUUID().toString();
+            String refreshToken = jwtUtil.createRefreshToken(key);
 
             CookieUtil.deleteCookie(request, response, "refreshToken");
             CookieUtil.addCookie(response, "refreshToken", refreshToken, jwtUtil.getRefreshTokenValidTime());
-            
-            RefreshToken dbRefreshToken = new RefreshToken(refreshToken, principal.getUser().getProviderId());
+
+            RefreshToken dbRefreshToken = new RefreshToken(key, principal.getUser().getProviderId());
             refreshTokenRepository.save(dbRefreshToken);
             
             String url = UriComponentsBuilder.fromUriString(redirectUri)

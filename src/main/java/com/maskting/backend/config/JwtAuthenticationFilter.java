@@ -3,6 +3,7 @@ package com.maskting.backend.config;
 import com.maskting.backend.domain.User;
 import com.maskting.backend.repository.UserRepository;
 import com.maskting.backend.util.JwtUtil;
+import com.maskting.common.exception.InvalidTokenException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,6 +31,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 && jwtUtil.isTokenExpired(accessToken) && getUser(accessToken) != null) {
             Authentication authentication = jwtUtil.getAuthentication(accessToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
+        }else{
+            throw new InvalidTokenException();
         }
         filterChain.doFilter(request, response);
     }

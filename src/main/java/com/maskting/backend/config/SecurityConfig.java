@@ -2,6 +2,7 @@ package com.maskting.backend.config;
 
 import com.maskting.backend.config.oauth.OAuth2AuthenticationSuccessHandler;
 import com.maskting.backend.service.oauth.OAuth2UserService;
+import com.maskting.common.exception.oauth.CustomAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,6 +31,9 @@ public class SecurityConfig {
                     .csrf().disable()
                     .formLogin().disable()
                     .httpBasic().disable()
+                    .exceptionHandling()
+                    .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                .and()
                     .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()

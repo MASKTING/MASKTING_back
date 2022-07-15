@@ -1,7 +1,10 @@
 package com.maskting.backend.config;
 
+import com.maskting.backend.config.oauth.OAuth2AccessDeniedHandler;
+import com.maskting.backend.config.oauth.OAuth2AuthenticationFailureHandler;
 import com.maskting.backend.config.oauth.OAuth2AuthenticationSuccessHandler;
 import com.maskting.backend.service.oauth.OAuth2UserService;
+import com.maskting.common.exception.oauth.CustomAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,6 +24,8 @@ public class SecurityConfig {
     private final OAuth2UserService oAuth2UserService;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final OAuth2AccessDeniedHandler oAuth2AccessDeniedHandler;
+    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -30,6 +35,10 @@ public class SecurityConfig {
                     .csrf().disable()
                     .formLogin().disable()
                     .httpBasic().disable()
+                    .exceptionHandling()
+                    .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                    .accessDeniedHandler(oAuth2AccessDeniedHandler)
+                .and()
                     .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -48,13 +57,13 @@ public class SecurityConfig {
                     .userService(oAuth2UserService)
                 .and()
                     .successHandler(oAuth2AuthenticationSuccessHandler)
+                    .failureHandler(oAuth2AuthenticationFailureHandler)
                 .and()
                     .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-    //cors 설정
     @Bean
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource corsConfigSource = new UrlBasedCorsConfigurationSource();

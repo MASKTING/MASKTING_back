@@ -3,6 +3,7 @@ package com.maskting.backend.config;
 import com.maskting.backend.domain.User;
 import com.maskting.backend.repository.UserRepository;
 import com.maskting.backend.util.JwtUtil;
+import com.maskting.common.exception.oauth.InvalidTokenException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,12 +27,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String accessToken = jwtUtil.resolveToken(request);
 
-        if (accessToken != null && jwtUtil.validateToken(accessToken)
-                && jwtUtil.isTokenExpired(accessToken) && getUser(accessToken) != null) {
+        if (accessToken != null) {
+            discernToken(accessToken);
+        }
+
+        filterChain.doFilter(request, response);
+    }
+
+    private void discernToken(String accessToken) {
+        if (isValidate(accessToken)) {
             Authentication authentication = jwtUtil.getAuthentication(accessToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-        filterChain.doFilter(request, response);
+    }
+
+    private boolean isValidate(String accessToken) {
+        if (jwtUtil.validateToken(accessToken))
+            return jwtUtil.isTokenExpired(accessToken) && getUser(accessToken) != null;
+        else
+            throw new InvalidTokenException();
     }
 
     private User getUser(String accessToken) {

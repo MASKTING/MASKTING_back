@@ -13,7 +13,6 @@ import java.io.IOException;
 public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-        super.onAuthenticationFailure(request, response, exception);
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.getWriter().println("{ \"message\" : \"" + "로그인에 실패하였습니다."

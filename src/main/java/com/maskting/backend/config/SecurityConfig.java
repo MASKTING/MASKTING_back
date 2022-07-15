@@ -1,5 +1,6 @@
 package com.maskting.backend.config;
 
+import com.maskting.backend.config.oauth.OAuth2AccessDeniedHandler;
 import com.maskting.backend.config.oauth.OAuth2AuthenticationSuccessHandler;
 import com.maskting.backend.service.oauth.OAuth2UserService;
 import com.maskting.common.exception.oauth.CustomAuthenticationEntryPoint;
@@ -22,6 +23,7 @@ public class SecurityConfig {
     private final OAuth2UserService oAuth2UserService;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final OAuth2AccessDeniedHandler oAuth2AccessDeniedHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -33,6 +35,7 @@ public class SecurityConfig {
                     .httpBasic().disable()
                     .exceptionHandling()
                     .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                    .accessDeniedHandler(oAuth2AccessDeniedHandler)
                 .and()
                     .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

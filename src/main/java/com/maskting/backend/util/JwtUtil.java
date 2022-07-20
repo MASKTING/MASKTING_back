@@ -2,6 +2,7 @@ package com.maskting.backend.util;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,16 +20,17 @@ import java.util.Date;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class JwtUtil {
 
     @Value("${jwt.secret}")
-    private String secretKey;
+    private final String secretKey;
 
     @Value("${app.auth.accessTokenExpiry}")
-    private long accessTokenValidTime;
+    private final long accessTokenValidTime;
 
     @Value("${app.auth.refreshTokenExpiry}")
-    private long refreshTokenValidTime;
+    private final long refreshTokenValidTime;
 
     private static final String AUTHORITIES_KEY = "role";
 
@@ -80,7 +82,7 @@ public class JwtUtil {
         }
     }
 
-    private Jws<Claims> getClaimsJws(String token) {
+    public Jws<Claims> getClaimsJws(String token) {
         return Jwts.parserBuilder().setSigningKey(getSigningKey(secretKey)).build().parseClaimsJws(token);
     }
 

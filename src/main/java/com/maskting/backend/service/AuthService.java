@@ -6,6 +6,7 @@ import com.maskting.backend.domain.User;
 import com.maskting.backend.repository.RefreshTokenRepository;
 import com.maskting.backend.util.CookieUtil;
 import com.maskting.backend.util.JwtUtil;
+import com.maskting.common.exception.NoRefreshTokenException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public class AuthService {
         //TODO common exception 만들기
         Cookie cookie = cookieUtil.getCookie(request, "refreshToken").orElseThrow();
         String refreshTokenId = cookie.getValue();
-        RefreshToken refreshToken = refreshTokenRepository.findById(refreshTokenId).orElseThrow();
+        RefreshToken refreshToken = refreshTokenRepository.findById(refreshTokenId).orElseThrow(NoRefreshTokenException::new);
         return refreshToken;
     }
 

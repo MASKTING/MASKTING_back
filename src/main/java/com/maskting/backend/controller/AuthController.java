@@ -25,13 +25,7 @@ public class AuthController {
     @PostMapping("/silent-refresh")
     public ResponseEntity<?> silentRefresh(HttpServletRequest request, HttpServletResponse response) {
         RefreshToken refreshToken = authService.getRefreshToken(request);
-
-        User user = userRepository.findByProviderId(refreshToken.getProviderId());
-        if (user == null) {
-            throw new UsernameNotFoundException("유저가 존재x");
-        }
-
-        authService.setAccessToken(response, user);
+        authService.setAccessToken(response, refreshToken);
         return ResponseEntity.ok().build();
     }
 

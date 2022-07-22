@@ -31,22 +31,23 @@ class JwtUtilTest {
     private static final String AUTHORITIES_KEY = "role";
     private final String testProviderId = "test1234";
     private final String role = "ROLE_USER";
+    private String accessToken;
 
     private JwtUtil jwtUtil;
 
     @BeforeEach
     void before() {
         jwtUtil = new JwtUtil(secretKey, accessTokenValidTime, refreshTokenValidTime);
+        accessToken = jwtUtil.createAccessToken(testProviderId, role);
     }
 
     @Test
     @DisplayName("액세스 토큰 생성")
     void createAccessToken() {
-        String accessToken = jwtUtil.createAccessToken(testProviderId, role);
         String providerId = decodeJwt(accessToken).getSubject();
         Date issuedAt = decodeJwt(accessToken).getIssuedAt();
         Date expiration = decodeJwt(accessToken).getExpiration();
-        String getRole = (String) decodeJwt(accessToken).get("role");
+        String getRole = (String) decodeJwt(accessToken).get(AUTHORITIES_KEY);
 
         assertEquals(testProviderId, providerId);
         assertEquals(issuedAt.getTime(), expiration.getTime() - accessTokenValidTime);
@@ -75,8 +76,6 @@ class JwtUtilTest {
     @Test
     @DisplayName("인증 반환")
     void getAuthentication() {
-        String accessToken = jwtUtil.createAccessToken(testProviderId, role);
-
         UsernamePasswordAuthenticationToken authentication
                 = (UsernamePasswordAuthenticationToken) jwtUtil.getAuthentication(accessToken);
         User user = (User) authentication.getPrincipal();
@@ -89,8 +88,6 @@ class JwtUtilTest {
     @Test
     @DisplayName("토큰으로부터 Subject(providerId)얻기")
     void getSubject() {
-        String accessToken = jwtUtil.createAccessToken(testProviderId, role);
-
         String providerId = jwtUtil.getSubject(accessToken);
 
         assertEquals(testProviderId, providerId);
@@ -99,8 +96,6 @@ class JwtUtilTest {
     @Test
     @DisplayName("토큰 시간이 만료되었는지")
     void isTokenExpired() {
-        String accessToken = jwtUtil.createAccessToken(testProviderId, role);
-
         Boolean tokenExpired = jwtUtil.isTokenExpired(accessToken);
 
         assertEquals(true, tokenExpired);
@@ -109,8 +104,6 @@ class JwtUtilTest {
     @Test
     @DisplayName("토큰이 유효한지")
     void validateToken() {
-        String accessToken = jwtUtil.createAccessToken(testProviderId, role);
-
         Boolean tokenExpired = jwtUtil.validateToken(accessToken);
 
         assertEquals(true, tokenExpired);
@@ -119,7 +112,6 @@ class JwtUtilTest {
     @Test
     @DisplayName("헤더에서 액세스 토큰 반환")
     void resolveToken() {
-        String accessToken = jwtUtil.createAccessToken(testProviderId, role);
         HttpServletRequest request = mock(HttpServletRequest.class);
         given(request.getHeader("accessToken")).willReturn(accessToken);
 

@@ -37,7 +37,8 @@ class JwtUtilTest {
 
     @BeforeEach
     void before() {
-        jwtUtil = new JwtUtil(secretKey, accessTokenValidTime, refreshTokenValidTime);
+        jwtUtil = new JwtUtil();
+        jwtUtil.updateJwtUtil(secretKey, accessTokenValidTime, refreshTokenValidTime);
         accessToken = jwtUtil.createAccessToken(testProviderId, role);
     }
 

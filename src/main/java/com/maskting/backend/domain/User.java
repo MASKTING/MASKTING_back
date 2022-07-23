@@ -25,6 +25,30 @@ public class User {
     @Column(nullable = false)
     private String email;
 
+    @Column(nullable = false)
+    private String gender;
+
+    @Column(nullable = false)
+    private String location;
+
+    @Column(nullable = false)
+    private String occupation;
+
+    @Column(nullable = false)
+    private String phone;
+
+    private String interest;
+
+    private boolean duty;
+
+    private boolean smoking;
+
+    private int drinking;
+
+    private String religion;
+
+    private String nickname;
+
     private String providerId;
 
     @Enumerated(EnumType.STRING)

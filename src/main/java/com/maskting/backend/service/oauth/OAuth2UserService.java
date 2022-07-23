@@ -26,13 +26,13 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
         try {
-            return this.process(userRequest, oAuth2User);
+            return this.process(userRequest, oAuth2User, userRequest.getAccessToken().getTokenValue());
         } catch (Exception e) {
             throw new InternalAuthenticationServiceException(e.getMessage(),e.getCause());
         }
     }
 
-    private OAuth2User process(OAuth2UserRequest userRequest, OAuth2User oAuth2User) {
+    private OAuth2User process(OAuth2UserRequest userRequest, OAuth2User oAuth2User, String accessToken) {
         String platform = userRequest.getClientRegistration().getRegistrationId();
         OAuth2UserInfo userInfo = distinguishedByPlatform(oAuth2User, platform);
 
@@ -42,7 +42,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
             missMatchProvider(platform, user);
         }
 
-        return new UserPrincipal(user, userInfo);
+        return new UserPrincipal(user, userInfo, accessToken);
     }
 
     private void missMatchProvider(String platform, User user) {

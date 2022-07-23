@@ -48,7 +48,7 @@ public class SecurityConfig {
                 .and()
                     .oauth2Login()
                     .authorizationEndpoint()
-                    .baseUri("/oauth2/authorization")
+                    .baseUri("/api/auth")
                 .and()
                     .redirectionEndpoint()
                     .baseUri("/*/oauth2/code/*")

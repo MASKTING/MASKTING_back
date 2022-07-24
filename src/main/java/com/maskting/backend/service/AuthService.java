@@ -29,6 +29,7 @@ public class AuthService {
     public RefreshToken getRefreshToken(HttpServletRequest request) {
         Cookie cookie = cookieUtil.getCookie(request, "refreshToken").orElseThrow(NoCookieException::new);
         String refreshTokenId = cookie.getValue();
+        //TODO resolve 필요
         RefreshToken refreshToken = refreshTokenRepository
                 .findById(refreshTokenId)
                 .orElseThrow(NoRefreshTokenException::new);

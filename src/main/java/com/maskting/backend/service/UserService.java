@@ -13,8 +13,10 @@ import com.maskting.backend.common.exception.InvalidProviderException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -71,5 +73,24 @@ public class UserService {
 
         RefreshToken dbRefreshToken = new RefreshToken(key, user.getProviderId());
         refreshTokenRepository.save(dbRefreshToken);
+    }
+
+    public void deleteAuth(HttpServletRequest request, HttpServletResponse response) {
+        Optional<Cookie> cookie = cookieUtil.getCookie(request, "refreshToken");
+        if (cookie.isPresent()) {
+            String token = cookie.get().getValue();
+            String key = jwtUtil.getSubject(token);
+            Optional<RefreshToken> refreshToken = refreshTokenRepository.findById(key);
+
+            deleteRefreshToken(refreshToken);
+        }
+
+        cookieUtil.deleteCookie(request, response, "refreshToken");
+    }
+
+    private void deleteRefreshToken(Optional<RefreshToken> refreshToken) {
+        if (refreshToken.isPresent()) {
+            refreshTokenRepository.delete(refreshToken.get());
+        }
     }
 }

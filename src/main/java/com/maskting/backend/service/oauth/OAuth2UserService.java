@@ -3,7 +3,7 @@ package com.maskting.backend.service.oauth;
 import com.maskting.backend.domain.User;
 import com.maskting.backend.domain.oauth.*;
 import com.maskting.backend.repository.UserRepository;
-import com.maskting.common.exception.oauth.ProviderMissMatchException;
+import com.maskting.backend.common.exception.oauth.ProviderMissMatchException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

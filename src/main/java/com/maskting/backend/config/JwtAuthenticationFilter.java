@@ -3,7 +3,7 @@ package com.maskting.backend.config;
 import com.maskting.backend.domain.User;
 import com.maskting.backend.repository.UserRepository;
 import com.maskting.backend.util.JwtUtil;
-import com.maskting.common.exception.oauth.InvalidTokenException;
+import com.maskting.backend.common.exception.oauth.InvalidTokenException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

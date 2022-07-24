@@ -29,4 +29,10 @@ public class UserController {
     }
 
     //TODO 2차 추가 회원정보입력
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
+        userService.deleteAuth(request, response);
+        return ResponseEntity.ok().build();
+    }
 }

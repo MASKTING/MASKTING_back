@@ -6,14 +6,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Getter
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class User extends BaseTimeEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +26,9 @@ public class User {
 
     @Column(nullable = false)
     private String gender;
+
+    @Column(nullable = false)
+    private String birth;
 
     @Column(nullable = false)
     private String location;
@@ -49,15 +51,14 @@ public class User {
 
     private String nickname;
 
+    @Column(nullable = false)
     private String providerId;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ProviderType providerType;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private RoleType roleType;
-
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
 }

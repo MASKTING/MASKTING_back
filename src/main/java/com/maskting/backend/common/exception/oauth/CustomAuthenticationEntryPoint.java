@@ -1,4 +1,4 @@
-package com.maskting.common.exception.oauth;
+package com.maskting.backend.common.exception.oauth;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

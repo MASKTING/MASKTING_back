@@ -16,11 +16,13 @@ public class UserPrincipal implements OAuth2User {
     private User user;
     private OAuth2UserInfo oAuth2UserInfo;
     private Collection<GrantedAuthority> authorities;
+    private String access_token;
 
-    public UserPrincipal(User user, OAuth2UserInfo oAuth2UserInfo) {
+    public UserPrincipal(User user, OAuth2UserInfo oAuth2UserInfo, String access_token) {
         this.user = user;
         this.oAuth2UserInfo = oAuth2UserInfo;
-        this.authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+        this.authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_GUEST"));
+        this.access_token = access_token;
     }
 
     @Override

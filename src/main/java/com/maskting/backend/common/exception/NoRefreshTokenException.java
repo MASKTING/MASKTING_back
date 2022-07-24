@@ -1,6 +1,6 @@
-package com.maskting.common.exception;
+package com.maskting.backend.common.exception;
 
-import com.maskting.common.Messages;
+import com.maskting.backend.common.Messages;
 import org.springframework.http.HttpStatus;
 
 public class NoRefreshTokenException extends MasktingException {

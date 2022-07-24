@@ -1,4 +1,4 @@
-package com.maskting.common;
+package com.maskting.backend.common;
 
 import lombok.NoArgsConstructor;
 

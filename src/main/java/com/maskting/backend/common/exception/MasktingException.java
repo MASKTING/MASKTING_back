@@ -1,4 +1,4 @@
-package com.maskting.common.exception;
+package com.maskting.backend.common.exception;
 
 import org.springframework.http.HttpStatus;
 

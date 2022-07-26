@@ -4,6 +4,7 @@ import com.maskting.backend.domain.ProviderType;
 import com.maskting.backend.domain.RefreshToken;
 import com.maskting.backend.domain.RoleType;
 import com.maskting.backend.domain.User;
+import com.maskting.backend.dto.request.AdditionalSignupRequest;
 import com.maskting.backend.dto.request.SignupRequest;
 import com.maskting.backend.repository.RefreshTokenRepository;
 import com.maskting.backend.repository.UserRepository;
@@ -12,6 +13,7 @@ import com.maskting.backend.util.JwtUtil;
 import com.maskting.backend.common.exception.InvalidProviderException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +23,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserService {
 
     private final UserRepository userRepository;
@@ -28,6 +31,7 @@ public class UserService {
     private final CookieUtil cookieUtil;
     private final RefreshTokenRepository refreshTokenRepository;
 
+    @Transactional
     public User joinUser(SignupRequest signupRequest) {
         ProviderType providerType = getProviderType(signupRequest);
 
@@ -64,6 +68,7 @@ public class UserService {
         response.setHeader("accessToken", accessToken);
     }
 
+    @Transactional
     public void returnRefreshToken(HttpServletRequest request, HttpServletResponse response, User user) {
         String key = UUID.randomUUID().toString();
         String refreshToken = jwtUtil.createRefreshToken(key);
@@ -75,6 +80,7 @@ public class UserService {
         refreshTokenRepository.save(dbRefreshToken);
     }
 
+    @Transactional
     public void deleteAuth(HttpServletRequest request, HttpServletResponse response) {
         Optional<Cookie> cookie = cookieUtil.getCookie(request, "refreshToken");
         if (cookie.isPresent()) {
@@ -92,5 +98,12 @@ public class UserService {
         if (refreshToken.isPresent()) {
             refreshTokenRepository.delete(refreshToken.get());
         }
+    }
+
+    @Transactional
+    public void addAdditionalInfo(AdditionalSignupRequest additionalSignupRequest) {
+        User user = userRepository.findByProviderId(additionalSignupRequest.getProviderId());
+        user.updateAdditionalInfo(additionalSignupRequest);
+        user.updateSort();
     }
 }

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maskting.backend.domain.RefreshToken;
+import com.maskting.backend.domain.RoleType;
+import com.maskting.backend.domain.User;
 import com.maskting.backend.domain.oauth.OAuth2UserInfo;
 import com.maskting.backend.domain.oauth.UserPrincipal;
 import com.maskting.backend.repository.RefreshTokenRepository;
@@ -57,7 +59,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             String email = searchEmail(principal, oAuth2UserInfo);
 
             String url = UriComponentsBuilder.fromUriString(redirectUri)
-                    .queryParam("flag", "guest")
+                    .queryParam("role", "guest")
+                    .queryParam("sort", "false")
                     .queryParam("providerId", oAuth2UserInfo.getProviderId())
                     .queryParam("provider", oAuth2UserInfo.getProvider())
                     .queryParam("email", email)
@@ -68,22 +71,41 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         if (!needJoin(principal)) {
             String role = hasAuthority(principal.getAuthorities(), "ROLE_USER") ? "ROLE_USER" : "ROLE_ADMIN";
             String accessToken = jwtUtil.createAccessToken(oAuth2UserInfo.getProviderId(), role);
+            response.setHeader("accessToken", accessToken);
+
             String key = UUID.randomUUID().toString();
             String refreshToken = jwtUtil.createRefreshToken(key);
-
             cookieUtil.deleteCookie(request, response, "refreshToken");
             cookieUtil.addCookie(response, "refreshToken", refreshToken, jwtUtil.getRefreshTokenValidTime());
 
-            RefreshToken dbRefreshToken = new RefreshToken(key, principal.getUser().getProviderId());
+            User user = principal.getUser();
+            RefreshToken dbRefreshToken = new RefreshToken(key, user.getProviderId());
             refreshTokenRepository.save(dbRefreshToken);
-            
-            String url = UriComponentsBuilder.fromUriString(redirectUri)
-                    .queryParam("flag", "user")
-                    .queryParam("accessToken", accessToken)
-                    .build().toUriString();
-            getRedirectStrategy().sendRedirect(request, response, url);
+
+            redirectByRole(request, response, user);
         }
 
+    }
+
+    private void redirectByRole(HttpServletRequest request, HttpServletResponse response, User user) throws IOException {
+        String url = null;
+        if (user.getRoleType() == RoleType.GUEST) {
+            url = UriComponentsBuilder.fromUriString(redirectUri)
+                    .queryParam("role", "guest")
+                    .queryParam("sort", user.isSort())
+                    .queryParam("providerId", user.getProviderId())
+                    .build().toUriString();
+        }
+
+        if (user.getRoleType() == RoleType.USER) {
+            url = UriComponentsBuilder.fromUriString(redirectUri)
+                    .queryParam("role", "user")
+                    .queryParam("providerId", user.getProviderId())
+                    .build().toUriString();
+        }
+
+        //TODO 관리자
+        getRedirectStrategy().sendRedirect(request, response, url);
     }
 
     private String searchEmail(UserPrincipal principal, OAuth2UserInfo oAuth2UserInfo) throws JsonProcessingException {

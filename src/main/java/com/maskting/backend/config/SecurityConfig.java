@@ -44,6 +44,7 @@ public class SecurityConfig {
                 .and()
                     .authorizeRequests()
                     .antMatchers("/", "/api/user/signup").permitAll()
+                    .antMatchers("/api/user/additional-signup").access("hasRole('ROLE_GUEST')")
                     .anyRequest().authenticated()
                 .and()
                     .oauth2Login()

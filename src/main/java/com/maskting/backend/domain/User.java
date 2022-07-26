@@ -1,5 +1,6 @@
 package com.maskting.backend.domain;
 
+import com.maskting.backend.dto.request.AdditionalSignupRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -49,6 +50,7 @@ public class User extends BaseTimeEntity{
 
     private String religion;
 
+    @Column(unique = true)
     private String nickname;
 
     @Column(nullable = false)
@@ -61,4 +63,21 @@ public class User extends BaseTimeEntity{
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private RoleType roleType;
+
+    private boolean sort;
+
+    public void updateAdditionalInfo(AdditionalSignupRequest additionalSignupRequest) {
+        this.interest = additionalSignupRequest.getInterest();
+        this.duty = additionalSignupRequest.isDuty();
+        this.smoking = additionalSignupRequest.isSmoking();
+        this.drinking = additionalSignupRequest.getDrinking();
+        this.religion = additionalSignupRequest.getReligion();
+        this.nickname = additionalSignupRequest.getNickname();
+
+        //TODO image 추가
+    }
+
+    public void updateSort() {
+        this.sort = !isSort();
+    }
 }

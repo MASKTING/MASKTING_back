@@ -1,0 +1,22 @@
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+= Rest Docs API
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+## User
+
+=== User signup (기본 회원가입)
+
+==== REQUEST
+
+include::{snippets}/user/signup/http-request.adoc[]
+
+==== RESPONSE
+include::{snippets}/user/signup/http-response.adoc[]

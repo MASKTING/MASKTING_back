@@ -20,3 +20,12 @@ include::{snippets}/user/signup/http-request.adoc[]
 
 ==== RESPONSE
 include::{snippets}/user/signup/http-response.adoc[]
+
+=== User logout (로그아웃)
+
+==== REQUEST
+
+include::{snippets}/user/logout/http-request.adoc[]
+
+==== RESPONSE
+include::{snippets}/user/logout/http-response.adoc[]

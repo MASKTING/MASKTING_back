@@ -1,5 +1,6 @@
 package com.maskting.backend.service;
 
+import com.maskting.backend.common.exception.NoProfileException;
 import com.maskting.backend.domain.*;
 import com.maskting.backend.dto.request.AdditionalSignupRequest;
 import com.maskting.backend.dto.request.SignupRequest;
@@ -114,6 +115,8 @@ public class UserService {
 
         if (!CollectionUtils.isEmpty(additionalSignupRequest.getProfiles())) {
             addProfiles(additionalSignupRequest, profiles);
+        } else {
+            throw new NoProfileException();
         }
 
         user.updateAdditionalInfo(additionalSignupRequest, profiles);

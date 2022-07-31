@@ -9,4 +9,5 @@ public class Messages {
     public static final String NO_REFRESH_TOKEN = "유효하지 않은 리프레쉬 토큰입니다.";
     public static final String NO_COOKIE = "유효하지 않은 쿠키입니다.";
     public static final String INVALID_PROVIDER = "유효하지 않은 플랫폼입니다.";
+    public static final String NO_PROFILE = "등록한 프로필 사진이 없습니다.";
 }

@@ -1,23 +1,28 @@
 package com.maskting.backend.service;
 
-import com.maskting.backend.domain.ProviderType;
-import com.maskting.backend.domain.RefreshToken;
-import com.maskting.backend.domain.RoleType;
-import com.maskting.backend.domain.User;
+import com.maskting.backend.domain.*;
 import com.maskting.backend.dto.request.AdditionalSignupRequest;
 import com.maskting.backend.dto.request.SignupRequest;
+import com.maskting.backend.dto.response.S3Response;
+import com.maskting.backend.repository.ProfileRepository;
 import com.maskting.backend.repository.RefreshTokenRepository;
 import com.maskting.backend.repository.UserRepository;
 import com.maskting.backend.util.CookieUtil;
 import com.maskting.backend.util.JwtUtil;
 import com.maskting.backend.common.exception.InvalidProviderException;
+import com.maskting.backend.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -30,6 +35,8 @@ public class UserService {
     private final JwtUtil jwtUtil;
     private final CookieUtil cookieUtil;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final S3Uploader s3Uploader;
+    private final ProfileRepository profileRepository;
 
     @Transactional
     public User joinUser(SignupRequest signupRequest) {
@@ -101,9 +108,28 @@ public class UserService {
     }
 
     @Transactional
-    public void addAdditionalInfo(AdditionalSignupRequest additionalSignupRequest) {
+    public void addAdditionalInfo(AdditionalSignupRequest additionalSignupRequest) throws IOException {
         User user = userRepository.findByProviderId(additionalSignupRequest.getProviderId());
-        user.updateAdditionalInfo(additionalSignupRequest);
+        List<Profile> profiles = new ArrayList<>();
+
+        if (!CollectionUtils.isEmpty(additionalSignupRequest.getProfiles())) {
+            addProfiles(additionalSignupRequest, profiles);
+        }
+
+        user.updateAdditionalInfo(additionalSignupRequest, profiles);
         user.updateSort();
+    }
+
+    private void addProfiles(AdditionalSignupRequest additionalSignupRequest, List<Profile> profiles) throws IOException {
+        for (MultipartFile multipartFile : additionalSignupRequest.getProfiles()) {
+            S3Response s3Response = s3Uploader.upload(multipartFile, "static");
+
+            Profile profile = Profile.builder()
+                    .name(s3Response.getName())
+                    .path(s3Response.getPath())
+                    .build();
+
+            profiles.add(profileRepository.save(profile));
+        }
     }
 }

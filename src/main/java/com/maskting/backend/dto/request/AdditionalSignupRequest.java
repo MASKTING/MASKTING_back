@@ -3,6 +3,9 @@ package com.maskting.backend.dto.request;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -23,5 +26,5 @@ public class AdditionalSignupRequest {
 
     private String nickname;
 
-    //TODO 이미지
+    private List<MultipartFile> profiles;
 }

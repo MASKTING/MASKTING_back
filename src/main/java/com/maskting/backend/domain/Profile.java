@@ -1,8 +1,15 @@
 package com.maskting.backend.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Profile {
 
     @Id @GeneratedValue
@@ -14,4 +21,8 @@ public class Profile {
     private String path;
 
     private String name;
+
+    public void updateUser(User user) {
+        this.user = user;
+    }
 }

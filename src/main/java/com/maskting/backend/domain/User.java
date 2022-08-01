@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -66,7 +68,10 @@ public class User extends BaseTimeEntity{
 
     private boolean sort;
 
-    public void updateAdditionalInfo(AdditionalSignupRequest additionalSignupRequest) {
+    @OneToMany(mappedBy = "user")
+    private List<Profile> profiles = new ArrayList<>();
+
+    public void updateAdditionalInfo(AdditionalSignupRequest additionalSignupRequest, List<Profile> profiles) {
         this.interest = additionalSignupRequest.getInterest();
         this.duty = additionalSignupRequest.isDuty();
         this.smoking = additionalSignupRequest.isSmoking();
@@ -74,7 +79,10 @@ public class User extends BaseTimeEntity{
         this.religion = additionalSignupRequest.getReligion();
         this.nickname = additionalSignupRequest.getNickname();
 
-        //TODO image 추가
+        for (Profile profile : profiles) {
+            this.profiles.add(profile);
+            profile.updateUser(this);
+        }
     }
 
     public void updateSort() {

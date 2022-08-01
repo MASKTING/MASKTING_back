@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,10 +30,9 @@ public class UserController {
         userService.returnRefreshToken(request, response, user);
         return ResponseEntity.ok().build();
     }
-
-    //TODO 2차 추가 회원정보입력
+    
     @PostMapping("/additional-signup")
-    public ResponseEntity<?> additionalSignup(@RequestBody AdditionalSignupRequest additionalSignupRequest) {
+    public ResponseEntity<?> additionalSignup(AdditionalSignupRequest additionalSignupRequest) throws IOException {
         userService.addAdditionalInfo(additionalSignupRequest);
         return ResponseEntity.ok().build();
     }

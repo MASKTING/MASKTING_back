@@ -34,6 +34,20 @@ include::{snippets}/user/signup/http-request.adoc[]
 
 include::{snippets}/user/signup/http-response.adoc[]
 
+=== User additional-signup (추가 회원가입)
+
+==== REQUEST
+
+include::{snippets}/user/additional-signup/httpie-request.adoc[]
+
+include::{snippets}/user/additional-signup/request-parameters.adoc[]
+
+include::{snippets}/user/additional-signup/request-parts.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/user/additional-signup/http-response.adoc[]
+
 === User logout (로그아웃)
 
 ==== REQUEST

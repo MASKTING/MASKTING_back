@@ -1,12 +1,11 @@
 package com.maskting.backend.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.maskting.backend.domain.ProviderType;
 import com.maskting.backend.domain.RefreshToken;
+import com.maskting.backend.domain.RoleType;
 import com.maskting.backend.domain.User;
-import com.maskting.backend.dto.request.SignupRequest;
 import com.maskting.backend.repository.RefreshTokenRepository;
 import com.maskting.backend.repository.UserRepository;
-import com.maskting.backend.util.CookieUtil;
 import com.maskting.backend.util.JwtUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +15,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -33,32 +31,27 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @ExtendWith(RestDocumentationExtension.class)
-class UserControllerTest {
+class AuthControllerTest {
+
+    private final String pre = "/api/auth";
 
     @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    RefreshTokenRepository refreshTokenRepository;
+    MockMvc mockMvc;
 
     @Autowired
     JwtUtil jwtUtil;
 
     @Autowired
-    CookieUtil cookieUtil;
-
-    private final String pre = "/api/user";
+    RefreshTokenRepository refreshTokenRepository;
 
     @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
+    UserRepository userRepository;
 
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
@@ -69,56 +62,44 @@ class UserControllerTest {
 
     @AfterEach
     void tearDown() {
-        userRepository.deleteAll();
         refreshTokenRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
-    @DisplayName("기본 회원가입")
-    void signup() throws Exception {
-        SignupRequest signupRequest = new SignupRequest(
-                "test", "test@gmail.com", "male",
-                "19990815", "서울 강북구", "학생",
-                "01012345678", "12341234", "google");
-        String content = objectMapper.writeValueAsString(signupRequest);
-
-        mockMvc.perform(
-                post(pre + "/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(content))
-                .andExpect(status().isOk())
-                .andExpect(header().exists("accessToken"))
-                .andExpect(cookie().exists("refreshToken"))
-                .andDo(document("user/signup",
-                        preprocessRequest(prettyPrint())));
-
-        User user = userRepository.findByProviderId("12341234");
-        assertEquals("test", user.getName());
-        assertEquals("test@gmail.com", user.getEmail());
-    }
-
-    //TODO 추가회원가입 test
-
-    @Test
-    @DisplayName("로그아웃")
-    void logout() throws Exception {
+    @DisplayName("RefreshToken 재발급")
+    void silentRefresh() throws Exception {
+        User user = createUser();
+        userRepository.save(user);
         String key = UUID.randomUUID().toString();
         String refreshToken = jwtUtil.createRefreshToken(key);
         Cookie cookie = createCookie(refreshToken);
         RefreshToken dbRefreshToken = new RefreshToken(key, "testProviderId");
         refreshTokenRepository.save(dbRefreshToken);
 
-        assertNotNull(refreshTokenRepository.findById(key).orElse(null));
         mockMvc.perform(
-                post(pre + "/logout")
-                        .cookie(cookie)
-                        .header("accessToken", "testAccessToken"))
+                post(pre + "/silent-refresh")
+                        .cookie(cookie))
                 .andExpect(status().isOk())
-                .andExpect(cookie().maxAge("refreshToken", 0))
-                .andDo(document("user/logout",
+                .andExpect(header().exists("accessToken"))
+                .andDo(document("auth/silent-refresh",
                         preprocessRequest(prettyPrint())));
+    }
 
-        assertNull(refreshTokenRepository.findById(key).orElse(null));
+    private User createUser() {
+        User user = User.builder()
+                .name("test")
+                .email("test@gmail.com")
+                .gender("male")
+                .birth("19990815")
+                .location("서울 강북구")
+                .occupation("대학생")
+                .phone("01012345678")
+                .roleType(RoleType.USER)
+                .providerId("testProviderId")
+                .providerType(ProviderType.GOOGLE)
+                .build();
+        return user;
     }
 
     private Cookie createCookie(String refreshToken) {

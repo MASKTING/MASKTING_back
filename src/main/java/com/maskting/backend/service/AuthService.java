@@ -27,14 +27,18 @@ public class AuthService {
     private final UserRepository userRepository;
 
     public RefreshToken getRefreshToken(HttpServletRequest request) {
-        Cookie cookie = cookieUtil.getCookie(request, "refreshToken").orElseThrow(NoCookieException::new);
-        String refreshTokenId = cookie.getValue();
-        //TODO resolve 필요
-        RefreshToken refreshToken = refreshTokenRepository
-                .findById(refreshTokenId)
+        String providerId = resolveRefreshToken(request);
+        RefreshToken dbRefreshToken = refreshTokenRepository
+                .findById(providerId)
                 .orElseThrow(NoRefreshTokenException::new);
 
-        return refreshToken;
+        return dbRefreshToken;
+    }
+
+    private String resolveRefreshToken(HttpServletRequest request) {
+        Cookie cookie = cookieUtil.getCookie(request, "refreshToken").orElseThrow(NoCookieException::new);
+        String refreshToken = cookie.getValue();
+        return jwtUtil.getSubject(refreshToken);
     }
 
     public void setAccessToken(HttpServletResponse response, RefreshToken refreshToken) {

@@ -10,6 +10,18 @@ endif::[]
 :toclevels: 4
 :sectlinks:
 
+## AUTH
+
+=== silent-refresh (토큰 재발급)
+
+==== REQUEST
+
+include::{snippets}/auth/silent-refresh/http-request.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/auth/silent-refresh/http-response.adoc[]
+
 ## User
 
 === User signup (기본 회원가입)
@@ -19,4 +31,15 @@ endif::[]
 include::{snippets}/user/signup/http-request.adoc[]
 
 ==== RESPONSE
+
 include::{snippets}/user/signup/http-response.adoc[]
+
+=== User logout (로그아웃)
+
+==== REQUEST
+
+include::{snippets}/user/logout/http-request.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/user/logout/http-response.adoc[]

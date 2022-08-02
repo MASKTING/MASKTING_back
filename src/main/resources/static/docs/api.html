@@ -446,18 +446,34 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_user">User</a>
+<li><a href="#_auth">AUTH</a>
 <ul class="sectlevel2">
-<li><a href="#_user_signup_기본_회원가입">User signup (기본 회원가입)</a>
+<li><a href="#_silent_refresh_토큰_재발급">silent-refresh (토큰 재발급)</a>
 <ul class="sectlevel3">
 <li><a href="#_request">REQUEST</a></li>
 <li><a href="#_response">RESPONSE</a></li>
 </ul>
 </li>
-<li><a href="#_user_logout_로그아웃">User logout (로그아웃)</a>
+</ul>
+</li>
+<li><a href="#_user">User</a>
+<ul class="sectlevel2">
+<li><a href="#_user_signup_기본_회원가입">User signup (기본 회원가입)</a>
 <ul class="sectlevel3">
 <li><a href="#_request_2">REQUEST</a></li>
 <li><a href="#_response_2">RESPONSE</a></li>
+</ul>
+</li>
+<li><a href="#_user_additional_signup_추가_회원가입">User additional-signup (추가 회원가입)</a>
+<ul class="sectlevel3">
+<li><a href="#_request_3">REQUEST</a></li>
+<li><a href="#_response_3">RESPONSE</a></li>
+</ul>
+</li>
+<li><a href="#_user_logout_로그아웃">User logout (로그아웃)</a>
+<ul class="sectlevel3">
+<li><a href="#_request_4">REQUEST</a></li>
+<li><a href="#_response_4">RESPONSE</a></li>
 </ul>
 </li>
 </ul>
@@ -467,12 +483,39 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1">
+<h2 id="_auth"><a class="link" href="#_auth">AUTH</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_silent_refresh_토큰_재발급"><a class="link" href="#_silent_refresh_토큰_재발급">silent-refresh (토큰 재발급)</a></h3>
+<div class="sect3">
+<h4 id="_request"><a class="link" href="#_request">REQUEST</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/auth/silent-refresh HTTP/1.1
+Host: localhost:8080
+Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjNGNhYTEwZi0xNTZhLTQxN2MtOTljYi0wMDZhYzEwYjU1ZmEiLCJpYXQiOjE2NTk0MjEyMjcsImV4cCI6MTY2MDYzMDgyN30.fw4G8HMzaJl16_uT7o8oJgMoR0Q8hoP0fkX4i0rTEgg</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response"><a class="link" href="#_response">RESPONSE</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0UHJvdmlkZXJJZCIsInJvbGUiOiJST0xFX1VTRVIiLCJpYXQiOjE2NTk0MjEyMjgsImV4cCI6MTY1OTQyMzAyOH0.LGyD0dXojErrRDgPjdjqAu4cYveWwacRf3v79VJ5XQ8</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_user"><a class="link" href="#_user">User</a></h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_user_signup_기본_회원가입"><a class="link" href="#_user_signup_기본_회원가입">User signup (기본 회원가입)</a></h3>
 <div class="sect3">
-<h4 id="_request"><a class="link" href="#_request">REQUEST</a></h4>
+<h4 id="_request_2"><a class="link" href="#_request_2">REQUEST</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/user/signup HTTP/1.1
@@ -495,12 +538,99 @@ Host: localhost:8080
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response"><a class="link" href="#_response">RESPONSE</a></h4>
+<h4 id="_response_2"><a class="link" href="#_response_2">RESPONSE</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0MTIzNCIsInJvbGUiOiJST0xFX0dVRVNUIiwiaWF0IjoxNjU4OTI5ODMzLCJleHAiOjE2NTg5MzE2MzN9.QuOKEudFgSpTudSREqjYoD-OD4PtPaZRypD8rnVZj5U
-Set-Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2YTk2ZmQ0Yy0xNWJmLTRjN2EtODk5Mi1lYTIyZDQ4YmM1NzkiLCJpYXQiOjE2NTg5Mjk4MzMsImV4cCI6MTY2MDEzOTQzM30.lgkWaiXylPUJZ8qcKfCgMM9V-Y-5G4IUOo75Y5lLkTI; Path=/; Max-Age=1209600000; Expires=Wed, 24 Nov 2060 13:50:33 GMT; HttpOnly</code></pre>
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0MTIzNCIsInJvbGUiOiJST0xFX0dVRVNUIiwiaWF0IjoxNjU5NDIxMjI5LCJleHAiOjE2NTk0MjMwMjl9.opbdu41vF1UtTOp32iHBKP4SqgHdbVpEvcbqDrMeZqI
+Set-Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMDUwYWJhYy1jOTQ0LTRiNjMtOTY5Zi1hZjMyN2Y0OWU0NGIiLCJpYXQiOjE2NTk0MjEyMjksImV4cCI6MTY2MDYzMDgyOX0.N-fQRrvHgpUEYJzcDFUSRNBroYQq2uPK5m0ar6ifNjU; Path=/; Max-Age=1209600000; Expires=Tue, 30 Nov 2060 06:20:29 GMT; HttpOnly</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_user_additional_signup_추가_회원가입"><a class="link" href="#_user_additional_signup_추가_회원가입">User additional-signup (추가 회원가입)</a></h3>
+<div class="sect3">
+<h4 id="_request_3"><a class="link" href="#_request_3">REQUEST</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ http --multipart POST 'http://localhost:8080/api/user/additional-signup' \
+    'profiles'@'test.jpg' \
+    'providerId=testProviderId' \
+    'interest=산책' \
+    'duty=true' \
+    'smoking=false' \
+    'drinking=5' \
+    'religion=무교' \
+    'nickname=테스트닉네임'</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>providerId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">제목</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>interest</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">취미</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>duty</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">군필</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smoking</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">담배</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>drinking</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">음주</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>religion</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">종교</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nickname</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">닉네임</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Part</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>profiles</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">첨부 프로필</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_response_3"><a class="link" href="#_response_3">RESPONSE</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK</code></pre>
 </div>
 </div>
 </div>
@@ -508,15 +638,23 @@ Set-Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2YTk2ZmQ0Yy0xNWJmLTRjN2
 <div class="sect2">
 <h3 id="_user_logout_로그아웃"><a class="link" href="#_user_logout_로그아웃">User logout (로그아웃)</a></h3>
 <div class="sect3">
-<h4 id="_request_2"><a class="link" href="#_request_2">REQUEST</a></h4>
-<div class="paragraph">
-<p>Unresolved directive in api.adoc - include::./build/generated-snippets/user/logout/http-request.adoc[]</p>
+<h4 id="_request_4"><a class="link" href="#_request_4">REQUEST</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/user/logout HTTP/1.1
+accessToken: testAccessToken
+Host: localhost:8080
+Cookie: refreshToken=</code></pre>
+</div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_2"><a class="link" href="#_response_2">RESPONSE</a></h4>
-<div class="paragraph">
-<p>Unresolved directive in api.adoc - include::./build/generated-snippets/user/logout/http-response.adoc[]</p>
+<h4 id="_response_4"><a class="link" href="#_response_4">RESPONSE</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Set-Cookie: refreshToken=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -526,7 +664,7 @@ Set-Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2YTk2ZmQ0Yy0xNWJmLTRjN2
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-07-27 22:33:03 +0900
+Last updated 2022-08-02 15:17:51 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

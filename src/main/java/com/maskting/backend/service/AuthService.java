@@ -27,9 +27,9 @@ public class AuthService {
     private final UserRepository userRepository;
 
     public RefreshToken getRefreshToken(HttpServletRequest request) {
-        String providerId = resolveRefreshToken(request);
+        String key = resolveRefreshToken(request);
         RefreshToken dbRefreshToken = refreshTokenRepository
-                .findById(providerId)
+                .findById(key)
                 .orElseThrow(NoRefreshTokenException::new);
 
         return dbRefreshToken;

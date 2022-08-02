@@ -50,20 +50,23 @@ class AuthServiceTest {
     @Test
     @DisplayName("리프레쉬 토큰 반환 - 성공")
     void getRefreshTokenSuccess() {
-        Cookie cookie = createCookie();
+        String key = "testKey";
+        String providerId = "testProviderId";
+        Cookie cookie = createCookie(key);
         given(cookieUtil.getCookie(any(HttpServletRequest.class), anyString())).willReturn(Optional.of(cookie));
-        given(refreshTokenRepository.findById(anyString()))
-                .willReturn(Optional.of(new RefreshToken(cookie.getValue(), "test1234")));
+        given(jwtUtil.getSubject(anyString())).willReturn(key);
+        given(refreshTokenRepository.findById(key))
+                .willReturn(Optional.of(new RefreshToken(key, providerId)));
         HttpServletRequest request = mock(HttpServletRequest.class);
 
         RefreshToken refreshToken = authService.getRefreshToken(request);
 
-        assertEquals(refreshToken.getId(), cookie.getValue());
-        assertEquals("test1234", refreshToken.getProviderId());
+        assertEquals(key, refreshToken.getId());
+        assertEquals(providerId, refreshToken.getProviderId());
     }
 
-    private Cookie createCookie() {
-        Cookie cookie = new Cookie("testName", "testValue");
+    private Cookie createCookie(String key) {
+        Cookie cookie = new Cookie("refreshToken", key);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         cookie.setMaxAge(100000);
@@ -83,7 +86,8 @@ class AuthServiceTest {
     @Test
     @DisplayName("리프레쉬 토큰 반환 - 리프레쉬 토큰 없는 경우")
     void getRefreshTokenWhenNoRefreshToken() {
-        Cookie cookie = createCookie();
+        String key = "testKey";
+        Cookie cookie = createCookie(key);
         given(cookieUtil.getCookie(any(HttpServletRequest.class), anyString())).willReturn(Optional.of(cookie));
         HttpServletRequest request = mock(HttpServletRequest.class);
 

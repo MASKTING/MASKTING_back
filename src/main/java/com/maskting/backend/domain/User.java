@@ -1,6 +1,5 @@
 package com.maskting.backend.domain;
 
-import com.maskting.backend.dto.request.AdditionalSignupRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -71,14 +70,13 @@ public class User extends BaseTimeEntity{
     @OneToMany(mappedBy = "user")
     private List<Profile> profiles = new ArrayList<>();
 
-    public void updateAdditionalInfo(AdditionalSignupRequest additionalSignupRequest, List<Profile> profiles) {
-        this.interest = additionalSignupRequest.getInterest();
-        this.duty = additionalSignupRequest.isDuty();
-        this.smoking = additionalSignupRequest.isSmoking();
-        this.drinking = additionalSignupRequest.getDrinking();
-        this.religion = additionalSignupRequest.getReligion();
-        this.nickname = additionalSignupRequest.getNickname();
+    public void updateType(ProviderType providerType, RoleType roleType) {
+        this.providerType = providerType;
+        this.roleType = roleType;
+    }
 
+    public void addProfiles(List<Profile> profiles) {
+        this.profiles = new ArrayList<>();
         for (Profile profile : profiles) {
             this.profiles.add(profile);
             profile.updateUser(this);

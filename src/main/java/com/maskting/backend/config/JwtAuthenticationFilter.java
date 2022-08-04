@@ -4,6 +4,7 @@ import com.maskting.backend.domain.User;
 import com.maskting.backend.repository.UserRepository;
 import com.maskting.backend.util.JwtUtil;
 import com.maskting.backend.common.exception.oauth.InvalidTokenException;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,8 +28,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String accessToken = jwtUtil.resolveToken(request);
 
-        if (accessToken != null) {
-            discernToken(accessToken);
+        try {
+            if (accessToken != null) {
+                discernToken(accessToken);
+            }
+        } catch (ExpiredJwtException ignored) {
         }
 
         filterChain.doFilter(request, response);

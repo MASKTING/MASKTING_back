@@ -487,7 +487,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/auth/silent-refresh HTTP/1.1
 Host: localhost:8080
-Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI4ZjYwNTBhYy01NTVkLTRmNGQtODQxZS1kNDAwMzY0YjA5MzkiLCJpYXQiOjE2NTk1MTIyODgsImV4cCI6MTY2MDcyMTg4OH0.cCy918BpfMHnPi77_c77Wm7r3Kosr7sJRhWwBsvq2zg</code></pre>
+Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjOWNkZjg3ZC0xY2QyLTQxYzUtYmJkNy0xNmZmMTc0MmQ1ZmEiLCJpYXQiOjE2NTk2Njg1NDcsImV4cCI6MTY2MDg3ODE0N30.XyF9w_e6uiXVSaX2_u6E5JfjaSZQwlB0_DMcz6U9gaQ</code></pre>
 </div>
 </div>
 </div>
@@ -496,7 +496,7 @@ Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI4ZjYwNTBhYy01NTVkLTRmNGQtOD
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0UHJvdmlkZXJJZCIsInJvbGUiOiJST0xFX1VTRVIiLCJpYXQiOjE2NTk1MTIyODksImV4cCI6MTY1OTUxNDA4OX0.xQ5xQv6euSp9KSnL4umIPPZygodKMl_rAGHzSq2LFPM</code></pre>
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0UHJvdmlkZXJJZCIsInJvbGUiOiJST0xFX1VTRVIiLCJpYXQiOjE2NTk2Njg1NDgsImV4cCI6MTY1OTY3MDM0OH0.A0XdwSeuGvjjtdSsGXbArxGJ3rsBtN_UlkOHI6m1ekQ</code></pre>
 </div>
 </div>
 </div>
@@ -527,6 +527,8 @@ accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0UHJvdmlkZXJJZCIsInJvbGUiOiJST0
     'duty=true' \
     'smoking=false' \
     'drinking=5' \
+    'height=181' \
+    'bodyType=3' \
     'religion=무교' \
     'nickname=테스트닉네임'</code></pre>
 </div>
@@ -596,6 +598,14 @@ accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0UHJvdmlkZXJJZCIsInJvbGUiOiJST0
 <td class="tableblock halign-left valign-top"><p class="tableblock">음주</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>height</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">키</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>bodyType</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">체형</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>religion</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">종교</p></td>
 </tr>
@@ -629,8 +639,8 @@ accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0UHJvdmlkZXJJZCIsInJvbGUiOiJST0
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0UHJvdmlkZXJJZCIsInJvbGUiOiJST0xFX0dVRVNUIiwiaWF0IjoxNjU5NTEyMjkwLCJleHAiOjE2NTk1MTQwOTB9.EmbrbcdmVV-90VwqK9zsP2Y4jeGUs6zN2jgwuVMkaME
-Set-Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZDVmYWE0YS0xOWM4LTQxNWMtYTlmNC02YTJkNWZmZTkyOTYiLCJpYXQiOjE2NTk1MTIyOTAsImV4cCI6MTY2MDcyMTg5MH0.Jlxlpes3s1jgLWRnBPVW1QUiPFp67olP8eIa01iG5QE; Path=/; Max-Age=1209600000; Expires=Wed, 01 Dec 2060 07:38:10 GMT; HttpOnly</code></pre>
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0UHJvdmlkZXJJZCIsInJvbGUiOiJST0xFX0dVRVNUIiwiaWF0IjoxNjU5NjY4NTQ5LCJleHAiOjE2NTk2NzAzNDl9.9F7Yw2XEOh4F79PalEAe0NowPjhlLz3pwE8DXEv9xls
+Set-Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwZGQxYzRmNS0xNzIxLTQ4NzUtYTJlMy1jM2U2N2M3Yzg4Y2QiLCJpYXQiOjE2NTk2Njg1NDksImV4cCI6MTY2MDg3ODE0OX0.uJKJiMZnUC5qaUhAVYNEW_vtmtCjgZQiHU8xyW-KgoA; Path=/; Max-Age=1209600000; Expires=Fri, 03 Dec 2060 03:02:29 GMT; HttpOnly</code></pre>
 </div>
 </div>
 </div>

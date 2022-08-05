@@ -55,6 +55,12 @@ public class SignupRequest {
     private int drinking;
 
     @NotNull
+    private int height;
+
+    @NotNull
+    private int bodyType;
+
+    @NotNull
     private String religion;
 
     @NotNull

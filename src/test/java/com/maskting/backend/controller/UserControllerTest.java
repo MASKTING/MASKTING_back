@@ -112,6 +112,8 @@ class UserControllerTest {
                         .param("duty", "true")
                         .param("smoking", "false")
                         .param("drinking", "5")
+                        .param("height", "181")
+                        .param("bodyType", "3")
                         .param("religion", "무교")
                         .param("nickname", "테스트닉네임")
                         .with(requestPostProcessor -> {
@@ -137,6 +139,8 @@ class UserControllerTest {
                                 ,parameterWithName("duty").description("군필")
                                 ,parameterWithName("smoking").description("담배")
                                 ,parameterWithName("drinking").description("음주")
+                                ,parameterWithName("height").description("키")
+                                ,parameterWithName("bodyType").description("체형")
                                 ,parameterWithName("religion").description("종교")
                                 ,parameterWithName("nickname").description("닉네임")
                         )
@@ -157,6 +161,8 @@ class UserControllerTest {
         assertTrue(dbUser.isDuty());
         assertFalse(dbUser.isSmoking());
         assertEquals(5, dbUser.getDrinking());
+        assertEquals(181, dbUser.getHeight());
+        assertEquals(3, dbUser.getBodyType());
         assertEquals("무교", dbUser.getReligion());
         assertEquals("테스트닉네임", dbUser.getNickname());
         assertTrue(dbUser.getProfiles().get(0).getName().contains("test.jpg"));

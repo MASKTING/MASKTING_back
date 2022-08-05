@@ -69,7 +69,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
 
         if (!needJoin(principal)) {
-            String role = hasAuthority(principal.getAuthorities(), "ROLE_USER") ? "ROLE_USER" : "ROLE_ADMIN";
+            String role = returnAuthority(principal.getAuthorities());
             String accessToken = jwtUtil.createAccessToken(oAuth2UserInfo.getProviderId(), role);
             response.setHeader("accessToken", accessToken);
 
@@ -154,17 +154,17 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         return principal.getUser() == null;
     }
 
-    private boolean hasAuthority(Collection<? extends GrantedAuthority> authorities, String authority) {
-        if (authorities == null) {
-            return false;
-        }
-
+    private String returnAuthority(Collection<? extends GrantedAuthority> authorities) {
         for (GrantedAuthority grantedAuthority : authorities) {
-            if (authority.equals(grantedAuthority.getAuthority())) {
-                return true;
+            if (grantedAuthority.getAuthority().equals("ROLE_USER"))
+                return "ROLE_USER";
+
+            if (grantedAuthority.getAuthority().equals("ROLE_ADMIN")) {
+                return "ROLE_ADMIN";
             }
         }
-        return false;
+
+        return "ROLE_GUEST";
     }
 
 }

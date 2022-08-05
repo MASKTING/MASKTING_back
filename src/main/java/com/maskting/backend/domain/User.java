@@ -1,6 +1,6 @@
 package com.maskting.backend.domain;
 
-import com.maskting.backend.dto.request.AdditionalSignupRequest;
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,48 +21,58 @@ public class User extends BaseTimeEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @NotNull
     private String name;
 
-    @Column(nullable = false)
+    @NotNull
     private String email;
 
-    @Column(nullable = false)
+    @NotNull
     private String gender;
 
-    @Column(nullable = false)
+    @NotNull
     private String birth;
 
-    @Column(nullable = false)
+    @NotNull
     private String location;
 
-    @Column(nullable = false)
+    @NotNull
     private String occupation;
 
-    @Column(nullable = false)
+    @NotNull
     private String phone;
 
+    @NotNull
     private String interest;
 
     private boolean duty;
 
     private boolean smoking;
 
+    @NotNull
     private int drinking;
 
+    @NotNull
+    private int height;
+
+    @NotNull
+    private int bodyType;
+
+    @NotNull
     private String religion;
 
+    @NotNull
     @Column(unique = true)
     private String nickname;
 
-    @Column(nullable = false)
+    @NotNull
     private String providerId;
 
-    @Column(nullable = false)
+    @NotNull
     @Enumerated(EnumType.STRING)
     private ProviderType providerType;
 
-    @Column(nullable = false)
+    @NotNull
     @Enumerated(EnumType.STRING)
     private RoleType roleType;
 
@@ -71,14 +81,13 @@ public class User extends BaseTimeEntity{
     @OneToMany(mappedBy = "user")
     private List<Profile> profiles = new ArrayList<>();
 
-    public void updateAdditionalInfo(AdditionalSignupRequest additionalSignupRequest, List<Profile> profiles) {
-        this.interest = additionalSignupRequest.getInterest();
-        this.duty = additionalSignupRequest.isDuty();
-        this.smoking = additionalSignupRequest.isSmoking();
-        this.drinking = additionalSignupRequest.getDrinking();
-        this.religion = additionalSignupRequest.getReligion();
-        this.nickname = additionalSignupRequest.getNickname();
+    public void updateType(ProviderType providerType, RoleType roleType) {
+        this.providerType = providerType;
+        this.roleType = roleType;
+    }
 
+    public void addProfiles(List<Profile> profiles) {
+        this.profiles = new ArrayList<>();
         for (Profile profile : profiles) {
             this.profiles.add(profile);
             profile.updateUser(this);

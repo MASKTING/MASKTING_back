@@ -1,8 +1,8 @@
 package com.maskting.backend.service;
 
 import com.maskting.backend.domain.RefreshToken;
-import com.maskting.backend.domain.RoleType;
 import com.maskting.backend.domain.User;
+import com.maskting.backend.factory.UserFactory;
 import com.maskting.backend.repository.RefreshTokenRepository;
 import com.maskting.backend.repository.UserRepository;
 import com.maskting.backend.util.CookieUtil;
@@ -99,10 +99,8 @@ class AuthServiceTest {
     @Test
     @DisplayName("헤더에 액세스 토큰 저장 - 성공")
     void setAccessToken() {
-        User user = User.builder()
-                .providerId("testProviderId")
-                .roleType(RoleType.USER)
-                .build();
+        UserFactory userFactory = new UserFactory();
+        User user = userFactory.createUser();
         HttpServletResponse response = mock(HttpServletResponse.class);
         given(userRepository.findByProviderId("testProviderId")).willReturn(user);
         given(jwtUtil.createAccessToken(anyString(), anyString())).willReturn(any());

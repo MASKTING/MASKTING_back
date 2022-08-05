@@ -4,8 +4,13 @@ import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class SignupRequest {
@@ -37,4 +42,29 @@ public class SignupRequest {
     @NotNull
     private String provider;
 
+    @NotNull
+    private String interest;
+
+    @NotNull
+    private boolean duty;
+
+    @NotNull
+    private boolean smoking;
+
+    @NotNull
+    private int drinking;
+
+    @NotNull
+    private int height;
+
+    @NotNull
+    private int bodyType;
+
+    @NotNull
+    private String religion;
+
+    @NotNull
+    private String nickname;
+
+    private List<MultipartFile> profiles;
 }

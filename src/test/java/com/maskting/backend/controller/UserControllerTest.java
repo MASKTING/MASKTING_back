@@ -3,9 +3,7 @@ package com.maskting.backend.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maskting.backend.domain.ProviderType;
 import com.maskting.backend.domain.RefreshToken;
-import com.maskting.backend.domain.RoleType;
 import com.maskting.backend.domain.User;
-import com.maskting.backend.dto.request.SignupRequest;
 import com.maskting.backend.repository.ProfileRepository;
 import com.maskting.backend.repository.RefreshTokenRepository;
 import com.maskting.backend.repository.UserRepository;
@@ -33,7 +31,6 @@ import javax.servlet.http.Cookie;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.ArrayList;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -93,46 +90,30 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("기본 회원가입")
-    void signup() throws Exception {
-        SignupRequest signupRequest = new SignupRequest(
-                "test", "test@gmail.com", "male",
-                "19990815", "서울 강북구", "학생",
-                "01012345678", "12341234", "google");
-        String content = objectMapper.writeValueAsString(signupRequest);
-
-        mockMvc.perform(
-                post(pre + "/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(content))
-                .andExpect(status().isOk())
-                .andExpect(header().exists("accessToken"))
-                .andExpect(cookie().exists("refreshToken"))
-                .andDo(document("user/signup",
-                        preprocessRequest(prettyPrint())));
-
-        User user = userRepository.findByProviderId("12341234");
-        assertEquals("test", user.getName());
-        assertEquals("test@gmail.com", user.getEmail());
-    }
-
-    @Test
     @Transactional
-    @DisplayName("추가 회원가입")
-    void additionalSignup() throws Exception {
-        User user = createUser();
-        userRepository.save(user);
+    @DisplayName("회원가입")
+    void signup() throws Exception {
         MockMultipartFile mockMultipartFile = new MockMultipartFile("profiles", "test.jpg",
                 "image/jpeg", new FileInputStream(new File("src/test/resources/test.jpg")));
 
         mockMvc.perform(
-                multipart(pre + "/additional-signup")
+                multipart(pre + "/signup")
                         .file(mockMultipartFile)
+                        .param("name", "test")
+                        .param("email", "test@gmail.com")
+                        .param("gender", "male")
+                        .param("birth", "19990815")
+                        .param("location", "서울 강북구")
+                        .param("occupation", "학생")
+                        .param("phone", "01012345678")
                         .param("providerId", "testProviderId")
+                        .param("provider", "google")
                         .param("interest", "산책")
                         .param("duty", "true")
                         .param("smoking", "false")
                         .param("drinking", "5")
+                        .param("height", "181")
+                        .param("bodyType", "3")
                         .param("religion", "무교")
                         .param("nickname", "테스트닉네임")
                         .with(requestPostProcessor -> {
@@ -141,13 +122,25 @@ class UserControllerTest {
                         })
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isOk())
-                .andDo(document("user/additional-signup",
+                .andExpect(header().exists("accessToken"))
+                .andExpect(cookie().exists("refreshToken"))
+                .andDo(document("user/signup",
                         requestParameters(
-                                parameterWithName("providerId").description("제목")
+                                parameterWithName("name").description("이름")
+                                ,parameterWithName("email").description("이메일")
+                                ,parameterWithName("gender").description("성별")
+                                ,parameterWithName("birth").description("생년월일")
+                                ,parameterWithName("location").description("지역")
+                                ,parameterWithName("occupation").description("직업")
+                                ,parameterWithName("phone").description("전화번호")
+                                ,parameterWithName("providerId").description("플랫폼 고유 id")
+                                ,parameterWithName("provider").description("플랫폼 타입")
                                 ,parameterWithName("interest").description("취미")
                                 ,parameterWithName("duty").description("군필")
                                 ,parameterWithName("smoking").description("담배")
                                 ,parameterWithName("drinking").description("음주")
+                                ,parameterWithName("height").description("키")
+                                ,parameterWithName("bodyType").description("체형")
                                 ,parameterWithName("religion").description("종교")
                                 ,parameterWithName("nickname").description("닉네임")
                         )
@@ -156,33 +149,25 @@ class UserControllerTest {
                         )));
 
         User dbUser = userRepository.findByProviderId("testProviderId");
+        assertEquals("test", dbUser.getName());
+        assertEquals("test@gmail.com", dbUser.getEmail());
+        assertEquals("male", dbUser.getGender());
+        assertEquals("19990815", dbUser.getBirth());
+        assertEquals("서울 강북구", dbUser.getLocation());
+        assertEquals("학생", dbUser.getOccupation());
+        assertEquals("01012345678", dbUser.getPhone());
+        assertEquals(ProviderType.GOOGLE, dbUser.getProviderType());
         assertEquals("산책", dbUser.getInterest());
         assertTrue(dbUser.isDuty());
         assertFalse(dbUser.isSmoking());
         assertEquals(5, dbUser.getDrinking());
+        assertEquals(181, dbUser.getHeight());
+        assertEquals(3, dbUser.getBodyType());
         assertEquals("무교", dbUser.getReligion());
         assertEquals("테스트닉네임", dbUser.getNickname());
         assertTrue(dbUser.getProfiles().get(0).getName().contains("test.jpg"));
         s3Uploader.delete(dbUser.getProfiles().get(0).getName());
     }
-
-    private User createUser() {
-        User user = User.builder()
-                .name("test")
-                .email("test@gmail.com")
-                .gender("male")
-                .birth("19990815")
-                .location("서울 강북구")
-                .occupation("학생")
-                .phone("01012345678")
-                .roleType(RoleType.GUEST)
-                .providerId("testProviderId")
-                .providerType(ProviderType.GOOGLE)
-                .profiles(new ArrayList<>())
-                .build();
-        return user;
-    }
-
 
     @Test
     @DisplayName("로그아웃")

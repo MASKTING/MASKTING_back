@@ -2,7 +2,6 @@ package com.maskting.backend.service;
 
 import com.maskting.backend.common.exception.NoProfileException;
 import com.maskting.backend.domain.*;
-import com.maskting.backend.dto.request.AdditionalSignupRequest;
 import com.maskting.backend.dto.request.SignupRequest;
 import com.maskting.backend.dto.response.S3Response;
 import com.maskting.backend.repository.ProfileRepository;
@@ -13,6 +12,7 @@ import com.maskting.backend.util.JwtUtil;
 import com.maskting.backend.common.exception.InvalidProviderException;
 import com.maskting.backend.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -38,25 +38,30 @@ public class UserService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final S3Uploader s3Uploader;
     private final ProfileRepository profileRepository;
+    private final ModelMapper modelMapper;
 
     @Transactional
-    public User joinUser(SignupRequest signupRequest) {
+    public User joinUser(SignupRequest signupRequest) throws IOException {
         ProviderType providerType = getProviderType(signupRequest);
 
-        User user = User.builder()
-                .name(signupRequest.getName())
-                .email(signupRequest.getEmail())
-                .gender(signupRequest.getGender())
-                .birth(signupRequest.getBirth())
-                .location(signupRequest.getLocation())
-                .occupation(signupRequest.getOccupation())
-                .phone(signupRequest.getPhone())
-                .roleType(RoleType.GUEST)
-                .providerId(signupRequest.getProviderId())
-                .providerType(providerType)
-                .build();
+        List<Profile> profiles = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(signupRequest.getProfiles())) {
+            addProfiles(signupRequest, profiles);
+        } else {
+            throw new NoProfileException();
+        }
 
-        userRepository.save(user);
+        signupRequest.setProfiles(null);
+        User user = createUser(signupRequest, providerType, profiles);
+
+        return userRepository.save(user);
+    }
+
+    private User createUser(SignupRequest signupRequest, ProviderType providerType, List<Profile> profiles) {
+        User user = modelMapper.map(signupRequest, User.class);
+        user.updateType(providerType, RoleType.GUEST);
+        user.addProfiles(profiles);
+        user.updateSort();
         return user;
     }
 
@@ -108,23 +113,8 @@ public class UserService {
         }
     }
 
-    @Transactional
-    public void addAdditionalInfo(AdditionalSignupRequest additionalSignupRequest) throws IOException {
-        User user = userRepository.findByProviderId(additionalSignupRequest.getProviderId());
-        List<Profile> profiles = new ArrayList<>();
-
-        if (!CollectionUtils.isEmpty(additionalSignupRequest.getProfiles())) {
-            addProfiles(additionalSignupRequest, profiles);
-        } else {
-            throw new NoProfileException();
-        }
-
-        user.updateAdditionalInfo(additionalSignupRequest, profiles);
-        user.updateSort();
-    }
-
-    private void addProfiles(AdditionalSignupRequest additionalSignupRequest, List<Profile> profiles) throws IOException {
-        for (MultipartFile multipartFile : additionalSignupRequest.getProfiles()) {
+    private void addProfiles(SignupRequest signupRequest, List<Profile> profiles) throws IOException {
+        for (MultipartFile multipartFile : signupRequest.getProfiles()) {
             S3Response s3Response = s3Uploader.upload(multipartFile, "static");
 
             Profile profile = Profile.builder()

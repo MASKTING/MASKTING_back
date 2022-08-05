@@ -1,5 +1,6 @@
 package com.maskting.backend.domain;
 
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,48 +21,58 @@ public class User extends BaseTimeEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @NotNull
     private String name;
 
-    @Column(nullable = false)
+    @NotNull
     private String email;
 
-    @Column(nullable = false)
+    @NotNull
     private String gender;
 
-    @Column(nullable = false)
+    @NotNull
     private String birth;
 
-    @Column(nullable = false)
+    @NotNull
     private String location;
 
-    @Column(nullable = false)
+    @NotNull
     private String occupation;
 
-    @Column(nullable = false)
+    @NotNull
     private String phone;
 
+    @NotNull
     private String interest;
 
     private boolean duty;
 
     private boolean smoking;
 
+    @NotNull
     private int drinking;
 
+    @NotNull
+    private int height;
+
+    @NotNull
+    private int bodyType;
+
+    @NotNull
     private String religion;
 
+    @NotNull
     @Column(unique = true)
     private String nickname;
 
-    @Column(nullable = false)
+    @NotNull
     private String providerId;
 
-    @Column(nullable = false)
+    @NotNull
     @Enumerated(EnumType.STRING)
     private ProviderType providerType;
 
-    @Column(nullable = false)
+    @NotNull
     @Enumerated(EnumType.STRING)
     private RoleType roleType;
 

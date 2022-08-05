@@ -1,9 +1,8 @@
 package com.maskting.backend.controller;
 
-import com.maskting.backend.domain.ProviderType;
 import com.maskting.backend.domain.RefreshToken;
-import com.maskting.backend.domain.RoleType;
 import com.maskting.backend.domain.User;
+import com.maskting.backend.factory.UserFactory;
 import com.maskting.backend.repository.RefreshTokenRepository;
 import com.maskting.backend.repository.UserRepository;
 import com.maskting.backend.util.JwtUtil;
@@ -53,6 +52,9 @@ class AuthControllerTest {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    UserFactory userFactory;
+
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
@@ -69,7 +71,7 @@ class AuthControllerTest {
     @Test
     @DisplayName("RefreshToken 재발급")
     void silentRefresh() throws Exception {
-        User user = createUser();
+        User user = userFactory.createUser();
         userRepository.save(user);
         String key = UUID.randomUUID().toString();
         String refreshToken = jwtUtil.createRefreshToken(key);
@@ -84,22 +86,6 @@ class AuthControllerTest {
                 .andExpect(header().exists("accessToken"))
                 .andDo(document("auth/silent-refresh",
                         preprocessRequest(prettyPrint())));
-    }
-
-    private User createUser() {
-        User user = User.builder()
-                .name("test")
-                .email("test@gmail.com")
-                .gender("male")
-                .birth("19990815")
-                .location("서울 강북구")
-                .occupation("대학생")
-                .phone("01012345678")
-                .roleType(RoleType.USER)
-                .providerId("testProviderId")
-                .providerType(ProviderType.GOOGLE)
-                .build();
-        return user;
     }
 
     private Cookie createCookie(String refreshToken) {

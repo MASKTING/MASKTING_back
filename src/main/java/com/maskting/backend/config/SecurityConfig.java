@@ -6,9 +6,11 @@ import com.maskting.backend.config.oauth.OAuth2AuthenticationSuccessHandler;
 import com.maskting.backend.service.oauth.OAuth2UserService;
 import com.maskting.backend.common.exception.oauth.CustomAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -26,6 +28,12 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final OAuth2AccessDeniedHandler oAuth2AccessDeniedHandler;
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() throws Exception {
+        return (web) -> web.ignoring().antMatchers("/vendor/**")
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

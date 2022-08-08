@@ -38,7 +38,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                    .cors()
+                .cors()
                 .and()
                     .csrf().disable()
                     .formLogin().disable()
@@ -51,7 +51,7 @@ public class SecurityConfig {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .authorizeRequests()
-                    .antMatchers("/", "/api/user/signup", "/api/auth/silent-refresh").permitAll()
+                    .antMatchers("/", "/api/user/signup", "/api/auth/silent-refresh", "/admin/**", "/error", "/favicon.ico").permitAll()
                     .anyRequest().authenticated()
                 .and()
                     .oauth2Login()

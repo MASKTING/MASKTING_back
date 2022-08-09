@@ -6,7 +6,49 @@
 <th:block layout:fragment="content">
     <!-- Begin Page Content -->
     <div class="container-fluid">
-        content
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Profile1</th>
+                            <th>Profile2</th>
+                            <th>Profile3</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>박무현</td>
+                            <td>test1</td>
+                            <td>test2</td>
+                            <td>test3</td>
+                        </tr>
+                        <tr>
+                            <td>테스트</td>
+                            <td>test1</td>
+                            <td>test2</td>
+                            <td>test3</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </div>
+    <!-- /.container-fluid -->
+
 </th:block>
 </html>
+
+<script>
+    $(document).ready( function () {
+        $('#dataTable').DataTable();
+    } );
+</script>

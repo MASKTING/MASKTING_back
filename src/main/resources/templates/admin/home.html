@@ -9,7 +9,7 @@
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+                <h6 class="m-0 font-weight-bold text-primary">심사 유저 목록</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -17,25 +17,14 @@
                         <thead>
                         <tr>
                             <th>Name</th>
+                            <th>Birth</th>
+                            <th>Height</th>
+                            <th>Nickname</th>
                             <th>Profile1</th>
                             <th>Profile2</th>
                             <th>Profile3</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <tr>
-                            <td>박무현</td>
-                            <td>test1</td>
-                            <td>test2</td>
-                            <td>test3</td>
-                        </tr>
-                        <tr>
-                            <td>테스트</td>
-                            <td>test1</td>
-                            <td>test2</td>
-                            <td>test3</td>
-                        </tr>
-                        </tbody>
                     </table>
                 </div>
             </div>
@@ -49,6 +38,45 @@
 
 <script>
     $(document).ready( function () {
-        $('#dataTable').DataTable();
+        $('#dataTable').DataTable({
+            "serverSide":true,
+            "processing": true,
+            "ajax": {
+                "url": "/admin/guests",
+                "dataSrc": function (res) {
+                    return res.data;
+                }
+            },
+            "columns": [
+                {"data": "name"},
+                {"data": "birth"},
+                {"data": "height"},
+                {"data": "nickname"},
+                {"data": "profiles.0",
+                    "render": function (data){
+                        if (data.length <= 1)
+                            return 'X';
+                        else
+                            return '<a href="'+data+'">프로필1<a>'
+                    }
+                },
+                {"data": "profiles.1",
+                    "render": function (data){
+                        if (data.length <= 1)
+                            return 'X';
+                        else
+                            return '<a href="'+data+'">프로필2<a>'
+                    }
+                },
+                {"data": "profiles.2",
+                    "render": function (data){
+                        if (data.length <= 1)
+                            return 'X';
+                        else
+                            return '<a href="'+data+'">프로필3<a>'
+                    }
+                }
+            ]
+        });
     } );
 </script>

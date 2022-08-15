@@ -1,6 +1,7 @@
 package com.maskting.backend.service;
 
 import com.maskting.backend.domain.Profile;
+import com.maskting.backend.domain.RoleType;
 import com.maskting.backend.domain.User;
 import com.maskting.backend.dto.request.ReviewRequest;
 import com.maskting.backend.dto.response.ReviewResponse;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class AdminService {
 
     private final JwtUtil jwtUtil;
@@ -68,5 +71,11 @@ public class AdminService {
         for (int i = profileCnt; i < 3; i++){
             reviewResponse.getProfiles().add("x");
         }
+    }
+
+    @Transactional
+    public void convertToUser(User user) {
+        user.updateSort();
+        user.updateRoleType(RoleType.USER);
     }
 }

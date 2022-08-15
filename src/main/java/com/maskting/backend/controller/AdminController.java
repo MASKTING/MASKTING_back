@@ -54,4 +54,11 @@ public class AdminController {
     private boolean isSearching(String name) {
         return name.length() > 0;
     }
+
+    @PostMapping("/approval/{name}")
+    String approval(@PathVariable String name){
+        User user = userRepository.findByName(name);
+        adminService.convertToUser(user);
+        return "admin/home";
+    }
 }

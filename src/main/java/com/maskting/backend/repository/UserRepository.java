@@ -14,4 +14,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     int countByNameContains(String name);
 
     Page<User> findByNameContains(String name, PageRequest pageRequest);
+
+    User findByName(String name);
 }

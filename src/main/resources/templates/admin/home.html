@@ -39,7 +39,7 @@
 </th:block>
 </html>
 
-<script>
+<script type="application/javascript">
     $(document).ready( function () {
         $('#dataTable').DataTable({
             "searching": true,
@@ -53,7 +53,11 @@
                 }
             },
             "columns": [
-                {"data": "name"},
+                {"data": "name",
+                    "render": function (data){
+                        return '<a href="javascript:void(0)" onclick="approval(\''+ data +'\')">' + data + '</a>'
+                    }
+                },
                 {"data": "phone"},
                 {"data": "nickname"},
                 {"data": "profiles.0",
@@ -84,4 +88,17 @@
                 table.search(searchValue).draw();
             }});
     } );
+
+    function approval(data){
+        console.log(data);
+        var check = confirm('정말 승인하시겠습니까?');
+        console.log(check);
+        if (check){
+            let f = document.createElement('form');
+            f.setAttribute('method', 'post');
+            f.setAttribute('action', '/admin/approval/' + data);
+            document.body.appendChild(f);
+            f.submit();
+        }
+    }
 </script>

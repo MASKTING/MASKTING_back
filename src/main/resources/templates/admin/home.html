@@ -12,6 +12,11 @@
                 <h6 class="m-0 font-weight-bold text-primary">심사 유저 목록</h6>
             </div>
             <div class="card-body">
+                <div style="float: right">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                    Search
+                    <input type="search" size="15" >
+                </div>
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
@@ -37,6 +42,8 @@
 <script>
     $(document).ready( function () {
         $('#dataTable').DataTable({
+            "searching": true,
+            "paging": true,
             "serverSide":true,
             "processing": true,
             "ajax": {
@@ -67,5 +74,14 @@
                 }
             ]
         });
+
+        $("#dataTable_filter").attr("hidden", "hidden");
+        var table = $('#dataTable').DataTable();
+        $('input').on('keyup', function (e) {
+            if(e.keyCode === 13){
+                console.log("hi");
+                var searchValue = $('input').val();
+                table.search(searchValue).draw();
+            }});
     } );
 </script>

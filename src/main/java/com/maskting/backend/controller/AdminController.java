@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -32,12 +33,25 @@ public class AdminController {
 
     @ResponseBody
     @GetMapping("/guests")
-    DataTableResponse returnGuests(ReviewRequest reviewRequest) {
-        List<User> guests = adminService.findSortingUser(reviewRequest);
-        List<ReviewResponse> reviewResponses = adminService.returnReviewResponse(guests);
+    DataTableResponse returnGuests(ReviewRequest reviewRequest, HttpServletRequest request) {
+        String name = request.getParameter("search[value]");
+        int total = 0;
+        List<User> guests = new ArrayList<>();
+
+        if(isSearching(name)){
+            total = userRepository.countByNameContains(name);
+            guests = adminService.findSortingUserByName(reviewRequest, name);
+        }else{
+            total = (int)userRepository.count();
+            guests = adminService.findSortingUser(reviewRequest);
+        }
+
+        List<ReviewResponse> reviewResponses = adminService.returnReviewResponse(guests);;
         int draw = reviewRequest.getDraw();
-        int total = (int)userRepository.count();
         return new DataTableResponse(draw, total, total, reviewResponses);
     }
 
+    private boolean isSearching(String name) {
+        return name.length() > 0;
+    }
 }

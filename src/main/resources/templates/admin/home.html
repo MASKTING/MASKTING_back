@@ -17,12 +17,10 @@
                         <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Birth</th>
-                            <th>Height</th>
+                            <th>Phone</th>
                             <th>Nickname</th>
                             <th>Profile1</th>
                             <th>Profile2</th>
-                            <th>Profile3</th>
                         </tr>
                         </thead>
                     </table>
@@ -49,8 +47,7 @@
             },
             "columns": [
                 {"data": "name"},
-                {"data": "birth"},
-                {"data": "height"},
+                {"data": "phone"},
                 {"data": "nickname"},
                 {"data": "profiles.0",
                     "render": function (data){
@@ -66,14 +63,6 @@
                             return 'X';
                         else
                             return '<a href="'+data+'">프로필2<a>'
-                    }
-                },
-                {"data": "profiles.2",
-                    "render": function (data){
-                        if (data.length <= 1)
-                            return 'X';
-                        else
-                            return '<a href="'+data+'">프로필3<a>'
                     }
                 }
             ]

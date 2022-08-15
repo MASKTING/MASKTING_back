@@ -13,8 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ReviewResponse {
     private String name;
-    private String birth;
-    private int height;
+    private String phone;
     private String nickname;
     private List<String> profiles;
 }

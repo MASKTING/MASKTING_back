@@ -52,6 +52,7 @@ public class SecurityConfig {
                 .and()
                     .authorizeRequests()
                 .antMatchers("/", "/api/user/signup", "/api/auth/silent-refresh", "/favicon.ico").permitAll()
+                .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                     .oauth2Login()

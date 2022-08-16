@@ -81,7 +81,7 @@ class UserServiceTest {
                 .build();
         S3Response s3Response = new S3Response("testName", "testPath");
         given(s3Uploader.upload(any(MultipartFile.class), anyString())).willReturn(s3Response);
-        User user = userFactory.createUser();
+        User user = userFactory.createUser("test","알콜쟁이 라이언");
         given(modelMapper.map(signupRequest, User.class)).willReturn(user);
         given(profileRepository.save(any())).willReturn(profile);
          given(userRepository.save(any())).willReturn(user);
@@ -111,7 +111,7 @@ class UserServiceTest {
     void returnAccessToken() {
         HttpServletResponse response = new MockHttpServletResponse();
         given(jwtUtil.createAccessToken(anyString(), anyString())).willReturn("testAccessToken");
-        User user = userFactory.createUser();
+        User user = userFactory.createUser("test","알콜쟁이 라이언");
 
         userService.returnAccessToken(response, user);
 
@@ -123,7 +123,7 @@ class UserServiceTest {
     void returnRefreshToken() {
         MockHttpServletRequest request = new MockHttpServletRequest();
         HttpServletResponse response = new MockHttpServletResponse();
-        User user = userFactory.createUser();
+        User user = userFactory.createUser("test","알콜쟁이 라이언");
         given(jwtUtil.createRefreshToken(anyString())).willReturn("testRefreshToken");
 
         userService.returnRefreshToken(request, response, user);

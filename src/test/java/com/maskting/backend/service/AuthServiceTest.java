@@ -100,7 +100,7 @@ class AuthServiceTest {
     @DisplayName("헤더에 액세스 토큰 저장 - 성공")
     void setAccessToken() {
         UserFactory userFactory = new UserFactory();
-        User user = userFactory.createUser();
+        User user = userFactory.createUser("test","알콜쟁이 라이언");
         HttpServletResponse response = mock(HttpServletResponse.class);
         given(userRepository.findByProviderId("testProviderId")).willReturn(user);
         given(jwtUtil.createAccessToken(anyString(), anyString())).willReturn(any());

@@ -71,7 +71,7 @@ class AuthControllerTest {
     @Test
     @DisplayName("RefreshToken 재발급")
     void silentRefresh() throws Exception {
-        User user = userFactory.createUser();
+        User user = userFactory.createUser("test", "알콜쟁이 라이언");
         userRepository.save(user);
         String key = UUID.randomUUID().toString();
         String refreshToken = jwtUtil.createRefreshToken(key);

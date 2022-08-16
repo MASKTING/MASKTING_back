@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/default">
+
+<th:block layout:fragment="content">
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">심사 유저 목록</h6>
+            </div>
+            <div class="card-body">
+                <div style="float: right">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                    Search
+                    <input type="search" size="15" >
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Nickname</th>
+                            <th>Profile1</th>
+                            <th>Profile2</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.container-fluid -->
+
+</th:block>
+</html>
+
+<script type="application/javascript">
+    $(document).ready( function () {
+        $('#dataTable').DataTable({
+            "searching": true,
+            "paging": true,
+            "serverSide":true,
+            "processing": true,
+            "ajax": {
+                "url": "/admin/guests",
+                "dataSrc": function (res) {
+                    return res.data;
+                }
+            },
+            "columns": [
+                {"data": "name",
+                    "render": function (data){
+                        return '<a href="javascript:void(0)" onclick="approval(\''+ data +'\')">' + data + '</a>'
+                    }
+                },
+                {"data": "phone"},
+                {"data": "nickname"},
+                {"data": "profiles.0",
+                    "render": function (data){
+                        if (data.length <= 1)
+                            return 'X';
+                        else
+                            return '<a href="'+data+'">프로필1<a>'
+                    }
+                },
+                {"data": "profiles.1",
+                    "render": function (data){
+                        if (data.length <= 1)
+                            return 'X';
+                        else
+                            return '<a href="'+data+'">프로필2<a>'
+                    }
+                }
+            ]
+        });
+
+        $("#dataTable_filter").attr("hidden", "hidden");
+        var table = $('#dataTable').DataTable();
+        $('input').on('keyup', function (e) {
+            if(e.keyCode === 13){
+                console.log("hi");
+                var searchValue = $('input').val();
+                table.search(searchValue).draw();
+            }});
+    } );
+
+    function approval(data){
+        console.log(data);
+        var check = confirm('정말 승인하시겠습니까?');
+        console.log(check);
+        if (check){
+            let f = document.createElement('form');
+            f.setAttribute('method', 'post');
+            f.setAttribute('action', '/admin/approval/' + data);
+            document.body.appendChild(f);
+            f.submit();
+        }
+    }
+</script>

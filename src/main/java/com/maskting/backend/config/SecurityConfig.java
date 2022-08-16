@@ -6,9 +6,11 @@ import com.maskting.backend.config.oauth.OAuth2AuthenticationSuccessHandler;
 import com.maskting.backend.service.oauth.OAuth2UserService;
 import com.maskting.backend.common.exception.oauth.CustomAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -28,9 +30,15 @@ public class SecurityConfig {
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
     @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() throws Exception {
+        return (web) -> web.ignoring().antMatchers("/vendor/**")
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                    .cors()
+                .cors()
                 .and()
                     .csrf().disable()
                     .formLogin().disable()
@@ -43,8 +51,9 @@ public class SecurityConfig {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .authorizeRequests()
-                    .antMatchers("/", "/api/user/signup", "/api/auth/silent-refresh").permitAll()
-                    .anyRequest().authenticated()
+                .antMatchers("/", "/api/user/signup", "/api/auth/silent-refresh", "/favicon.ico").permitAll()
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .anyRequest().authenticated()
                 .and()
                     .oauth2Login()
                     .authorizationEndpoint()

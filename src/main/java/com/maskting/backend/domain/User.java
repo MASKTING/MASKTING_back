@@ -83,6 +83,10 @@ public class User extends BaseTimeEntity{
 
     public void updateType(ProviderType providerType, RoleType roleType) {
         this.providerType = providerType;
+        updateRoleType(roleType);
+    }
+
+    public void updateRoleType(RoleType roleType) {
         this.roleType = roleType;
     }
 

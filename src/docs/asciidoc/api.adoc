@@ -47,3 +47,49 @@ include::{snippets}/user/logout/http-request.adoc[]
 ==== RESPONSE
 
 include::{snippets}/user/logout/http-response.adoc[]
+
+## Admin
+
+=== home (관리자 홈)
+
+==== REQUEST
+
+include::{snippets}/admin/http-request.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/admin/http-response.adoc[]
+
+=== guests (페이징 게스트 반환)
+
+==== REQUEST
+
+include::{snippets}/admin/guests/http-request.adoc[]
+
+include::{snippets}/admin/guests/request-parameters.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/admin/guests/http-response.adoc[]
+
+=== guestsWithSearch (검색 페이징 게스트 반환)
+
+==== REQUEST
+
+include::{snippets}/admin/guestsWithSearch/http-request.adoc[]
+
+include::{snippets}/admin/guestsWithSearch/request-parameters.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/admin/guestsWithSearch/http-response.adoc[]
+
+=== approval (심사 승인)
+
+==== REQUEST
+
+include::{snippets}/admin/approval/http-request.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/admin/approval/http-response.adoc[]

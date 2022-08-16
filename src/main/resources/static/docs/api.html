@@ -472,6 +472,34 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 </ul>
 </li>
+<li><a href="#_admin">Admin</a>
+<ul class="sectlevel2">
+<li><a href="#_home_관리자_홈">home (관리자 홈)</a>
+<ul class="sectlevel3">
+<li><a href="#_request_4">REQUEST</a></li>
+<li><a href="#_response_4">RESPONSE</a></li>
+</ul>
+</li>
+<li><a href="#_guests_페이징_게스트_반환">guests (페이징 게스트 반환)</a>
+<ul class="sectlevel3">
+<li><a href="#_request_5">REQUEST</a></li>
+<li><a href="#_response_5">RESPONSE</a></li>
+</ul>
+</li>
+<li><a href="#_guestswithsearch_검색_페이징_게스트_반환">guestsWithSearch (검색 페이징 게스트 반환)</a>
+<ul class="sectlevel3">
+<li><a href="#_request_6">REQUEST</a></li>
+<li><a href="#_response_6">RESPONSE</a></li>
+</ul>
+</li>
+<li><a href="#_approval_심사_승인">approval (심사 승인)</a>
+<ul class="sectlevel3">
+<li><a href="#_request_7">REQUEST</a></li>
+<li><a href="#_response_7">RESPONSE</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -487,7 +515,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/auth/silent-refresh HTTP/1.1
 Host: localhost:8080
-Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjOWNkZjg3ZC0xY2QyLTQxYzUtYmJkNy0xNmZmMTc0MmQ1ZmEiLCJpYXQiOjE2NTk2Njg1NDcsImV4cCI6MTY2MDg3ODE0N30.XyF9w_e6uiXVSaX2_u6E5JfjaSZQwlB0_DMcz6U9gaQ</code></pre>
+Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlYTAwODNiYi04NjJhLTRmZTctODEwYi0wYWI0M2Y2MGQ3NTIiLCJpYXQiOjE2NjA2MzkwOTYsImV4cCI6MTY2MTg0ODY5Nn0._pWHHM7NBSHkSLh-88Wiqry6xmWK0qBV26ff5uykGxc</code></pre>
 </div>
 </div>
 </div>
@@ -496,7 +524,7 @@ Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjOWNkZjg3ZC0xY2QyLTQxYzUtYm
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0UHJvdmlkZXJJZCIsInJvbGUiOiJST0xFX1VTRVIiLCJpYXQiOjE2NTk2Njg1NDgsImV4cCI6MTY1OTY3MDM0OH0.A0XdwSeuGvjjtdSsGXbArxGJ3rsBtN_UlkOHI6m1ekQ</code></pre>
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0UHJvdmlkZXJJZCIsInJvbGUiOiJST0xFX1VTRVIiLCJpYXQiOjE2NjA2MzkwOTgsImV4cCI6MTY2MDY0MDg5OH0.onQdv9uudkfKsxpO4s-rlpPeR2Jap7U3lu_QA6kG8wA</code></pre>
 </div>
 </div>
 </div>
@@ -639,8 +667,8 @@ accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0UHJvdmlkZXJJZCIsInJvbGUiOiJST0
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0UHJvdmlkZXJJZCIsInJvbGUiOiJST0xFX0dVRVNUIiwiaWF0IjoxNjU5NjY4NTQ5LCJleHAiOjE2NTk2NzAzNDl9.9F7Yw2XEOh4F79PalEAe0NowPjhlLz3pwE8DXEv9xls
-Set-Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwZGQxYzRmNS0xNzIxLTQ4NzUtYTJlMy1jM2U2N2M3Yzg4Y2QiLCJpYXQiOjE2NTk2Njg1NDksImV4cCI6MTY2MDg3ODE0OX0.uJKJiMZnUC5qaUhAVYNEW_vtmtCjgZQiHU8xyW-KgoA; Path=/; Max-Age=1209600000; Expires=Fri, 03 Dec 2060 03:02:29 GMT; HttpOnly</code></pre>
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0UHJvdmlkZXJJZCIsInJvbGUiOiJST0xFX0dVRVNUIiwiaWF0IjoxNjYwNjM5MDk4LCJleHAiOjE2NjA2NDA4OTh9.zGYRgaN3ipuU7F_avfj2NThzhe_KQfxbITab7lwriUE
+Set-Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlYTdhYTEzZi1mZWEzLTRhNDMtODkyYy05ZjU4NmQ0OWM0MmUiLCJpYXQiOjE2NjA2MzkwOTgsImV4cCI6MTY2MTg0ODY5OH0.OC5WTzyFfTRU07MHxIZHEyeOte95AGYRfTfQopGH_Ks; Path=/; Max-Age=1209600000; Expires=Tue, 14 Dec 2060 08:38:18 GMT; HttpOnly</code></pre>
 </div>
 </div>
 </div>
@@ -670,11 +698,646 @@ Set-Cookie: refreshToken=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_admin"><a class="link" href="#_admin">Admin</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_home_관리자_홈"><a class="link" href="#_home_관리자_홈">home (관리자 홈)</a></h3>
+<div class="sect3">
+<h4 id="_request_4"><a class="link" href="#_request_4">REQUEST</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /admin HTTP/1.1
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY2MDYzOTA5NCwiZXhwIjoxNjYwNjQwODk0fQ.UHJLNw_5izKh-RCs4GL7jA6Q8h89G0spmvwBqbMOv_0
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_4"><a class="link" href="#_response_4">RESPONSE</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Language: en
+Content-Type: text/html;charset=UTF-8
+Content-Length: 7638
+
+&lt;!DOCTYPE html&gt;
+&lt;html lang="ko"&gt;
+
+&lt;!-- 공통 헤더--&gt;
+
+  &lt;head&gt;
+    &lt;meta charset="UTF-8"/&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"&gt;
+
+    &lt;title&gt;Admin Page&lt;/title&gt;
+
+    &lt;link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet"&gt;
+    &lt;link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css"&gt;
+    &lt;link href="/css/sb-admin-2.min.css" rel="stylesheet"&gt;
+
+    &lt;!-- DataTable --&gt;
+    &lt;link href="/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet"&gt;
+
+  &lt;/head&gt;
+
+
+&lt;body id="page-top"&gt;
+&lt;div id="wrapper"&gt;
+  &lt;!-- 사이드바--&gt;
+
+
+  &lt;!-- Sidebar --&gt;
+  &lt;ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar"&gt;
+
+    &lt;!-- Sidebar - Brand --&gt;
+    &lt;a class="sidebar-brand d-flex align-items-center justify-content-center" href="/admin"&gt;
+      &lt;div class="sidebar-brand-icon rotate-n-15"&gt;
+        &lt;i class="fas fa-laugh-wink"&gt;&lt;/i&gt;
+      &lt;/div&gt;
+      &lt;div class="sidebar-brand-text mx-3"&gt;Maskting Admin&lt;/div&gt;
+    &lt;/a&gt;
+
+      &lt;!-- Divider --&gt;
+    &lt;hr class="sidebar-divider my-0"&gt;
+
+    &lt;li class="nav-item active"&gt;
+      &lt;a class="nav-link" href="/admin"&gt;
+        &lt;i class="fas fa-fw fa-table"&gt;&lt;/i&gt;
+        &lt;span&gt;Membership Review&lt;/span&gt;&lt;/a&gt;
+    &lt;/li&gt;
+
+    &lt;!-- Divider --&gt;
+    &lt;hr class="sidebar-divider"&gt;
+
+  &lt;/ul&gt;
+  &lt;!-- End of Sidebar --&gt;
+
+
+
+  &lt;div id="content-wrapper" class="d-flex flex-column"&gt;
+    &lt;div id="content"&gt;
+      &lt;!-- 상단바--&gt;
+
+
+  &lt;!-- Topbar --&gt;
+  &lt;nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"&gt;
+    &lt;ul class="navbar-nav ml-auto"&gt;
+      &lt;li class="nav-item dropdown no-arrow"&gt;
+        &lt;a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"&gt;
+          &lt;span class="mr-2 d-none d-lg-inline text-gray-600 small"&gt;admin&lt;/span&gt;
+        &lt;/a&gt;
+        &lt;!-- Dropdown - User Information --&gt;
+        &lt;div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+             aria-labelledby="userDropdown"&gt;
+          &lt;a class="dropdown-item" href="#"&gt;
+            &lt;i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"&gt;&lt;/i&gt;
+            test
+          &lt;/a&gt;
+          &lt;a class="dropdown-item" href="#"&gt;
+            &lt;i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"&gt;&lt;/i&gt;
+            test
+          &lt;/a&gt;
+          &lt;a class="dropdown-item" href="#"&gt;
+            &lt;i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"&gt;&lt;/i&gt;
+            test
+          &lt;/a&gt;
+          &lt;div class="dropdown-divider"&gt;&lt;/div&gt;
+          &lt;a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal"&gt;
+            &lt;i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"&gt;&lt;/i&gt;
+            Logout
+          &lt;/a&gt;
+        &lt;/div&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/nav&gt;
+  &lt;!-- End of Topbar --&gt;
+
+
+      &lt;!-- 본문--&gt;
+
+    &lt;!-- Begin Page Content --&gt;
+    &lt;div class="container-fluid"&gt;
+        &lt;!-- DataTales Example --&gt;
+        &lt;div class="card shadow mb-4"&gt;
+            &lt;div class="card-header py-3"&gt;
+                &lt;h6 class="m-0 font-weight-bold text-primary"&gt;심사 유저 목록&lt;/h6&gt;
+            &lt;/div&gt;
+            &lt;div class="card-body"&gt;
+                &lt;div style="float: right"&gt;
+                    &lt;i class="fa fa-search" aria-hidden="true"&gt;&lt;/i&gt;
+                    Search
+                    &lt;input type="search" size="15" &gt;
+                &lt;/div&gt;
+                &lt;div class="table-responsive"&gt;
+                    &lt;table class="table table-bordered" id="dataTable" width="100%" cellspacing="0"&gt;
+                        &lt;thead&gt;
+                        &lt;tr&gt;
+                            &lt;th&gt;Name&lt;/th&gt;
+                            &lt;th&gt;Phone&lt;/th&gt;
+                            &lt;th&gt;Nickname&lt;/th&gt;
+                            &lt;th&gt;Profile1&lt;/th&gt;
+                            &lt;th&gt;Profile2&lt;/th&gt;
+                        &lt;/tr&gt;
+                        &lt;/thead&gt;
+                    &lt;/table&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+    &lt;/div&gt;
+    &lt;!-- /.container-fluid --&gt;
+
+
+    &lt;/div&gt;
+    &lt;!-- 공통 하단--&gt;
+
+  &lt;footer class="sticky-footer bg-white"&gt;
+    &lt;div class="container my-auto"&gt;
+      &lt;div class="copyright text-center my-auto"&gt;
+        &lt;span&gt;Copyright &amp;copy; maskting 2022&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/footer&gt;
+
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- 공통 스크립트--&gt;
+
+
+
+  &lt;!-- Bootstrap core JavaScript--&gt;
+  &lt;script src="/vendor/jquery/jquery.min.js"&gt;&lt;/script&gt;
+  &lt;script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"&gt;&lt;/script&gt;
+
+  &lt;!-- Core plugin JavaScript--&gt;
+  &lt;script src="/vendor/jquery-easing/jquery.easing.min.js"&gt;&lt;/script&gt;
+
+  &lt;!-- Custom scripts for all pages--&gt;
+  &lt;script src="/js/sb-admin-2.min.js"&gt;&lt;/script&gt;
+
+  &lt;!-- Page level plugins --&gt;
+  &lt;script src="/vendor/chart.js/Chart.min.js"&gt;&lt;/script&gt;
+
+  &lt;!--  DataTable  --&gt;
+  &lt;script src="/vendor/datatables/jquery.dataTables.js"&gt;&lt;/script&gt;
+  &lt;script src="/vendor/datatables/dataTables.bootstrap4.js"&gt;&lt;/script&gt;
+
+  &lt;!-- Page level custom scripts --&gt;
+  &lt;!--    &lt;script th:src="@{/js/demo/chart-area-demo.js}"&gt;&lt;/script&gt;--&gt;
+  &lt;!--    &lt;script th:src="@{/js/demo/chart-pie-demo.js}"&gt;&lt;/script&gt;--&gt;
+
+
+&lt;/body&gt;
+&lt;/html&gt;
+
+&lt;script type="application/javascript"&gt;
+    $(document).ready( function () {
+        $('#dataTable').DataTable({
+            "searching": true,
+            "paging": true,
+            "serverSide":true,
+            "processing": true,
+            "ajax": {
+                "url": "/admin/guests",
+                "dataSrc": function (res) {
+                    return res.data;
+                }
+            },
+            "columns": [
+                {"data": "name",
+                    "render": function (data){
+                        return '&lt;a href="javascript:void(0)" onclick="approval(\''+ data +'\')"&gt;' + data + '&lt;/a&gt;'
+                    }
+                },
+                {"data": "phone"},
+                {"data": "nickname"},
+                {"data": "profiles.0",
+                    "render": function (data){
+                        if (data.length &lt;= 1)
+                            return 'X';
+                        else
+                            return '&lt;a href="'+data+'"&gt;프로필1&lt;a&gt;'
+                    }
+                },
+                {"data": "profiles.1",
+                    "render": function (data){
+                        if (data.length &lt;= 1)
+                            return 'X';
+                        else
+                            return '&lt;a href="'+data+'"&gt;프로필2&lt;a&gt;'
+                    }
+                }
+            ]
+        });
+
+        $("#dataTable_filter").attr("hidden", "hidden");
+        var table = $('#dataTable').DataTable();
+        $('input').on('keyup', function (e) {
+            if(e.keyCode === 13){
+                console.log("hi");
+                var searchValue = $('input').val();
+                table.search(searchValue).draw();
+            }});
+    } );
+
+    function approval(data){
+        console.log(data);
+        var check = confirm('정말 승인하시겠습니까?');
+        console.log(check);
+        if (check){
+            let f = document.createElement('form');
+            f.setAttribute('method', 'post');
+            f.setAttribute('action', '/admin/approval/' + data);
+            document.body.appendChild(f);
+            f.submit();
+        }
+    }
+&lt;/script&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_guests_페이징_게스트_반환"><a class="link" href="#_guests_페이징_게스트_반환">guests (페이징 게스트 반환)</a></h3>
+<div class="sect3">
+<h4 id="_request_5"><a class="link" href="#_request_5">REQUEST</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /admin/guests?search%5Bvalue%5D=&amp;draw=1&amp;start=0&amp;length=10&amp;search%5Bvalue%5D= HTTP/1.1
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY2MDYzOTA5NiwiZXhwIjoxNjYwNjQwODk2fQ.a8D1GFI739kUKPuisoKTSkrGcrBRKQODVM_y0k6_RmQ
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>draw</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">몇번째 draw</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>start</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">시작(offset)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>length</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">길이(limit)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>search[value]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">검색값</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_response_5"><a class="link" href="#_response_5">RESPONSE</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 888
+
+{"draw":1,"recordsTotal":16,"recordsFiltered":16,"data":[{"name":"First","phone":"01012345678","nickname":"user0","profiles":["x","x","x"]},{"name":"First","phone":"01012345678","nickname":"user1","profiles":["x","x","x"]},{"name":"First","phone":"01012345678","nickname":"user2","profiles":["x","x","x"]},{"name":"First","phone":"01012345678","nickname":"user3","profiles":["x","x","x"]},{"name":"First","phone":"01012345678","nickname":"user4","profiles":["x","x","x"]},{"name":"First","phone":"01012345678","nickname":"user5","profiles":["x","x","x"]},{"name":"First","phone":"01012345678","nickname":"user6","profiles":["x","x","x"]},{"name":"First","phone":"01012345678","nickname":"user7","profiles":["x","x","x"]},{"name":"First","phone":"01012345678","nickname":"user8","profiles":["x","x","x"]},{"name":"First","phone":"01012345678","nickname":"user9","profiles":["x","x","x"]}]}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_guestswithsearch_검색_페이징_게스트_반환"><a class="link" href="#_guestswithsearch_검색_페이징_게스트_반환">guestsWithSearch (검색 페이징 게스트 반환)</a></h3>
+<div class="sect3">
+<h4 id="_request_6"><a class="link" href="#_request_6">REQUEST</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /admin/guests?search%5Bvalue%5D=Second&amp;draw=1&amp;start=0&amp;length=10 HTTP/1.1
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY2MDYzOTA5NiwiZXhwIjoxNjYwNjQwODk2fQ.a8D1GFI739kUKPuisoKTSkrGcrBRKQODVM_y0k6_RmQ
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>draw</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">몇번째 draw</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>start</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">시작(offset)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>length</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">길이(limit)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>search[value]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">검색값</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_response_6"><a class="link" href="#_response_6">RESPONSE</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 481
+
+{"draw":1,"recordsTotal":5,"recordsFiltered":5,"data":[{"name":"Second","phone":"01012345678","nickname":"user10","profiles":["x","x","x"]},{"name":"Second","phone":"01012345678","nickname":"user11","profiles":["x","x","x"]},{"name":"Second","phone":"01012345678","nickname":"user12","profiles":["x","x","x"]},{"name":"Second","phone":"01012345678","nickname":"user13","profiles":["x","x","x"]},{"name":"Second","phone":"01012345678","nickname":"user14","profiles":["x","x","x"]}]}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_approval_심사_승인"><a class="link" href="#_approval_심사_승인">approval (심사 승인)</a></h3>
+<div class="sect3">
+<h4 id="_request_7"><a class="link" href="#_request_7">REQUEST</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /admin/approval/test HTTP/1.1
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY2MDYzOTA5NiwiZXhwIjoxNjYwNjQwODk2fQ.a8D1GFI739kUKPuisoKTSkrGcrBRKQODVM_y0k6_RmQ
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_7"><a class="link" href="#_response_7">RESPONSE</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Language: en
+Content-Type: text/html;charset=UTF-8
+Content-Length: 7637
+
+&lt;!DOCTYPE html&gt;
+&lt;html lang="ko"&gt;
+
+&lt;!-- 공통 헤더--&gt;
+
+  &lt;head&gt;
+    &lt;meta charset="UTF-8"/&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"&gt;
+
+    &lt;title&gt;Admin Page&lt;/title&gt;
+
+    &lt;link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet"&gt;
+    &lt;link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css"&gt;
+    &lt;link href="/css/sb-admin-2.min.css" rel="stylesheet"&gt;
+
+    &lt;!-- DataTable --&gt;
+    &lt;link href="/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet"&gt;
+
+  &lt;/head&gt;
+
+
+&lt;body id="page-top"&gt;
+&lt;div id="wrapper"&gt;
+  &lt;!-- 사이드바--&gt;
+
+
+  &lt;!-- Sidebar --&gt;
+  &lt;ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar"&gt;
+
+    &lt;!-- Sidebar - Brand --&gt;
+    &lt;a class="sidebar-brand d-flex align-items-center justify-content-center" href="/admin"&gt;
+      &lt;div class="sidebar-brand-icon rotate-n-15"&gt;
+        &lt;i class="fas fa-laugh-wink"&gt;&lt;/i&gt;
+      &lt;/div&gt;
+      &lt;div class="sidebar-brand-text mx-3"&gt;Maskting Admin&lt;/div&gt;
+    &lt;/a&gt;
+
+      &lt;!-- Divider --&gt;
+    &lt;hr class="sidebar-divider my-0"&gt;
+
+    &lt;li class="nav-item active"&gt;
+      &lt;a class="nav-link" href="/admin"&gt;
+        &lt;i class="fas fa-fw fa-table"&gt;&lt;/i&gt;
+        &lt;span&gt;Membership Review&lt;/span&gt;&lt;/a&gt;
+    &lt;/li&gt;
+
+    &lt;!-- Divider --&gt;
+    &lt;hr class="sidebar-divider"&gt;
+
+  &lt;/ul&gt;
+  &lt;!-- End of Sidebar --&gt;
+
+
+
+  &lt;div id="content-wrapper" class="d-flex flex-column"&gt;
+    &lt;div id="content"&gt;
+      &lt;!-- 상단바--&gt;
+
+
+  &lt;!-- Topbar --&gt;
+  &lt;nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"&gt;
+    &lt;ul class="navbar-nav ml-auto"&gt;
+      &lt;li class="nav-item dropdown no-arrow"&gt;
+        &lt;a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"&gt;
+          &lt;span class="mr-2 d-none d-lg-inline text-gray-600 small"&gt;test&lt;/span&gt;
+        &lt;/a&gt;
+        &lt;!-- Dropdown - User Information --&gt;
+        &lt;div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+             aria-labelledby="userDropdown"&gt;
+          &lt;a class="dropdown-item" href="#"&gt;
+            &lt;i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"&gt;&lt;/i&gt;
+            test
+          &lt;/a&gt;
+          &lt;a class="dropdown-item" href="#"&gt;
+            &lt;i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"&gt;&lt;/i&gt;
+            test
+          &lt;/a&gt;
+          &lt;a class="dropdown-item" href="#"&gt;
+            &lt;i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"&gt;&lt;/i&gt;
+            test
+          &lt;/a&gt;
+          &lt;div class="dropdown-divider"&gt;&lt;/div&gt;
+          &lt;a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal"&gt;
+            &lt;i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"&gt;&lt;/i&gt;
+            Logout
+          &lt;/a&gt;
+        &lt;/div&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/nav&gt;
+  &lt;!-- End of Topbar --&gt;
+
+
+      &lt;!-- 본문--&gt;
+
+    &lt;!-- Begin Page Content --&gt;
+    &lt;div class="container-fluid"&gt;
+        &lt;!-- DataTales Example --&gt;
+        &lt;div class="card shadow mb-4"&gt;
+            &lt;div class="card-header py-3"&gt;
+                &lt;h6 class="m-0 font-weight-bold text-primary"&gt;심사 유저 목록&lt;/h6&gt;
+            &lt;/div&gt;
+            &lt;div class="card-body"&gt;
+                &lt;div style="float: right"&gt;
+                    &lt;i class="fa fa-search" aria-hidden="true"&gt;&lt;/i&gt;
+                    Search
+                    &lt;input type="search" size="15" &gt;
+                &lt;/div&gt;
+                &lt;div class="table-responsive"&gt;
+                    &lt;table class="table table-bordered" id="dataTable" width="100%" cellspacing="0"&gt;
+                        &lt;thead&gt;
+                        &lt;tr&gt;
+                            &lt;th&gt;Name&lt;/th&gt;
+                            &lt;th&gt;Phone&lt;/th&gt;
+                            &lt;th&gt;Nickname&lt;/th&gt;
+                            &lt;th&gt;Profile1&lt;/th&gt;
+                            &lt;th&gt;Profile2&lt;/th&gt;
+                        &lt;/tr&gt;
+                        &lt;/thead&gt;
+                    &lt;/table&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+    &lt;/div&gt;
+    &lt;!-- /.container-fluid --&gt;
+
+
+    &lt;/div&gt;
+    &lt;!-- 공통 하단--&gt;
+
+  &lt;footer class="sticky-footer bg-white"&gt;
+    &lt;div class="container my-auto"&gt;
+      &lt;div class="copyright text-center my-auto"&gt;
+        &lt;span&gt;Copyright &amp;copy; maskting 2022&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/footer&gt;
+
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- 공통 스크립트--&gt;
+
+
+
+  &lt;!-- Bootstrap core JavaScript--&gt;
+  &lt;script src="/vendor/jquery/jquery.min.js"&gt;&lt;/script&gt;
+  &lt;script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"&gt;&lt;/script&gt;
+
+  &lt;!-- Core plugin JavaScript--&gt;
+  &lt;script src="/vendor/jquery-easing/jquery.easing.min.js"&gt;&lt;/script&gt;
+
+  &lt;!-- Custom scripts for all pages--&gt;
+  &lt;script src="/js/sb-admin-2.min.js"&gt;&lt;/script&gt;
+
+  &lt;!-- Page level plugins --&gt;
+  &lt;script src="/vendor/chart.js/Chart.min.js"&gt;&lt;/script&gt;
+
+  &lt;!--  DataTable  --&gt;
+  &lt;script src="/vendor/datatables/jquery.dataTables.js"&gt;&lt;/script&gt;
+  &lt;script src="/vendor/datatables/dataTables.bootstrap4.js"&gt;&lt;/script&gt;
+
+  &lt;!-- Page level custom scripts --&gt;
+  &lt;!--    &lt;script th:src="@{/js/demo/chart-area-demo.js}"&gt;&lt;/script&gt;--&gt;
+  &lt;!--    &lt;script th:src="@{/js/demo/chart-pie-demo.js}"&gt;&lt;/script&gt;--&gt;
+
+
+&lt;/body&gt;
+&lt;/html&gt;
+
+&lt;script type="application/javascript"&gt;
+    $(document).ready( function () {
+        $('#dataTable').DataTable({
+            "searching": true,
+            "paging": true,
+            "serverSide":true,
+            "processing": true,
+            "ajax": {
+                "url": "/admin/guests",
+                "dataSrc": function (res) {
+                    return res.data;
+                }
+            },
+            "columns": [
+                {"data": "name",
+                    "render": function (data){
+                        return '&lt;a href="javascript:void(0)" onclick="approval(\''+ data +'\')"&gt;' + data + '&lt;/a&gt;'
+                    }
+                },
+                {"data": "phone"},
+                {"data": "nickname"},
+                {"data": "profiles.0",
+                    "render": function (data){
+                        if (data.length &lt;= 1)
+                            return 'X';
+                        else
+                            return '&lt;a href="'+data+'"&gt;프로필1&lt;a&gt;'
+                    }
+                },
+                {"data": "profiles.1",
+                    "render": function (data){
+                        if (data.length &lt;= 1)
+                            return 'X';
+                        else
+                            return '&lt;a href="'+data+'"&gt;프로필2&lt;a&gt;'
+                    }
+                }
+            ]
+        });
+
+        $("#dataTable_filter").attr("hidden", "hidden");
+        var table = $('#dataTable').DataTable();
+        $('input').on('keyup', function (e) {
+            if(e.keyCode === 13){
+                console.log("hi");
+                var searchValue = $('input').val();
+                table.search(searchValue).draw();
+            }});
+    } );
+
+    function approval(data){
+        console.log(data);
+        var check = confirm('정말 승인하시겠습니까?');
+        console.log(check);
+        if (check){
+            let f = document.createElement('form');
+            f.setAttribute('method', 'post');
+            f.setAttribute('action', '/admin/approval/' + data);
+            document.body.appendChild(f);
+            f.submit();
+        }
+    }
+&lt;/script&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-08-03 16:37:48 +0900
+Last updated 2022-08-16 17:36:14 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

@@ -42,7 +42,8 @@ public class AdminService {
     private PageRequest getPageRequest(ReviewRequest reviewRequest) {
         int start = reviewRequest.getStart();
         int length = reviewRequest.getLength();
-        return PageRequest.of(start, length);
+        int page = start/length;
+        return PageRequest.of(page, length);
     }
 
     public List<User> findSortingUser(ReviewRequest reviewRequest) {

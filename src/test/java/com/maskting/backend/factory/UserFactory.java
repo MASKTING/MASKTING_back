@@ -56,11 +56,12 @@ public class UserFactory {
                 .providerId("testProviderId")
                 .providerType(ProviderType.GOOGLE)
                 .sort(true)
+                .profiles(new ArrayList<>())
                 .build();
         return user;
     }
 
-    public List<User> createGuests(){
+    public List<User> createSavedGuests(){
         List<User> users = new ArrayList<>();
         for (int i = 0; i < 15; i++) {
             User user;
@@ -78,6 +79,16 @@ public class UserFactory {
         else
             user = createGuest("Second", "user" + i);
         return user;
+    }
+
+    public List<User> createGuests(){
+        List<User> users = new ArrayList<>();
+        for (int i = 0; i < 15; i++) {
+            User user;
+            user = getUser(i);
+            users.add(user);
+        }
+        return users;
     }
 
     public User createAdmin(){

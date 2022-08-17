@@ -72,7 +72,7 @@ class AdminControllerTest {
     @Test
     @DisplayName("심사받는 페이징 유저들 반환")
     void returnGuests() throws Exception {
-        userFactory.createGuests();
+        userFactory.createSavedGuests();
         String draw = "1";
         String start = "0";
         String length = "10";
@@ -97,7 +97,7 @@ class AdminControllerTest {
     @Test
     @DisplayName("심사받는 검색 페이징 유저들 반환")
     void returnGuestsWithSearch() throws Exception {
-        userFactory.createGuests();
+        userFactory.createSavedGuests();
         String draw = "1";
         String start = "0";
         String length = "10";

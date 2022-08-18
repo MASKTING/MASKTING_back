@@ -66,6 +66,10 @@ public class User extends BaseTimeEntity{
     private String nickname;
 
     @NotNull
+    @Embedded
+    private Partner partner;
+
+    @NotNull
     private String providerId;
 
     @NotNull

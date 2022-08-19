@@ -66,5 +66,26 @@ public class SignupRequest {
     @NotNull
     private String nickname;
 
+    @NotNull
+    private String partnerLocation;
+
+    @NotNull
+    private String partnerDuty;
+
+    @NotNull
+    private String partnerSmoking;
+
+    @NotNull
+    private String partnerReligion;
+
+    @NotNull
+    private int partnerDrinking;
+
+    @NotNull
+    private String partnerHeight;
+
+    @NotNull
+    private String partnerBodyType;
+
     private List<MultipartFile> profiles;
 }

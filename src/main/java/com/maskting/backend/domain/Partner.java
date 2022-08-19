@@ -15,7 +15,7 @@ public class Partner {
     private String partnerDuty;
     private String partnerSmoking;
     private String partnerReligion;
-    private Integer partnerDrinking;
+    private int partnerDrinking;
     private String partnerHeight;
     private String partnerBodyType;
 }

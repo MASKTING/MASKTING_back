@@ -105,4 +105,8 @@ public class User extends BaseTimeEntity{
     public void updateSort() {
         this.sort = !isSort();
     }
+
+    public void updatePartner(Partner partner) {
+        this.partner = partner;
+    }
 }

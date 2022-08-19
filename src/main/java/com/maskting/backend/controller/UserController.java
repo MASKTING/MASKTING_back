@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 
 @RestController
@@ -21,7 +22,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(SignupRequest signupRequest,
+    public ResponseEntity<?> signup(@Valid SignupRequest signupRequest,
                                     HttpServletRequest request, HttpServletResponse response) throws IOException {
         User user = userService.joinUser(signupRequest);
         userService.returnAccessToken(response, user);

@@ -1,12 +1,13 @@
 package com.maskting.backend.dto.request;
 
-import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Getter
@@ -15,34 +16,34 @@ import java.util.List;
 @AllArgsConstructor
 public class SignupRequest {
 
-    @NotNull
+    @NotBlank
     private String name;
 
-    @NotNull
+    @NotBlank
     private String email;
 
-    @NotNull
+    @NotBlank
     private String gender;
 
-    @NotNull
+    @NotBlank
     private String birth;
 
-    @NotNull
+    @NotBlank
     private String location;
 
-    @NotNull
+    @NotBlank
     private String occupation;
 
-    @NotNull
+    @NotBlank
     private String phone;
 
-    @NotNull
+    @NotBlank
     private String providerId;
 
-    @NotNull
+    @NotBlank
     private String provider;
 
-    @NotNull
+    @NotBlank
     private String interest;
 
     @NotNull
@@ -60,31 +61,31 @@ public class SignupRequest {
     @NotNull
     private int bodyType;
 
-    @NotNull
+    @NotBlank
     private String religion;
 
-    @NotNull
+    @NotBlank
     private String nickname;
 
-    @NotNull
+    @NotBlank
     private String partnerLocation;
 
-    @NotNull
+    @NotBlank
     private String partnerDuty;
 
-    @NotNull
+    @NotBlank
     private String partnerSmoking;
 
-    @NotNull
+    @NotBlank
     private String partnerReligion;
 
     @NotNull
     private int partnerDrinking;
 
-    @NotNull
+    @NotBlank
     private String partnerHeight;
 
-    @NotNull
+    @NotBlank
     private String partnerBodyType;
 
     private List<MultipartFile> profiles;

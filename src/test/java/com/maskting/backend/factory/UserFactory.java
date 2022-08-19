@@ -82,27 +82,13 @@ public class UserFactory {
     }
 
     public User createAdmin(){
-        Partner partner = new Partner("admin", "admin", "admin",
-                "admin", 0, "admin", "admin");
         User user = User.builder()
                 .name("admin")
                 .email("admin@gmail.com")
-                .gender("admin")
-                .birth("admin")
-                .location("admin")
-                .occupation("admin")
-                .phone("admin")
-                .interest("admin")
-                .drinking(0)
-                .height(0)
-                .bodyType(0)
-                .religion("admin")
                 .nickname("admin")
                 .roleType(RoleType.ADMIN)
                 .providerId("adminProviderId")
                 .providerType(ProviderType.GOOGLE)
-                .profiles(new ArrayList<>())
-                .partner(partner)
                 .build();
         return user;
     }

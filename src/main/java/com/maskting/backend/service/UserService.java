@@ -59,7 +59,10 @@ public class UserService {
 
     private User createUser(SignupRequest signupRequest, ProviderType providerType, List<Profile> profiles) {
         User user = modelMapper.map(signupRequest, User.class);
+        Partner partner = modelMapper.map(signupRequest, Partner.class);
+
         user.updateType(providerType, RoleType.GUEST);
+        user.updatePartner(partner);
         user.addProfiles(profiles);
         user.updateSort();
         return user;

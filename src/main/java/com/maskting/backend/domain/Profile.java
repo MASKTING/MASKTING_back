@@ -1,12 +1,12 @@
 package com.maskting.backend.domain;
 
-import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Getter
@@ -21,10 +21,10 @@ public class Profile {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @NotNull
+    @NotBlank
     private String path;
 
-    @NotNull
+    @NotBlank
     private String name;
 
     public void updateUser(User user) {

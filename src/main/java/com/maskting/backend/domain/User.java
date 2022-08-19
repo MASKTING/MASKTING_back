@@ -1,12 +1,12 @@
 package com.maskting.backend.domain;
 
-import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,58 +21,49 @@ public class User extends BaseTimeEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @NotBlank
     private String name;
 
-    @NotNull
+    @NotBlank
     private String email;
 
-    @NotNull
     private String gender;
 
-    @NotNull
     private String birth;
 
-    @NotNull
     private String location;
 
-    @NotNull
     private String occupation;
 
-    @NotNull
     private String phone;
 
-    @NotNull
     private String interest;
 
     private boolean duty;
 
     private boolean smoking;
 
-    @NotNull
     private int drinking;
 
-    @NotNull
     private int height;
 
-    @NotNull
     private int bodyType;
 
-    @NotNull
     private String religion;
 
-    @NotNull
+    @NotBlank
     @Column(unique = true)
     private String nickname;
 
-    @NotNull
+    @Embedded
+    private Partner partner;
+
+    @NotBlank
     private String providerId;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     private ProviderType providerType;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     private RoleType roleType;
 
@@ -100,5 +91,9 @@ public class User extends BaseTimeEntity{
 
     public void updateSort() {
         this.sort = !isSort();
+    }
+
+    public void updatePartner(Partner partner) {
+        this.partner = partner;
     }
 }

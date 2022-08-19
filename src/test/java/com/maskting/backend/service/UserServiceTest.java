@@ -102,7 +102,8 @@ class UserServiceTest {
                 "01012345678", "testProviderId", "google",
                 "산책", true, false,
                 5, 181, 3,
-                "무교", "알콜쟁이 라이언", profiles);
+                "무교", "알콜쟁이 라이언", "경기 북부, 경기 중부", "any", "any",
+                "무교", 1, "165, 175", "2, 4", profiles);
         return signupRequest;
     }
 

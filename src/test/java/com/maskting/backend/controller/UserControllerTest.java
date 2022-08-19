@@ -116,6 +116,13 @@ class UserControllerTest {
                         .param("bodyType", "3")
                         .param("religion", "무교")
                         .param("nickname", "테스트닉네임")
+                        .param("partnerLocation", "경기 북부, 경기 중부")
+                        .param("partnerDuty", "any")
+                        .param("partnerSmoking", "any")
+                        .param("partnerReligion", "무교")
+                        .param("partnerDrinking", "1")
+                        .param("partnerHeight", "165, 175")
+                        .param("partnerBodyType", "2, 4")
                         .with(requestPostProcessor -> {
                             requestPostProcessor.setMethod("POST");
                             return requestPostProcessor;
@@ -143,6 +150,13 @@ class UserControllerTest {
                                 ,parameterWithName("bodyType").description("체형")
                                 ,parameterWithName("religion").description("종교")
                                 ,parameterWithName("nickname").description("닉네임")
+                                ,parameterWithName("partnerLocation").description("상대방 지역 (다중선택 가능)")
+                                ,parameterWithName("partnerDuty").description("상대방 군필여부(여자인경우만)")
+                                ,parameterWithName("partnerSmoking").description("상대방 군필여부(여자인경우만, 남자인 경우 any)")
+                                ,parameterWithName("partnerReligion").description("상대방 종교 (다중선택 가능)")
+                                ,parameterWithName("partnerDrinking").description("상대방 음주")
+                                ,parameterWithName("partnerHeight").description("상대방 키(최소, 최대)")
+                                ,parameterWithName("partnerBodyType").description("상대방 체형 (다중선택 가능)")
                         )
                         , requestParts(
                                 partWithName("profiles").description("첨부 프로필")

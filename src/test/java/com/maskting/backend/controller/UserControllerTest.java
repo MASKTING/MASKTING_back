@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maskting.backend.domain.ProviderType;
 import com.maskting.backend.domain.RefreshToken;
 import com.maskting.backend.domain.User;
+import com.maskting.backend.dto.request.SignupRequest;
+import com.maskting.backend.factory.RequestFactory;
 import com.maskting.backend.repository.ProfileRepository;
 import com.maskting.backend.repository.RefreshTokenRepository;
 import com.maskting.backend.repository.UserRepository;
@@ -48,8 +50,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Import(S3MockConfig.class)
 @ExtendWith(RestDocumentationExtension.class)
 class UserControllerTest {
+
+    private final String pre = "/api/user";
+    private RequestFactory requestFactory;
 
     @Autowired
     UserRepository userRepository;
@@ -69,8 +75,6 @@ class UserControllerTest {
     @Autowired
     S3Uploader s3Uploader;
 
-    private final String pre = "/api/user";
-
     @Autowired
     private MockMvc mockMvc;
 
@@ -82,6 +86,7 @@ class UserControllerTest {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .apply(documentationConfiguration(restDocumentation))
                 .build();
+        requestFactory = new RequestFactory();
     }
 
     @AfterEach
@@ -95,36 +100,34 @@ class UserControllerTest {
     @Transactional
     @DisplayName("회원가입")
     void signup() throws Exception {
-        MockMultipartFile mockMultipartFile = new MockMultipartFile("profiles", "test.jpg",
-                "image/jpeg", new FileInputStream(new File("src/test/resources/test.jpg")));
-
+        SignupRequest signupRequest = requestFactory.createSignupRequest();
         mockMvc.perform(
                 multipart(pre + "/signup")
-                        .file(mockMultipartFile)
-                        .param("name", "test")
-                        .param("email", "test@gmail.com")
-                        .param("gender", "male")
-                        .param("birth", "19990815")
-                        .param("location", "서울 강북구")
-                        .param("occupation", "학생")
-                        .param("phone", "01012345678")
-                        .param("providerId", "testProviderId")
-                        .param("provider", "google")
-                        .param("interest", "산책")
-                        .param("duty", "true")
-                        .param("smoking", "false")
-                        .param("drinking", "5")
-                        .param("height", "181")
-                        .param("bodyType", "3")
-                        .param("religion", "무교")
-                        .param("nickname", "테스트닉네임")
-                        .param("partnerLocation", "경기 북부, 경기 중부")
-                        .param("partnerDuty", "any")
-                        .param("partnerSmoking", "any")
-                        .param("partnerReligion", "무교")
-                        .param("partnerDrinking", "1")
-                        .param("partnerHeight", "165, 175")
-                        .param("partnerBodyType", "2, 4")
+                        .file((MockMultipartFile) signupRequest.getProfiles().get(0))
+                        .param("name", signupRequest.getName())
+                        .param("email", signupRequest.getEmail())
+                        .param("gender", signupRequest.getGender())
+                        .param("birth", signupRequest.getBirth())
+                        .param("location", signupRequest.getLocation())
+                        .param("occupation", signupRequest.getOccupation())
+                        .param("phone", signupRequest.getPhone())
+                        .param("providerId", signupRequest.getProviderId())
+                        .param("provider", signupRequest.getProvider())
+                        .param("interest", signupRequest.getInterest())
+                        .param("duty", String.valueOf(signupRequest.isDuty()))
+                        .param("smoking", String.valueOf(signupRequest.isSmoking()))
+                        .param("drinking", Integer.toString(signupRequest.getDrinking()))
+                        .param("height", Integer.toString(signupRequest.getHeight()))
+                        .param("bodyType", Integer.toString(signupRequest.getBodyType()))
+                        .param("religion", signupRequest.getReligion())
+                        .param("nickname", signupRequest.getNickname())
+                        .param("partnerLocation", signupRequest.getPartnerLocation())
+                        .param("partnerDuty", signupRequest.getPartnerDuty())
+                        .param("partnerSmoking", signupRequest.getPartnerSmoking())
+                        .param("partnerReligion", signupRequest.getPartnerReligion())
+                        .param("partnerDrinking", Integer.toString(signupRequest.getPartnerDrinking()))
+                        .param("partnerHeight", signupRequest.getPartnerHeight())
+                        .param("partnerBodyType", signupRequest.getPartnerBodyType())
                         .with(requestPostProcessor -> {
                             requestPostProcessor.setMethod("POST");
                             return requestPostProcessor;
@@ -164,24 +167,31 @@ class UserControllerTest {
                                 partWithName("profiles").description("첨부 프로필")
                         )));
 
-        User dbUser = userRepository.findByProviderId("testProviderId");
-        assertEquals("test", dbUser.getName());
-        assertEquals("test@gmail.com", dbUser.getEmail());
-        assertEquals("male", dbUser.getGender());
-        assertEquals("19990815", dbUser.getBirth());
-        assertEquals("서울 강북구", dbUser.getLocation());
-        assertEquals("학생", dbUser.getOccupation());
-        assertEquals("01012345678", dbUser.getPhone());
+        User dbUser = userRepository.findByProviderId(signupRequest.getProviderId());
+        assertEquals(signupRequest.getName(), dbUser.getName());
+        assertEquals(signupRequest.getEmail(), dbUser.getEmail());
+        assertEquals(signupRequest.getGender(), dbUser.getGender());
+        assertEquals(signupRequest.getBirth(), dbUser.getBirth());
+        assertEquals(signupRequest.getLocation(), dbUser.getLocation());
+        assertEquals(signupRequest.getOccupation(), dbUser.getOccupation());
+        assertEquals(signupRequest.getPhone(), dbUser.getPhone());
         assertEquals(ProviderType.GOOGLE, dbUser.getProviderType());
-        assertEquals("산책", dbUser.getInterest());
+        assertEquals(signupRequest.getInterest(), dbUser.getInterest());
         assertTrue(dbUser.isDuty());
         assertFalse(dbUser.isSmoking());
-        assertEquals(5, dbUser.getDrinking());
-        assertEquals(181, dbUser.getHeight());
-        assertEquals(3, dbUser.getBodyType());
-        assertEquals("무교", dbUser.getReligion());
-        assertEquals("테스트닉네임", dbUser.getNickname());
-        assertTrue(dbUser.getProfiles().get(0).getName().contains("test.jpg"));
+        assertEquals(signupRequest.getDrinking(), dbUser.getDrinking());
+        assertEquals(signupRequest.getHeight(), dbUser.getHeight());
+        assertEquals(signupRequest.getBodyType(), dbUser.getBodyType());
+        assertEquals(signupRequest.getReligion(), dbUser.getReligion());
+        assertEquals(signupRequest.getNickname(), dbUser.getNickname());
+        assertEquals(signupRequest.getPartnerLocation(), dbUser.getPartner().getPartnerLocation());
+        assertEquals(signupRequest.getPartnerDuty(), dbUser.getPartner().getPartnerDuty());
+        assertEquals(signupRequest.getPartnerSmoking(), dbUser.getPartner().getPartnerSmoking());
+        assertEquals(signupRequest.getPartnerReligion(), dbUser.getPartner().getPartnerReligion());
+        assertEquals(signupRequest.getPartnerDrinking(), dbUser.getPartner().getPartnerDrinking());
+        assertEquals(signupRequest.getPartnerHeight(), dbUser.getPartner().getPartnerHeight());
+        assertEquals(signupRequest.getPartnerBodyType(), dbUser.getPartner().getPartnerBodyType());
+        assertTrue(dbUser.getProfiles().get(0).getName().contains("test.PNG"));
     }
 
     @Test

@@ -9,6 +9,7 @@ import com.maskting.backend.repository.RefreshTokenRepository;
 import com.maskting.backend.repository.UserRepository;
 import com.maskting.backend.util.CookieUtil;
 import com.maskting.backend.util.JwtUtil;
+import com.maskting.backend.util.S3MockConfig;
 import com.maskting.backend.util.S3Uploader;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +19,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.RestDocumentationContextProvider;
@@ -180,7 +182,6 @@ class UserControllerTest {
         assertEquals("무교", dbUser.getReligion());
         assertEquals("테스트닉네임", dbUser.getNickname());
         assertTrue(dbUser.getProfiles().get(0).getName().contains("test.jpg"));
-        s3Uploader.delete(dbUser.getProfiles().get(0).getName());
     }
 
     @Test

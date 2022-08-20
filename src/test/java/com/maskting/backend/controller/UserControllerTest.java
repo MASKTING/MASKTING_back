@@ -13,6 +13,7 @@ import com.maskting.backend.util.CookieUtil;
 import com.maskting.backend.util.JwtUtil;
 import com.maskting.backend.util.S3MockConfig;
 import com.maskting.backend.util.S3Uploader;
+import io.findify.s3mock.S3Mock;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -33,8 +34,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.http.Cookie;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -81,6 +80,9 @@ class UserControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    S3Mock s3Mock;
+
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
@@ -94,6 +96,7 @@ class UserControllerTest {
         profileRepository.deleteAll();
         userRepository.deleteAll();
         refreshTokenRepository.deleteAll();
+        s3Mock.stop();
     }
 
     @Test
@@ -168,6 +171,21 @@ class UserControllerTest {
                         )));
 
         User dbUser = userRepository.findByProviderId(signupRequest.getProviderId());
+        assertUserInfo(signupRequest, dbUser);
+        assertPartnerInfo(signupRequest, dbUser);
+    }
+
+    private void assertPartnerInfo(SignupRequest signupRequest, User dbUser) {
+        assertEquals(signupRequest.getPartnerLocation(), dbUser.getPartner().getPartnerLocation());
+        assertEquals(signupRequest.getPartnerDuty(), dbUser.getPartner().getPartnerDuty());
+        assertEquals(signupRequest.getPartnerSmoking(), dbUser.getPartner().getPartnerSmoking());
+        assertEquals(signupRequest.getPartnerReligion(), dbUser.getPartner().getPartnerReligion());
+        assertEquals(signupRequest.getPartnerDrinking(), dbUser.getPartner().getPartnerDrinking());
+        assertEquals(signupRequest.getPartnerHeight(), dbUser.getPartner().getPartnerHeight());
+        assertEquals(signupRequest.getPartnerBodyType(), dbUser.getPartner().getPartnerBodyType());
+    }
+
+    private void assertUserInfo(SignupRequest signupRequest, User dbUser) {
         assertEquals(signupRequest.getName(), dbUser.getName());
         assertEquals(signupRequest.getEmail(), dbUser.getEmail());
         assertEquals(signupRequest.getGender(), dbUser.getGender());
@@ -184,13 +202,6 @@ class UserControllerTest {
         assertEquals(signupRequest.getBodyType(), dbUser.getBodyType());
         assertEquals(signupRequest.getReligion(), dbUser.getReligion());
         assertEquals(signupRequest.getNickname(), dbUser.getNickname());
-        assertEquals(signupRequest.getPartnerLocation(), dbUser.getPartner().getPartnerLocation());
-        assertEquals(signupRequest.getPartnerDuty(), dbUser.getPartner().getPartnerDuty());
-        assertEquals(signupRequest.getPartnerSmoking(), dbUser.getPartner().getPartnerSmoking());
-        assertEquals(signupRequest.getPartnerReligion(), dbUser.getPartner().getPartnerReligion());
-        assertEquals(signupRequest.getPartnerDrinking(), dbUser.getPartner().getPartnerDrinking());
-        assertEquals(signupRequest.getPartnerHeight(), dbUser.getPartner().getPartnerHeight());
-        assertEquals(signupRequest.getPartnerBodyType(), dbUser.getPartner().getPartnerBodyType());
         assertTrue(dbUser.getProfiles().get(0).getName().contains("test.PNG"));
     }
 

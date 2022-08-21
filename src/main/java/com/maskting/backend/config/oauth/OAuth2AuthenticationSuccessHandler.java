@@ -17,7 +17,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
@@ -28,7 +27,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.UUID;
 
 
@@ -67,8 +65,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
 
         if (!needJoin(principal)) {
-            String role = returnAuthority(principal.getAuthorities());
-            //TODO returnAuthority 굳이 불필요? -> principal.getUser().getRoleType
+            String role = "ROLE_" + principal.getUser().getRoleType();
             String accessToken = jwtUtil.createAccessToken(oAuth2UserInfo.getProviderId(), role);
             response.setHeader("accessToken", accessToken);
 
@@ -151,19 +148,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private boolean needJoin(UserPrincipal principal) {
         return principal.getUser() == null;
-    }
-
-    private String returnAuthority(Collection<? extends GrantedAuthority> authorities) {
-        for (GrantedAuthority grantedAuthority : authorities) {
-            if (grantedAuthority.getAuthority().equals("ROLE_USER"))
-                return "ROLE_USER";
-
-            if (grantedAuthority.getAuthority().equals("ROLE_ADMIN")) {
-                return "ROLE_ADMIN";
-            }
-        }
-
-        return "ROLE_GUEST";
     }
 
 }

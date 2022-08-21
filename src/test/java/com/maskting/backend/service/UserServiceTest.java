@@ -5,6 +5,7 @@ import com.maskting.backend.domain.RefreshToken;
 import com.maskting.backend.domain.User;
 import com.maskting.backend.dto.request.SignupRequest;
 import com.maskting.backend.dto.response.S3Response;
+import com.maskting.backend.factory.RequestFactory;
 import com.maskting.backend.factory.UserFactory;
 import com.maskting.backend.repository.ProfileRepository;
 import com.maskting.backend.repository.RefreshTokenRepository;
@@ -20,16 +21,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,6 +39,7 @@ import static org.mockito.Mockito.*;
 class UserServiceTest {
 
     private UserFactory userFactory;
+    private RequestFactory requestFactory;
 
     @InjectMocks
     UserService userService;
@@ -69,12 +68,13 @@ class UserServiceTest {
     @BeforeEach
     void setUp() {
         userFactory = new UserFactory();
+        requestFactory = new RequestFactory();
     }
 
     @Test
     @DisplayName("회원 가입")
     void joinUser() throws IOException {
-        SignupRequest signupRequest = createSignupRequest();
+        SignupRequest signupRequest = requestFactory.createSignupRequest();
         Profile profile = Profile.builder()
                 .name("testName")
                 .path("testPath")
@@ -90,21 +90,6 @@ class UserServiceTest {
 
         assertNotNull(joinUser.getProfiles());
         assertTrue(joinUser.isSort());
-    }
-
-    private SignupRequest createSignupRequest() {
-        List<MultipartFile> profiles = List.of(
-                new MockMultipartFile("test1", "test1.PNG", MediaType.IMAGE_PNG_VALUE, "test1".getBytes())
-        );
-        SignupRequest signupRequest = new SignupRequest(
-                "test", "test@gmail.com", "male",
-                "19990815", "서울 강북구", "대학생",
-                "01012345678", "testProviderId", "google",
-                "산책", true, false,
-                5, 181, 3,
-                "무교", "알콜쟁이 라이언", "경기 북부, 경기 중부", "any", "any",
-                "무교", 1, "165, 175", "2, 4", profiles);
-        return signupRequest;
     }
 
     @Test

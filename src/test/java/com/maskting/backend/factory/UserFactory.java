@@ -4,12 +4,14 @@ import com.maskting.backend.domain.Partner;
 import com.maskting.backend.domain.ProviderType;
 import com.maskting.backend.domain.RoleType;
 import com.maskting.backend.domain.User;
+import com.maskting.backend.domain.oauth.*;
 import com.maskting.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class UserFactory {
@@ -91,5 +93,81 @@ public class UserFactory {
                 .providerType(ProviderType.GOOGLE)
                 .build();
         return user;
+    }
+
+    public UserPrincipal createGoogleUser(User user) {
+        Map<String, Object> attributes = new HashMap<>();
+        attributes.put("sub", "123456789");
+        OAuth2UserInfo oAuth2UserInfo = new GoogleUserInfo(attributes);
+        return new UserPrincipal(user, oAuth2UserInfo, "accessToken");
+    }
+
+    public Authentication createAuthentication(UserPrincipal userPrincipal) {
+        Authentication authentication = new Authentication() {
+            @Override
+            public boolean equals(Object another) {
+                return false;
+            }
+
+            @Override
+            public String toString() {
+                return null;
+            }
+
+            @Override
+            public int hashCode() {
+                return 0;
+            }
+
+            @Override
+            public String getName() {
+                return null;
+            }
+
+            @Override
+            public Collection<? extends GrantedAuthority> getAuthorities() {
+                return null;
+            }
+
+            @Override
+            public Object getCredentials() {
+                return null;
+            }
+
+            @Override
+            public Object getDetails() {
+                return null;
+            }
+
+            @Override
+            public Object getPrincipal() {
+                return userPrincipal;
+            }
+
+            @Override
+            public boolean isAuthenticated() {
+                return false;
+            }
+
+            @Override
+            public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
+
+            }
+        };
+        return authentication;
+    }
+
+    public UserPrincipal createNaverUser(User user) {
+        Map<String, Object> attributes = new HashMap<>();
+        attributes.put("id", "123456789");
+        OAuth2UserInfo oAuth2UserInfo = new NaverUserInfo(attributes);
+        return new UserPrincipal(user, oAuth2UserInfo, "accessToken");
+    }
+
+    public UserPrincipal createKakaoUser(User user) {
+        Map<String, Object> attributes = new HashMap<>();
+        attributes.put("id", "123456789");
+        OAuth2UserInfo oAuth2UserInfo = new KakaoUserInfo(attributes);
+        return new UserPrincipal(user, oAuth2UserInfo, "accessToken");
     }
 }

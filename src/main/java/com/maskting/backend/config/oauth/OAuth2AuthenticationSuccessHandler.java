@@ -12,7 +12,6 @@ import com.maskting.backend.repository.RefreshTokenRepository;
 import com.maskting.backend.util.CookieUtil;
 import com.maskting.backend.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -40,6 +39,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final String googleUserinfoUrl = "https://www.googleapis.com/oauth2/v1/userinfo";
     private final String naverUserinfoUrl = "https://openapi.naver.com/v1/nid/me";
     private final String kakaoUserinfoUrl = "https://kapi.kakao.com/v2/user/me";
+    private final String redirectUri = "http://localhost:3000/oauth2/redirect";
 
     private final JwtUtil jwtUtil;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -47,8 +47,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
-    @Value("${app.auth.redirectUri}")
-    private String redirectUri;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -70,6 +68,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         if (!needJoin(principal)) {
             String role = returnAuthority(principal.getAuthorities());
+            //TODO returnAuthority 굳이 불필요? -> principal.getUser().getRoleType
             String accessToken = jwtUtil.createAccessToken(oAuth2UserInfo.getProviderId(), role);
             response.setHeader("accessToken", accessToken);
 

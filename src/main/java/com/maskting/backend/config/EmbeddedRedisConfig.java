@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 @Configuration
-@Profile("local")
+@Profile({"local", "test"})
 public class EmbeddedRedisConfig {
     @Value("${spring.redis.port}")
     private int redisPort;

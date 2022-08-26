@@ -84,6 +84,7 @@ public class UserFactory {
     }
 
     public User createAdmin(){
+        Partner partner = new Partner(0);
         User user = User.builder()
                 .name("admin")
                 .email("admin@gmail.com")
@@ -91,6 +92,7 @@ public class UserFactory {
                 .roleType(RoleType.ADMIN)
                 .providerId("adminProviderId")
                 .providerType(ProviderType.GOOGLE)
+                .partner(partner)
                 .build();
         return user;
     }

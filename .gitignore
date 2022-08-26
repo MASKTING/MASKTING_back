@@ -39,3 +39,4 @@ out/
 ### property ##
 src/main/resources/application-auth.yml
 src/main/resources/application-aws.yml
+src/main/resources/application-dev.yml

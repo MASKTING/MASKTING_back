@@ -79,8 +79,11 @@ public class SignupRequest {
     @NotNull
     private int partnerDrinking;
 
-    @NotBlank
-    private String partnerHeight;
+    @NotNull
+    private int partnerMinHeight;
+
+    @NotNull
+    private int partnerMaxHeight;
 
     private List<Integer> partnerBodyTypes;
 

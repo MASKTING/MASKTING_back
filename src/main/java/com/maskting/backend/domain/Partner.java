@@ -15,7 +15,6 @@ public class Partner {
     private String partnerSmoking;
     private int partnerDrinking;
     private String partnerHeight;
-    private String partnerBodyType;
 
     public Partner(int partnerDrinking) {
         this.partnerDrinking = partnerDrinking;

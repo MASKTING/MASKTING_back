@@ -82,8 +82,7 @@ public class SignupRequest {
     @NotBlank
     private String partnerHeight;
 
-    @NotBlank
-    private String partnerBodyType;
+    private List<Integer> partnerBodyTypes;
 
     private List<MultipartFile> profiles;
 }

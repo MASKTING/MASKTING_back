@@ -40,6 +40,7 @@ public class UserService {
     private final InterestRepository interestRepository;
     private final PartnerLocationRepository partnerLocationRepository;
     private final PartnerReligionRepository partnerReligionRepository;
+    private final PartnerBodyTypeRepository partnerBodyTypeRepository;
 
     @Transactional
     public User joinUser(SignupRequest signupRequest) throws IOException {
@@ -62,20 +63,42 @@ public class UserService {
         List<Interest> interests = addInterests(signupRequest);
         List<PartnerLocation> partnerLocations = addPartnerLocations(signupRequest);
         List<PartnerReligion> partnerReligions = addPartnerReligions(signupRequest);
-        signupRequest.setInterests(new ArrayList<>());
-        signupRequest.setPartnerLocations(new ArrayList<>());
-        signupRequest.setPartnerReligions(new ArrayList<>());
+        List<PartnerBodyType> partnerBodyTypes = addPartnerBodyTypes(signupRequest);
+        initializeInfoList(signupRequest);
         User user = modelMapper.map(signupRequest, User.class);
         Partner partner = modelMapper.map(signupRequest, Partner.class);
 
         user.updateType(providerType, RoleType.GUEST);
         user.updatePartner(partner);
+        addInfoList(profiles, interests, partnerLocations, partnerReligions, partnerBodyTypes, user);
+        user.updateSort();
+        return user;
+    }
+
+    private void addInfoList(List<Profile> profiles, List<Interest> interests, List<PartnerLocation> partnerLocations, List<PartnerReligion> partnerReligions, List<PartnerBodyType> partnerBodyTypes, User user) {
         user.addProfiles(profiles);
         user.addInterests(interests);
         user.addPartnerLocations(partnerLocations);
         user.addPartnerReligions(partnerReligions);
-        user.updateSort();
-        return user;
+        user.addPartnerBodyTypes(partnerBodyTypes);
+    }
+
+    private void initializeInfoList(SignupRequest signupRequest) {
+        signupRequest.setInterests(new ArrayList<>());
+        signupRequest.setPartnerLocations(new ArrayList<>());
+        signupRequest.setPartnerReligions(new ArrayList<>());
+        signupRequest.setPartnerBodyTypes(new ArrayList<>());
+    }
+
+    private List<PartnerBodyType> addPartnerBodyTypes(SignupRequest signupRequest) {
+        List<PartnerBodyType> partnerBodyTypes = new ArrayList<>();
+        for (Integer getPartnerBodyType : signupRequest.getPartnerBodyTypes()) {
+            PartnerBodyType partnerBodyType = PartnerBodyType.builder()
+                    .val(getPartnerBodyType)
+                    .build();
+            partnerBodyTypes.add(partnerBodyTypeRepository.save(partnerBodyType));
+        }
+        return partnerBodyTypes;
     }
 
     private List<PartnerReligion> addPartnerReligions(SignupRequest signupRequest) {

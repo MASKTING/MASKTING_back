@@ -4,10 +4,7 @@ import com.maskting.backend.common.exception.NoProfileException;
 import com.maskting.backend.domain.*;
 import com.maskting.backend.dto.request.SignupRequest;
 import com.maskting.backend.dto.response.S3Response;
-import com.maskting.backend.repository.InterestRepository;
-import com.maskting.backend.repository.ProfileRepository;
-import com.maskting.backend.repository.RefreshTokenRepository;
-import com.maskting.backend.repository.UserRepository;
+import com.maskting.backend.repository.*;
 import com.maskting.backend.util.CookieUtil;
 import com.maskting.backend.util.JwtUtil;
 import com.maskting.backend.common.exception.InvalidProviderException;
@@ -41,6 +38,7 @@ public class UserService {
     private final ProfileRepository profileRepository;
     private final ModelMapper modelMapper;
     private final InterestRepository interestRepository;
+    private final PartnerLocationRepository partnerLocationRepository;
 
     @Transactional
     public User joinUser(SignupRequest signupRequest) throws IOException {
@@ -61,7 +59,9 @@ public class UserService {
 
     private User createUser(SignupRequest signupRequest, ProviderType providerType, List<Profile> profiles) {
         List<Interest> interests = addInterests(signupRequest);
+        List<PartnerLocation> partnerLocations = addPartnerLocations(signupRequest);
         signupRequest.setInterests(new ArrayList<>());
+        signupRequest.setPartnerLocations(new ArrayList<>());
         User user = modelMapper.map(signupRequest, User.class);
         Partner partner = modelMapper.map(signupRequest, Partner.class);
 
@@ -69,8 +69,20 @@ public class UserService {
         user.updatePartner(partner);
         user.addProfiles(profiles);
         user.addInterests(interests);
+        user.addPartnerLocations(partnerLocations);
         user.updateSort();
         return user;
+    }
+
+    private List<PartnerLocation> addPartnerLocations(SignupRequest signupRequest) {
+        List<PartnerLocation> partnerLocations = new ArrayList<>();
+        for (String getPartnerLocation : signupRequest.getPartnerLocations()) {
+            PartnerLocation partnerLocation = PartnerLocation.builder()
+                    .name(getPartnerLocation)
+                    .build();
+            partnerLocations.add(partnerLocationRepository.save(partnerLocation));
+        }
+        return partnerLocations;
     }
 
     private List<Interest> addInterests(SignupRequest signupRequest) {

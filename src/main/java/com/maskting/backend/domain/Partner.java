@@ -11,7 +11,6 @@ import javax.persistence.Embeddable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Partner {
-    private String partnerLocation;
     private String partnerDuty;
     private String partnerSmoking;
     private String partnerReligion;

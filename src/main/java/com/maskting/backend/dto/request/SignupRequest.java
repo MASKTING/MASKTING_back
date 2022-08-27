@@ -66,8 +66,7 @@ public class SignupRequest {
     @NotBlank
     private String nickname;
 
-    @NotBlank
-    private String partnerLocation;
+    private List<String> partnerLocations;
 
     @NotBlank
     private String partnerDuty;

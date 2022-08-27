@@ -60,6 +60,9 @@ public class User extends BaseTimeEntity{
     @Embedded
     private Partner partner;
 
+    @OneToMany(mappedBy = "user")
+    private List<PartnerLocation> partnerLocations = new ArrayList<>();
+
     @NotBlank
     private String providerId;
 
@@ -102,6 +105,13 @@ public class User extends BaseTimeEntity{
         for (Interest interest : interests) {
             this.interests.add(interest);
             interest.updateUser(this);
+        }
+    }
+
+    public void addPartnerLocations(List<PartnerLocation> partnerLocations) {
+        for (PartnerLocation partnerLocation : partnerLocations) {
+            this.partnerLocations.add(partnerLocation);
+            partnerLocation.updateUser(this);
         }
     }
 }

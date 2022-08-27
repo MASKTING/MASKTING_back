@@ -31,6 +31,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.http.Cookie;
@@ -106,6 +108,9 @@ class UserControllerTest {
     @DisplayName("회원가입")
     void signup() throws Exception {
         SignupRequest signupRequest = requestFactory.createSignupRequest();
+        MultiValueMap<String, String> interests = new LinkedMultiValueMap<>();
+        interests.add("interests", signupRequest.getInterests().get(0));
+
         mockMvc.perform(
                 multipart(pre + "/signup")
                         .file((MockMultipartFile) signupRequest.getProfiles().get(0))
@@ -118,7 +123,7 @@ class UserControllerTest {
                         .param("phone", signupRequest.getPhone())
                         .param("providerId", signupRequest.getProviderId())
                         .param("provider", signupRequest.getProvider())
-                        .param("interest", signupRequest.getInterest())
+                        .params(interests)
                         .param("duty", String.valueOf(signupRequest.isDuty()))
                         .param("smoking", String.valueOf(signupRequest.isSmoking()))
                         .param("drinking", Integer.toString(signupRequest.getDrinking()))
@@ -152,7 +157,7 @@ class UserControllerTest {
                                 ,parameterWithName("phone").description("전화번호")
                                 ,parameterWithName("providerId").description("플랫폼 고유 id")
                                 ,parameterWithName("provider").description("플랫폼 타입")
-                                ,parameterWithName("interest").description("취미")
+                                ,parameterWithName("interests").description("취미(List)")
                                 ,parameterWithName("duty").description("군필")
                                 ,parameterWithName("smoking").description("담배")
                                 ,parameterWithName("drinking").description("음주")
@@ -196,7 +201,7 @@ class UserControllerTest {
         assertEquals(signupRequest.getOccupation(), dbUser.getOccupation());
         assertEquals(signupRequest.getPhone(), dbUser.getPhone());
         assertEquals(ProviderType.GOOGLE, dbUser.getProviderType());
-        assertEquals(signupRequest.getInterest(), dbUser.getInterest());
+        assertEquals(signupRequest.getInterests().get(0), dbUser.getInterests().get(0).getName());
         assertTrue(dbUser.isDuty());
         assertFalse(dbUser.isSmoking());
         assertEquals(signupRequest.getDrinking(), dbUser.getDrinking());

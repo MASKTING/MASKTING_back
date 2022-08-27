@@ -1,9 +1,6 @@
 package com.maskting.backend.factory;
 
-import com.maskting.backend.domain.Partner;
-import com.maskting.backend.domain.ProviderType;
-import com.maskting.backend.domain.RoleType;
-import com.maskting.backend.domain.User;
+import com.maskting.backend.domain.*;
 import com.maskting.backend.domain.oauth.*;
 import com.maskting.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +30,7 @@ public class UserFactory {
                 .location("경기 북부")
                 .occupation("대학생")
                 .phone("01012345678")
-                .interest("산책")
+                .interests(new ArrayList<>())
                 .drinking(5)
                 .height(181)
                 .bodyType(3)

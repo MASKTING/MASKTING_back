@@ -1,5 +1,6 @@
 package com.maskting.backend.service;
 
+import com.maskting.backend.domain.Interest;
 import com.maskting.backend.domain.Profile;
 import com.maskting.backend.domain.RefreshToken;
 import com.maskting.backend.domain.User;
@@ -7,6 +8,7 @@ import com.maskting.backend.dto.request.SignupRequest;
 import com.maskting.backend.dto.response.S3Response;
 import com.maskting.backend.factory.RequestFactory;
 import com.maskting.backend.factory.UserFactory;
+import com.maskting.backend.repository.InterestRepository;
 import com.maskting.backend.repository.ProfileRepository;
 import com.maskting.backend.repository.RefreshTokenRepository;
 import com.maskting.backend.repository.UserRepository;
@@ -65,6 +67,9 @@ class UserServiceTest {
     @Mock
     RefreshTokenRepository refreshTokenRepository;
 
+    @Mock
+    InterestRepository interestRepository;
+
     @BeforeEach
     void setUp() {
         userFactory = new UserFactory();
@@ -79,16 +84,21 @@ class UserServiceTest {
                 .name("testName")
                 .path("testPath")
                 .build();
+        Interest interest = Interest.builder()
+                .name("산책")
+                .build();
         S3Response s3Response = new S3Response("testName", "testPath");
         given(s3Uploader.upload(any(MultipartFile.class), anyString())).willReturn(s3Response);
         User user = userFactory.createUser("test","알콜쟁이 라이언");
         given(modelMapper.map(signupRequest, User.class)).willReturn(user);
         given(profileRepository.save(any())).willReturn(profile);
-         given(userRepository.save(any())).willReturn(user);
+        given(userRepository.save(any())).willReturn(user);
+        given(interestRepository.save(any())).willReturn(interest);
 
         User joinUser = userService.joinUser(signupRequest);
 
-        assertNotNull(joinUser.getProfiles());
+        assertEquals(1, joinUser.getProfiles().size());
+        assertEquals(1, joinUser.getInterests().size());
         assertTrue(joinUser.isSort());
     }
 

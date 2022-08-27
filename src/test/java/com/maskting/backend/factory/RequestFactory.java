@@ -26,6 +26,9 @@ public class RequestFactory {
         List<String> partnerReligions = new ArrayList<>();
         partnerReligions.add("무교");
 
+        List<Integer> partnerBodyTypes = new ArrayList<>();
+        partnerBodyTypes.add(2);
+
         SignupRequest signupRequest = new SignupRequest(
                 "test", "test@gmail.com", "male",
                 "19990815", "경기 북부", "대학생",
@@ -33,7 +36,7 @@ public class RequestFactory {
                 interests, true, false,
                 5, 181, 3,
                 "무교", "알콜쟁이 라이언", partnerLocations, "any", "any",
-                partnerReligions, 1, "165, 175", "2, 4", profiles);
+                partnerReligions, 1, "165, 175", partnerBodyTypes, profiles);
         return signupRequest;
     }
 }

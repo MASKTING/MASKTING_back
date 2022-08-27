@@ -21,7 +21,7 @@ public class UserFactory {
 
     private User createUserByRole(String name, String nickname, RoleType roleType, Boolean sort) {
         Partner partner = new Partner("any", "any",
-                1, "165, 175", "2, 4");
+                1, "165, 175");
         return User.builder()
                 .name(name)
                 .email("test@gmail.com")
@@ -39,6 +39,7 @@ public class UserFactory {
                 .partner(partner)
                 .partnerLocations(new ArrayList<>())
                 .partnerReligions(new ArrayList<>())
+                .partnerBodyTypes(new ArrayList<>())
                 .roleType(roleType)
                 .profiles(new ArrayList<>())
                 .providerId("testProviderId")

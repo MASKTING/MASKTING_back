@@ -43,8 +43,7 @@ public class SignupRequest {
     @NotBlank
     private String provider;
 
-    @NotBlank
-    private String interest;
+    private List<String> interests;
 
     @NotNull
     private boolean duty;

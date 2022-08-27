@@ -4,6 +4,7 @@ import com.maskting.backend.common.exception.NoProfileException;
 import com.maskting.backend.domain.*;
 import com.maskting.backend.dto.request.SignupRequest;
 import com.maskting.backend.dto.response.S3Response;
+import com.maskting.backend.repository.InterestRepository;
 import com.maskting.backend.repository.ProfileRepository;
 import com.maskting.backend.repository.RefreshTokenRepository;
 import com.maskting.backend.repository.UserRepository;
@@ -39,6 +40,7 @@ public class UserService {
     private final S3Uploader s3Uploader;
     private final ProfileRepository profileRepository;
     private final ModelMapper modelMapper;
+    private final InterestRepository interestRepository;
 
     @Transactional
     public User joinUser(SignupRequest signupRequest) throws IOException {
@@ -51,21 +53,35 @@ public class UserService {
             throw new NoProfileException();
         }
 
-        signupRequest.setProfiles(null);
+        signupRequest.setProfiles(new ArrayList<>());
         User user = createUser(signupRequest, providerType, profiles);
 
         return userRepository.save(user);
     }
 
     private User createUser(SignupRequest signupRequest, ProviderType providerType, List<Profile> profiles) {
+        List<Interest> interests = addInterests(signupRequest);
+        signupRequest.setInterests(new ArrayList<>());
         User user = modelMapper.map(signupRequest, User.class);
         Partner partner = modelMapper.map(signupRequest, Partner.class);
 
         user.updateType(providerType, RoleType.GUEST);
         user.updatePartner(partner);
         user.addProfiles(profiles);
+        user.addInterests(interests);
         user.updateSort();
         return user;
+    }
+
+    private List<Interest> addInterests(SignupRequest signupRequest) {
+        List<Interest> interests = new ArrayList<>();
+        for (String getInterest : signupRequest.getInterests()) {
+            Interest interest = Interest.builder()
+                    .name(getInterest)
+                    .build();
+            interests.add(interestRepository.save(interest));
+        }
+        return interests;
     }
 
     private ProviderType getProviderType(SignupRequest signupRequest) {

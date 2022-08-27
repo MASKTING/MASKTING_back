@@ -19,13 +19,17 @@ public class RequestFactory {
 
         List<String> interests = new ArrayList<>();
         interests.add("산책");
+
+        List<String> partnerLocation = new ArrayList<>();
+        partnerLocation.add("경기 북부");
+
         SignupRequest signupRequest = new SignupRequest(
                 "test", "test@gmail.com", "male",
                 "19990815", "경기 북부", "대학생",
                 "01012345678", "testProviderId", "google",
                 interests, true, false,
                 5, 181, 3,
-                "무교", "알콜쟁이 라이언", "경기 북부, 경기 중부", "any", "any",
+                "무교", "알콜쟁이 라이언", partnerLocation, "any", "any",
                 "무교", 1, "165, 175", "2, 4", profiles);
         return signupRequest;
     }

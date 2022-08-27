@@ -110,6 +110,8 @@ class UserControllerTest {
         SignupRequest signupRequest = requestFactory.createSignupRequest();
         MultiValueMap<String, String> interests = new LinkedMultiValueMap<>();
         interests.add("interests", signupRequest.getInterests().get(0));
+        MultiValueMap<String, String> partnerLocation = new LinkedMultiValueMap<>();
+        interests.add("partnerLocations", signupRequest.getPartnerLocations().get(0));
 
         mockMvc.perform(
                 multipart(pre + "/signup")
@@ -131,7 +133,7 @@ class UserControllerTest {
                         .param("bodyType", Integer.toString(signupRequest.getBodyType()))
                         .param("religion", signupRequest.getReligion())
                         .param("nickname", signupRequest.getNickname())
-                        .param("partnerLocation", signupRequest.getPartnerLocation())
+                        .params(partnerLocation)
                         .param("partnerDuty", signupRequest.getPartnerDuty())
                         .param("partnerSmoking", signupRequest.getPartnerSmoking())
                         .param("partnerReligion", signupRequest.getPartnerReligion())
@@ -165,7 +167,7 @@ class UserControllerTest {
                                 ,parameterWithName("bodyType").description("체형")
                                 ,parameterWithName("religion").description("종교")
                                 ,parameterWithName("nickname").description("닉네임")
-                                ,parameterWithName("partnerLocation").description("상대방 지역 (다중선택 가능)")
+                                ,parameterWithName("partnerLocations").description("상대방 선호 지역(List)")
                                 ,parameterWithName("partnerDuty").description("상대방 군필여부(여자인경우만)")
                                 ,parameterWithName("partnerSmoking").description("상대방 군필여부(여자인경우만, 남자인 경우 any)")
                                 ,parameterWithName("partnerReligion").description("상대방 종교 (다중선택 가능)")
@@ -183,7 +185,7 @@ class UserControllerTest {
     }
 
     private void assertPartnerInfo(SignupRequest signupRequest, User dbUser) {
-        assertEquals(signupRequest.getPartnerLocation(), dbUser.getPartner().getPartnerLocation());
+        assertEquals(signupRequest.getPartnerLocations().get(0), dbUser.getPartnerLocations().get(0).getName());
         assertEquals(signupRequest.getPartnerDuty(), dbUser.getPartner().getPartnerDuty());
         assertEquals(signupRequest.getPartnerSmoking(), dbUser.getPartner().getPartnerSmoking());
         assertEquals(signupRequest.getPartnerReligion(), dbUser.getPartner().getPartnerReligion());

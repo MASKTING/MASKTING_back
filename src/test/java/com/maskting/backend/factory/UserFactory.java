@@ -20,7 +20,7 @@ public class UserFactory {
     }
 
     private User createUserByRole(String name, String nickname, RoleType roleType, Boolean sort) {
-        Partner partner = new Partner("경기 북부, 경기 중부", "any", "any",
+        Partner partner = new Partner("any", "any",
                 "무교", 1, "165, 175", "2, 4");
         return User.builder()
                 .name(name)
@@ -37,6 +37,7 @@ public class UserFactory {
                 .religion("무교")
                 .nickname(nickname)
                 .partner(partner)
+                .partnerLocations(new ArrayList<>())
                 .roleType(roleType)
                 .profiles(new ArrayList<>())
                 .providerId("testProviderId")

@@ -1,17 +1,11 @@
 package com.maskting.backend.service;
 
-import com.maskting.backend.domain.Interest;
-import com.maskting.backend.domain.Profile;
-import com.maskting.backend.domain.RefreshToken;
-import com.maskting.backend.domain.User;
+import com.maskting.backend.domain.*;
 import com.maskting.backend.dto.request.SignupRequest;
 import com.maskting.backend.dto.response.S3Response;
 import com.maskting.backend.factory.RequestFactory;
 import com.maskting.backend.factory.UserFactory;
-import com.maskting.backend.repository.InterestRepository;
-import com.maskting.backend.repository.ProfileRepository;
-import com.maskting.backend.repository.RefreshTokenRepository;
-import com.maskting.backend.repository.UserRepository;
+import com.maskting.backend.repository.*;
 import com.maskting.backend.util.CookieUtil;
 import com.maskting.backend.util.JwtUtil;
 import com.maskting.backend.util.S3Uploader;
@@ -70,6 +64,9 @@ class UserServiceTest {
     @Mock
     InterestRepository interestRepository;
 
+    @Mock
+    PartnerLocationRepository partnerLocationRepository;
+
     @BeforeEach
     void setUp() {
         userFactory = new UserFactory();
@@ -87,6 +84,9 @@ class UserServiceTest {
         Interest interest = Interest.builder()
                 .name("산책")
                 .build();
+        PartnerLocation partnerLocation = PartnerLocation.builder()
+                .name("경기 북부")
+                .build();
         S3Response s3Response = new S3Response("testName", "testPath");
         given(s3Uploader.upload(any(MultipartFile.class), anyString())).willReturn(s3Response);
         User user = userFactory.createUser("test","알콜쟁이 라이언");
@@ -94,11 +94,14 @@ class UserServiceTest {
         given(profileRepository.save(any())).willReturn(profile);
         given(userRepository.save(any())).willReturn(user);
         given(interestRepository.save(any())).willReturn(interest);
+        given(partnerLocationRepository.save(any())).willReturn(partnerLocation);
 
         User joinUser = userService.joinUser(signupRequest);
 
+        assertNotNull(joinUser);
         assertEquals(1, joinUser.getProfiles().size());
         assertEquals(1, joinUser.getInterests().size());
+        assertEquals(1, joinUser.getPartnerLocations().size());
         assertTrue(joinUser.isSort());
     }
 

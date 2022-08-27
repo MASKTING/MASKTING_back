@@ -110,8 +110,10 @@ class UserControllerTest {
         SignupRequest signupRequest = requestFactory.createSignupRequest();
         MultiValueMap<String, String> interests = new LinkedMultiValueMap<>();
         interests.add("interests", signupRequest.getInterests().get(0));
-        MultiValueMap<String, String> partnerLocation = new LinkedMultiValueMap<>();
+        MultiValueMap<String, String> partnerLocations = new LinkedMultiValueMap<>();
         interests.add("partnerLocations", signupRequest.getPartnerLocations().get(0));
+        MultiValueMap<String, String> partnerReligions = new LinkedMultiValueMap<>();
+        interests.add("partnerReligions", signupRequest.getPartnerReligions().get(0));
 
         mockMvc.perform(
                 multipart(pre + "/signup")
@@ -133,10 +135,10 @@ class UserControllerTest {
                         .param("bodyType", Integer.toString(signupRequest.getBodyType()))
                         .param("religion", signupRequest.getReligion())
                         .param("nickname", signupRequest.getNickname())
-                        .params(partnerLocation)
+                        .params(partnerLocations)
                         .param("partnerDuty", signupRequest.getPartnerDuty())
                         .param("partnerSmoking", signupRequest.getPartnerSmoking())
-                        .param("partnerReligion", signupRequest.getPartnerReligion())
+                        .params(partnerReligions)
                         .param("partnerDrinking", Integer.toString(signupRequest.getPartnerDrinking()))
                         .param("partnerHeight", signupRequest.getPartnerHeight())
                         .param("partnerBodyType", signupRequest.getPartnerBodyType())
@@ -170,7 +172,7 @@ class UserControllerTest {
                                 ,parameterWithName("partnerLocations").description("상대방 선호 지역(List)")
                                 ,parameterWithName("partnerDuty").description("상대방 군필여부(여자인경우만)")
                                 ,parameterWithName("partnerSmoking").description("상대방 군필여부(여자인경우만, 남자인 경우 any)")
-                                ,parameterWithName("partnerReligion").description("상대방 종교 (다중선택 가능)")
+                                ,parameterWithName("partnerReligions").description("상대방 종교(List)")
                                 ,parameterWithName("partnerDrinking").description("상대방 음주")
                                 ,parameterWithName("partnerHeight").description("상대방 키(최소, 최대)")
                                 ,parameterWithName("partnerBodyType").description("상대방 체형 (다중선택 가능)")
@@ -188,7 +190,7 @@ class UserControllerTest {
         assertEquals(signupRequest.getPartnerLocations().get(0), dbUser.getPartnerLocations().get(0).getName());
         assertEquals(signupRequest.getPartnerDuty(), dbUser.getPartner().getPartnerDuty());
         assertEquals(signupRequest.getPartnerSmoking(), dbUser.getPartner().getPartnerSmoking());
-        assertEquals(signupRequest.getPartnerReligion(), dbUser.getPartner().getPartnerReligion());
+        assertEquals(signupRequest.getPartnerReligions().get(0), dbUser.getPartnerReligions().get(0).getName());
         assertEquals(signupRequest.getPartnerDrinking(), dbUser.getPartner().getPartnerDrinking());
         assertEquals(signupRequest.getPartnerHeight(), dbUser.getPartner().getPartnerHeight());
         assertEquals(signupRequest.getPartnerBodyType(), dbUser.getPartner().getPartnerBodyType());

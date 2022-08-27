@@ -67,6 +67,9 @@ class UserServiceTest {
     @Mock
     PartnerLocationRepository partnerLocationRepository;
 
+    @Mock
+    PartnerReligionRepository partnerReligionRepository;
+
     @BeforeEach
     void setUp() {
         userFactory = new UserFactory();
@@ -87,6 +90,9 @@ class UserServiceTest {
         PartnerLocation partnerLocation = PartnerLocation.builder()
                 .name("경기 북부")
                 .build();
+        PartnerReligion partnerReligion = PartnerReligion.builder()
+                .name("무교")
+                .build();
         S3Response s3Response = new S3Response("testName", "testPath");
         given(s3Uploader.upload(any(MultipartFile.class), anyString())).willReturn(s3Response);
         User user = userFactory.createUser("test","알콜쟁이 라이언");
@@ -95,6 +101,7 @@ class UserServiceTest {
         given(userRepository.save(any())).willReturn(user);
         given(interestRepository.save(any())).willReturn(interest);
         given(partnerLocationRepository.save(any())).willReturn(partnerLocation);
+        given(partnerReligionRepository.save(any())).willReturn(partnerReligion);
 
         User joinUser = userService.joinUser(signupRequest);
 
@@ -102,6 +109,7 @@ class UserServiceTest {
         assertEquals(1, joinUser.getProfiles().size());
         assertEquals(1, joinUser.getInterests().size());
         assertEquals(1, joinUser.getPartnerLocations().size());
+        assertEquals(1, joinUser.getPartnerReligions().size());
         assertTrue(joinUser.isSort());
     }
 

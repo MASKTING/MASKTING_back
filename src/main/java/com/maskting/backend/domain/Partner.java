@@ -13,7 +13,6 @@ import javax.persistence.Embeddable;
 public class Partner {
     private String partnerDuty;
     private String partnerSmoking;
-    private String partnerReligion;
     private int partnerDrinking;
     private String partnerHeight;
     private String partnerBodyType;

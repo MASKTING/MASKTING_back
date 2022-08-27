@@ -39,6 +39,7 @@ public class UserService {
     private final ModelMapper modelMapper;
     private final InterestRepository interestRepository;
     private final PartnerLocationRepository partnerLocationRepository;
+    private final PartnerReligionRepository partnerReligionRepository;
 
     @Transactional
     public User joinUser(SignupRequest signupRequest) throws IOException {
@@ -60,8 +61,10 @@ public class UserService {
     private User createUser(SignupRequest signupRequest, ProviderType providerType, List<Profile> profiles) {
         List<Interest> interests = addInterests(signupRequest);
         List<PartnerLocation> partnerLocations = addPartnerLocations(signupRequest);
+        List<PartnerReligion> partnerReligions = addPartnerReligions(signupRequest);
         signupRequest.setInterests(new ArrayList<>());
         signupRequest.setPartnerLocations(new ArrayList<>());
+        signupRequest.setPartnerReligions(new ArrayList<>());
         User user = modelMapper.map(signupRequest, User.class);
         Partner partner = modelMapper.map(signupRequest, Partner.class);
 
@@ -70,8 +73,20 @@ public class UserService {
         user.addProfiles(profiles);
         user.addInterests(interests);
         user.addPartnerLocations(partnerLocations);
+        user.addPartnerReligions(partnerReligions);
         user.updateSort();
         return user;
+    }
+
+    private List<PartnerReligion> addPartnerReligions(SignupRequest signupRequest) {
+        List<PartnerReligion> partnerReligions = new ArrayList<>();
+        for (String getPartnerReligion : signupRequest.getPartnerReligions()) {
+            PartnerReligion partnerReligion = PartnerReligion.builder()
+                    .name(getPartnerReligion)
+                    .build();
+            partnerReligions.add(partnerReligionRepository.save(partnerReligion));
+        }
+        return partnerReligions;
     }
 
     private List<PartnerLocation> addPartnerLocations(SignupRequest signupRequest) {

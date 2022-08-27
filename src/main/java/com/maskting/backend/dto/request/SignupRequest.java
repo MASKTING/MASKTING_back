@@ -74,8 +74,7 @@ public class SignupRequest {
     @NotBlank
     private String partnerSmoking;
 
-    @NotBlank
-    private String partnerReligion;
+    private List<String> partnerReligions;
 
     @NotNull
     private int partnerDrinking;

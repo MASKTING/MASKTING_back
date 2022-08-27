@@ -4,9 +4,7 @@ import com.maskting.backend.common.exception.NoProfileException;
 import com.maskting.backend.domain.*;
 import com.maskting.backend.dto.request.SignupRequest;
 import com.maskting.backend.dto.response.S3Response;
-import com.maskting.backend.repository.ProfileRepository;
-import com.maskting.backend.repository.RefreshTokenRepository;
-import com.maskting.backend.repository.UserRepository;
+import com.maskting.backend.repository.*;
 import com.maskting.backend.util.CookieUtil;
 import com.maskting.backend.util.JwtUtil;
 import com.maskting.backend.common.exception.InvalidProviderException;
@@ -39,6 +37,10 @@ public class UserService {
     private final S3Uploader s3Uploader;
     private final ProfileRepository profileRepository;
     private final ModelMapper modelMapper;
+    private final InterestRepository interestRepository;
+    private final PartnerLocationRepository partnerLocationRepository;
+    private final PartnerReligionRepository partnerReligionRepository;
+    private final PartnerBodyTypeRepository partnerBodyTypeRepository;
 
     @Transactional
     public User joinUser(SignupRequest signupRequest) throws IOException {
@@ -51,21 +53,85 @@ public class UserService {
             throw new NoProfileException();
         }
 
-        signupRequest.setProfiles(null);
+        signupRequest.setProfiles(new ArrayList<>());
         User user = createUser(signupRequest, providerType, profiles);
 
         return userRepository.save(user);
     }
 
     private User createUser(SignupRequest signupRequest, ProviderType providerType, List<Profile> profiles) {
+        List<Interest> interests = addInterests(signupRequest);
+        List<PartnerLocation> partnerLocations = addPartnerLocations(signupRequest);
+        List<PartnerReligion> partnerReligions = addPartnerReligions(signupRequest);
+        List<PartnerBodyType> partnerBodyTypes = addPartnerBodyTypes(signupRequest);
+        initializeInfoList(signupRequest);
         User user = modelMapper.map(signupRequest, User.class);
         Partner partner = modelMapper.map(signupRequest, Partner.class);
 
         user.updateType(providerType, RoleType.GUEST);
         user.updatePartner(partner);
-        user.addProfiles(profiles);
+        addInfoList(profiles, interests, partnerLocations, partnerReligions, partnerBodyTypes, user);
         user.updateSort();
         return user;
+    }
+
+    private void addInfoList(List<Profile> profiles, List<Interest> interests, List<PartnerLocation> partnerLocations, List<PartnerReligion> partnerReligions, List<PartnerBodyType> partnerBodyTypes, User user) {
+        user.addProfiles(profiles);
+        user.addInterests(interests);
+        user.addPartnerLocations(partnerLocations);
+        user.addPartnerReligions(partnerReligions);
+        user.addPartnerBodyTypes(partnerBodyTypes);
+    }
+
+    private void initializeInfoList(SignupRequest signupRequest) {
+        signupRequest.setInterests(new ArrayList<>());
+        signupRequest.setPartnerLocations(new ArrayList<>());
+        signupRequest.setPartnerReligions(new ArrayList<>());
+        signupRequest.setPartnerBodyTypes(new ArrayList<>());
+    }
+
+    private List<PartnerBodyType> addPartnerBodyTypes(SignupRequest signupRequest) {
+        List<PartnerBodyType> partnerBodyTypes = new ArrayList<>();
+        for (Integer getPartnerBodyType : signupRequest.getPartnerBodyTypes()) {
+            PartnerBodyType partnerBodyType = PartnerBodyType.builder()
+                    .val(getPartnerBodyType)
+                    .build();
+            partnerBodyTypes.add(partnerBodyTypeRepository.save(partnerBodyType));
+        }
+        return partnerBodyTypes;
+    }
+
+    private List<PartnerReligion> addPartnerReligions(SignupRequest signupRequest) {
+        List<PartnerReligion> partnerReligions = new ArrayList<>();
+        for (String getPartnerReligion : signupRequest.getPartnerReligions()) {
+            PartnerReligion partnerReligion = PartnerReligion.builder()
+                    .name(getPartnerReligion)
+                    .build();
+            partnerReligions.add(partnerReligionRepository.save(partnerReligion));
+        }
+        return partnerReligions;
+    }
+
+    private List<PartnerLocation> addPartnerLocations(SignupRequest signupRequest) {
+        List<PartnerLocation> partnerLocations = new ArrayList<>();
+        for (String getPartnerLocation : signupRequest.getPartnerLocations()) {
+            PartnerLocation partnerLocation = PartnerLocation.builder()
+                    .name(getPartnerLocation)
+                    .build();
+            partnerLocations.add(partnerLocationRepository.save(partnerLocation));
+        }
+        return partnerLocations;
+    }
+
+    private List<Interest> addInterests(SignupRequest signupRequest) {
+        List<Interest> interests = new ArrayList<>();
+        for (String getInterest : signupRequest.getInterests()) {
+            Interest interest = Interest.builder()
+                    .name(getInterest)
+                    .build();
+            interests.add(interestRepository.save(interest));
+        }
+        return interests;
     }
 
     private ProviderType getProviderType(SignupRequest signupRequest) {

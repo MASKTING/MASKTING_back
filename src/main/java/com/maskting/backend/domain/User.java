@@ -38,7 +38,8 @@ public class User extends BaseTimeEntity{
 
     private String phone;
 
-    private String interest;
+    @OneToMany(mappedBy = "user")
+    private List<Interest> interests = new ArrayList<>();
 
     private boolean duty;
 
@@ -58,6 +59,15 @@ public class User extends BaseTimeEntity{
 
     @Embedded
     private Partner partner;
+
+    @OneToMany(mappedBy = "user")
+    private List<PartnerLocation> partnerLocations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<PartnerReligion> partnerReligions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<PartnerBodyType> partnerBodyTypes = new ArrayList<>();
 
     @NotBlank
     private String providerId;
@@ -83,7 +93,6 @@ public class User extends BaseTimeEntity{
     }
 
     public void addProfiles(List<Profile> profiles) {
-        this.profiles = new ArrayList<>();
         for (Profile profile : profiles) {
             this.profiles.add(profile);
             profile.updateUser(this);
@@ -96,5 +105,33 @@ public class User extends BaseTimeEntity{
 
     public void updatePartner(Partner partner) {
         this.partner = partner;
+    }
+
+    public void addInterests(List<Interest> interests) {
+        for (Interest interest : interests) {
+            this.interests.add(interest);
+            interest.updateUser(this);
+        }
+    }
+
+    public void addPartnerLocations(List<PartnerLocation> partnerLocations) {
+        for (PartnerLocation partnerLocation : partnerLocations) {
+            this.partnerLocations.add(partnerLocation);
+            partnerLocation.updateUser(this);
+        }
+    }
+
+    public void addPartnerReligions(List<PartnerReligion> partnerReligions) {
+        for (PartnerReligion partnerReligion : partnerReligions) {
+            this.partnerReligions.add(partnerReligion);
+            partnerReligion.updateUser(this);
+        }
+    }
+
+    public void addPartnerBodyTypes(List<PartnerBodyType> partnerBodyTypes) {
+        for (PartnerBodyType partnerBodyType : partnerBodyTypes) {
+            this.partnerBodyTypes.add(partnerBodyType);
+            partnerBodyType.updateUser(this);
+        }
     }
 }

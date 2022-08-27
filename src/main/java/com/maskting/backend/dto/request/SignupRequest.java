@@ -43,8 +43,7 @@ public class SignupRequest {
     @NotBlank
     private String provider;
 
-    @NotBlank
-    private String interest;
+    private List<String> interests;
 
     @NotNull
     private boolean duty;
@@ -67,8 +66,7 @@ public class SignupRequest {
     @NotBlank
     private String nickname;
 
-    @NotBlank
-    private String partnerLocation;
+    private List<String> partnerLocations;
 
     @NotBlank
     private String partnerDuty;
@@ -76,17 +74,18 @@ public class SignupRequest {
     @NotBlank
     private String partnerSmoking;
 
-    @NotBlank
-    private String partnerReligion;
+    private List<String> partnerReligions;
 
     @NotNull
     private int partnerDrinking;
 
-    @NotBlank
-    private String partnerHeight;
+    @NotNull
+    private int partnerMinHeight;
 
-    @NotBlank
-    private String partnerBodyType;
+    @NotNull
+    private int partnerMaxHeight;
+
+    private List<Integer> partnerBodyTypes;
 
     private List<MultipartFile> profiles;
 }

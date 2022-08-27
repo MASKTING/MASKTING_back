@@ -1,9 +1,6 @@
 package com.maskting.backend.factory;
 
-import com.maskting.backend.domain.Partner;
-import com.maskting.backend.domain.ProviderType;
-import com.maskting.backend.domain.RoleType;
-import com.maskting.backend.domain.User;
+import com.maskting.backend.domain.*;
 import com.maskting.backend.domain.oauth.*;
 import com.maskting.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +20,8 @@ public class UserFactory {
     }
 
     private User createUserByRole(String name, String nickname, RoleType roleType, Boolean sort) {
-        Partner partner = new Partner("경기 북부, 경기 중부", "any", "any",
-                "무교", 1, "165, 175", "2, 4");
+        Partner partner = new Partner("any", "any",
+                1, 160, 170);
         return User.builder()
                 .name(name)
                 .email("test@gmail.com")
@@ -33,13 +30,16 @@ public class UserFactory {
                 .location("경기 북부")
                 .occupation("대학생")
                 .phone("01012345678")
-                .interest("산책")
+                .interests(new ArrayList<>())
                 .drinking(5)
                 .height(181)
                 .bodyType(3)
                 .religion("무교")
                 .nickname(nickname)
                 .partner(partner)
+                .partnerLocations(new ArrayList<>())
+                .partnerReligions(new ArrayList<>())
+                .partnerBodyTypes(new ArrayList<>())
                 .roleType(roleType)
                 .profiles(new ArrayList<>())
                 .providerId("testProviderId")

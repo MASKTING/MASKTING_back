@@ -31,6 +31,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.http.Cookie;
@@ -106,6 +108,15 @@ class UserControllerTest {
     @DisplayName("회원가입")
     void signup() throws Exception {
         SignupRequest signupRequest = requestFactory.createSignupRequest();
+        MultiValueMap<String, String> interests = new LinkedMultiValueMap<>();
+        interests.add("interests", signupRequest.getInterests().get(0));
+        MultiValueMap<String, String> partnerLocations = new LinkedMultiValueMap<>();
+        partnerLocations.add("partnerLocations", signupRequest.getPartnerLocations().get(0));
+        MultiValueMap<String, String> partnerReligions = new LinkedMultiValueMap<>();
+        partnerReligions.add("partnerReligions", signupRequest.getPartnerReligions().get(0));
+        MultiValueMap<String, String> partnerBodyTypes = new LinkedMultiValueMap<>();
+        partnerBodyTypes.add("partnerBodyTypes", String.valueOf(signupRequest.getPartnerBodyTypes().get(0)));
+
         mockMvc.perform(
                 multipart(pre + "/signup")
                         .file((MockMultipartFile) signupRequest.getProfiles().get(0))
@@ -118,7 +129,7 @@ class UserControllerTest {
                         .param("phone", signupRequest.getPhone())
                         .param("providerId", signupRequest.getProviderId())
                         .param("provider", signupRequest.getProvider())
-                        .param("interest", signupRequest.getInterest())
+                        .params(interests)
                         .param("duty", String.valueOf(signupRequest.isDuty()))
                         .param("smoking", String.valueOf(signupRequest.isSmoking()))
                         .param("drinking", Integer.toString(signupRequest.getDrinking()))
@@ -126,13 +137,14 @@ class UserControllerTest {
                         .param("bodyType", Integer.toString(signupRequest.getBodyType()))
                         .param("religion", signupRequest.getReligion())
                         .param("nickname", signupRequest.getNickname())
-                        .param("partnerLocation", signupRequest.getPartnerLocation())
+                        .params(partnerLocations)
                         .param("partnerDuty", signupRequest.getPartnerDuty())
                         .param("partnerSmoking", signupRequest.getPartnerSmoking())
-                        .param("partnerReligion", signupRequest.getPartnerReligion())
+                        .params(partnerReligions)
                         .param("partnerDrinking", Integer.toString(signupRequest.getPartnerDrinking()))
-                        .param("partnerHeight", signupRequest.getPartnerHeight())
-                        .param("partnerBodyType", signupRequest.getPartnerBodyType())
+                        .param("partnerMinHeight", Integer.toString(signupRequest.getPartnerMinHeight()))
+                        .param("partnerMaxHeight", Integer.toString(signupRequest.getPartnerMaxHeight()))
+                        .params(partnerBodyTypes)
                         .with(requestPostProcessor -> {
                             requestPostProcessor.setMethod("POST");
                             return requestPostProcessor;
@@ -152,7 +164,7 @@ class UserControllerTest {
                                 ,parameterWithName("phone").description("전화번호")
                                 ,parameterWithName("providerId").description("플랫폼 고유 id")
                                 ,parameterWithName("provider").description("플랫폼 타입")
-                                ,parameterWithName("interest").description("취미")
+                                ,parameterWithName("interests").description("취미(List)")
                                 ,parameterWithName("duty").description("군필")
                                 ,parameterWithName("smoking").description("담배")
                                 ,parameterWithName("drinking").description("음주")
@@ -160,13 +172,14 @@ class UserControllerTest {
                                 ,parameterWithName("bodyType").description("체형")
                                 ,parameterWithName("religion").description("종교")
                                 ,parameterWithName("nickname").description("닉네임")
-                                ,parameterWithName("partnerLocation").description("상대방 지역 (다중선택 가능)")
-                                ,parameterWithName("partnerDuty").description("상대방 군필여부(여자인경우만)")
-                                ,parameterWithName("partnerSmoking").description("상대방 군필여부(여자인경우만, 남자인 경우 any)")
-                                ,parameterWithName("partnerReligion").description("상대방 종교 (다중선택 가능)")
+                                ,parameterWithName("partnerLocations").description("상대방 선호 지역(List)")
+                                ,parameterWithName("partnerDuty").description("상대방 군필여부(여자인경우만, 남자인 경우 any)")
+                                ,parameterWithName("partnerSmoking").description("상대방 흡연 여부(상관없는 경우 any)")
+                                ,parameterWithName("partnerReligions").description("상대방 선호 종교(List)")
                                 ,parameterWithName("partnerDrinking").description("상대방 음주")
-                                ,parameterWithName("partnerHeight").description("상대방 키(최소, 최대)")
-                                ,parameterWithName("partnerBodyType").description("상대방 체형 (다중선택 가능)")
+                                ,parameterWithName("partnerMinHeight").description("상대방 선호 최소키")
+                                ,parameterWithName("partnerMaxHeight").description("상대방 선호 최대키")
+                                ,parameterWithName("partnerBodyTypes").description("상대방 선호 체형(List)")
                         )
                         , requestParts(
                                 partWithName("profiles").description("첨부 프로필")
@@ -178,13 +191,14 @@ class UserControllerTest {
     }
 
     private void assertPartnerInfo(SignupRequest signupRequest, User dbUser) {
-        assertEquals(signupRequest.getPartnerLocation(), dbUser.getPartner().getPartnerLocation());
+        assertEquals(signupRequest.getPartnerLocations().get(0), dbUser.getPartnerLocations().get(0).getName());
         assertEquals(signupRequest.getPartnerDuty(), dbUser.getPartner().getPartnerDuty());
         assertEquals(signupRequest.getPartnerSmoking(), dbUser.getPartner().getPartnerSmoking());
-        assertEquals(signupRequest.getPartnerReligion(), dbUser.getPartner().getPartnerReligion());
+        assertEquals(signupRequest.getPartnerReligions().get(0), dbUser.getPartnerReligions().get(0).getName());
         assertEquals(signupRequest.getPartnerDrinking(), dbUser.getPartner().getPartnerDrinking());
-        assertEquals(signupRequest.getPartnerHeight(), dbUser.getPartner().getPartnerHeight());
-        assertEquals(signupRequest.getPartnerBodyType(), dbUser.getPartner().getPartnerBodyType());
+        assertEquals(signupRequest.getPartnerMinHeight(), dbUser.getPartner().getPartnerMinHeight());
+        assertEquals(signupRequest.getPartnerMaxHeight(), dbUser.getPartner().getPartnerMaxHeight());
+        assertEquals(signupRequest.getPartnerBodyTypes().get(0), dbUser.getPartnerBodyTypes().get(0).getVal());
     }
 
     private void assertUserInfo(SignupRequest signupRequest, User dbUser) {
@@ -196,7 +210,7 @@ class UserControllerTest {
         assertEquals(signupRequest.getOccupation(), dbUser.getOccupation());
         assertEquals(signupRequest.getPhone(), dbUser.getPhone());
         assertEquals(ProviderType.GOOGLE, dbUser.getProviderType());
-        assertEquals(signupRequest.getInterest(), dbUser.getInterest());
+        assertEquals(signupRequest.getInterests().get(0), dbUser.getInterests().get(0).getName());
         assertTrue(dbUser.isDuty());
         assertFalse(dbUser.isSmoking());
         assertEquals(signupRequest.getDrinking(), dbUser.getDrinking());

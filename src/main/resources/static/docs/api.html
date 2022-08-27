@@ -515,7 +515,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/auth/silent-refresh HTTP/1.1
 Host: localhost:8080
-Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxZGM1MjUzYS02NjA5LTQ3OTAtOTNjYi0wOGUyNmJhZmNkMDYiLCJpYXQiOjE2NjE1OTI2MDMsImV4cCI6MTY2MjgwMjIwM30.6zgk2BaAEkvG4SPCbtQMZiihkVL3pVCAQm-1zwl88jQ</code></pre>
+Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmY2U1YmM0OS1mZjVhLTQyODItYjY3MS05NmFjM2M4NjJlMDkiLCJpYXQiOjE2NjE1OTMyNjQsImV4cCI6MTY2MjgwMjg2NH0.m4dyTYQN_SbSccaD70p6kw-XB3ICq61Ay8T2v-sALWs</code></pre>
 </div>
 </div>
 </div>
@@ -524,7 +524,7 @@ Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxZGM1MjUzYS02NjA5LTQ3OTAtOT
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0UHJvdmlkZXJJZCIsInJvbGUiOiJST0xFX1VTRVIiLCJpYXQiOjE2NjE1OTI2MDQsImV4cCI6MTY2MTU5NDQwNH0.FLDAT0Zl4Mb04VwsDtuRIiKx9Tss_TPSCd-ObRE70pc</code></pre>
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0UHJvdmlkZXJJZCIsInJvbGUiOiJST0xFX1VTRVIiLCJpYXQiOjE2NjE1OTMyNjUsImV4cCI6MTY2MTU5NTA2NX0.X54GZwW4tKN9q3XwUTMxfEv7TsIrDRvw0yInxPcnhZ8</code></pre>
 </div>
 </div>
 </div>
@@ -564,7 +564,8 @@ accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0UHJvdmlkZXJJZCIsInJvbGUiOiJST0
     'partnerSmoking=any' \
     'partnerReligions=무교' \
     'partnerDrinking=1' \
-    'partnerHeight=165, 175' \
+    'partnerMinHeight=160' \
+    'partnerMaxHeight=170' \
     'partnerBodyTypes=2'</code></pre>
 </div>
 </div>
@@ -669,8 +670,12 @@ accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0UHJvdmlkZXJJZCIsInJvbGUiOiJST0
 <td class="tableblock halign-left valign-top"><p class="tableblock">상대방 음주</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>partnerHeight</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상대방 키(최소, 최대)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>partnerMinHeight</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">상대방 선호 최소키</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>partnerMaxHeight</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">상대방 선호 최대키</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>partnerBodyTypes</code></p></td>
@@ -702,8 +707,8 @@ accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0UHJvdmlkZXJJZCIsInJvbGUiOiJST0
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0UHJvdmlkZXJJZCIsInJvbGUiOiJST0xFX0dVRVNUIiwiaWF0IjoxNjYxNTkyNjA5LCJleHAiOjE2NjE1OTQ0MDl9.ZYJkA7g1pZpbAJB6t6JqsfXcsEVCn4c5mDyjPy45vc4
-Set-Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3OWEzYjI0Ni05YmEwLTQ5MGQtYjVhYi1kZmY1NjViMzgwNzUiLCJpYXQiOjE2NjE1OTI2MDksImV4cCI6MTY2MjgwMjIwOX0.pnJ3_kW-iMeyuggm3xhYTKLs4I4-gZJHAP0Jpa5gGPk; Path=/; Max-Age=1209600000; Expires=Sat, 25 Dec 2060 09:30:09 GMT; HttpOnly</code></pre>
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0UHJvdmlkZXJJZCIsInJvbGUiOiJST0xFX0dVRVNUIiwiaWF0IjoxNjYxNTkzMjcxLCJleHAiOjE2NjE1OTUwNzF9.9Y0h37LriSbFvf4y6UZjEgAJm2fgX4WFOM567JYXB8Y
+Set-Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI4NTU2MmFkMC1lNjc1LTQ2MWMtODJmZi1lNzE1NjUxZDk2YTciLCJpYXQiOjE2NjE1OTMyNzEsImV4cCI6MTY2MjgwMjg3MX0.6roQhyB6FX29epuTWx0dD2d2VuQx3icFDPr_T_0SKnw; Path=/; Max-Age=1209600000; Expires=Sat, 25 Dec 2060 09:41:11 GMT; HttpOnly</code></pre>
 </div>
 </div>
 </div>
@@ -743,7 +748,7 @@ Set-Cookie: refreshToken=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /admin HTTP/1.1
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY2MTU5MjYwMSwiZXhwIjoxNjYxNTk0NDAxfQ.vQMlfgqheXgJdVSvHvCVhiTQ_6D_6b74iZ_tesaRpUA
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY2MTU5MzI2MiwiZXhwIjoxNjYxNTk1MDYyfQ.oNko96bQhwXYHGTcoGC0sbpSmLCvthUVzOiBj7w2PcQ
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -1003,7 +1008,7 @@ Content-Length: 7638
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /admin/guests?search%5Bvalue%5D=&amp;draw=1&amp;start=0&amp;length=10&amp;search%5Bvalue%5D= HTTP/1.1
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY2MTU5MjYwMiwiZXhwIjoxNjYxNTk0NDAyfQ.qf5dDdvYcv_fElW3CSdPxMnh83mjZLa95lmRu7S_QiU
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY2MTU5MzI2MywiZXhwIjoxNjYxNTk1MDYzfQ.aDj1W61QCefKX5HnMQ-WkygOEk7yXygQ88bD5sOM_fk
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -1058,7 +1063,7 @@ Content-Length: 888
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /admin/guests?search%5Bvalue%5D=Second&amp;draw=1&amp;start=0&amp;length=10 HTTP/1.1
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY2MTU5MjYwMiwiZXhwIjoxNjYxNTk0NDAyfQ.qf5dDdvYcv_fElW3CSdPxMnh83mjZLa95lmRu7S_QiU
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY2MTU5MzI2NCwiZXhwIjoxNjYxNTk1MDY0fQ.Eh7uJQygg8XpkBixqXZYi-FD7TCMFwuMwskXsAuDrUc
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -1113,7 +1118,7 @@ Content-Length: 481
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /admin/approval/test HTTP/1.1
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY2MTU5MjYwMiwiZXhwIjoxNjYxNTk0NDAyfQ.qf5dDdvYcv_fElW3CSdPxMnh83mjZLa95lmRu7S_QiU
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY2MTU5MzI2NCwiZXhwIjoxNjYxNTk1MDY0fQ.Eh7uJQygg8XpkBixqXZYi-FD7TCMFwuMwskXsAuDrUc
 Host: localhost:8080</code></pre>
 </div>
 </div>

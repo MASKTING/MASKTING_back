@@ -142,7 +142,8 @@ class UserControllerTest {
                         .param("partnerSmoking", signupRequest.getPartnerSmoking())
                         .params(partnerReligions)
                         .param("partnerDrinking", Integer.toString(signupRequest.getPartnerDrinking()))
-                        .param("partnerHeight", signupRequest.getPartnerHeight())
+                        .param("partnerMinHeight", Integer.toString(signupRequest.getPartnerMinHeight()))
+                        .param("partnerMaxHeight", Integer.toString(signupRequest.getPartnerMaxHeight()))
                         .params(partnerBodyTypes)
                         .with(requestPostProcessor -> {
                             requestPostProcessor.setMethod("POST");
@@ -176,7 +177,8 @@ class UserControllerTest {
                                 ,parameterWithName("partnerSmoking").description("상대방 흡연 여부(상관없는 경우 any)")
                                 ,parameterWithName("partnerReligions").description("상대방 선호 종교(List)")
                                 ,parameterWithName("partnerDrinking").description("상대방 음주")
-                                ,parameterWithName("partnerHeight").description("상대방 키(최소, 최대)")
+                                ,parameterWithName("partnerMinHeight").description("상대방 선호 최소키")
+                                ,parameterWithName("partnerMaxHeight").description("상대방 선호 최대키")
                                 ,parameterWithName("partnerBodyTypes").description("상대방 선호 체형(List)")
                         )
                         , requestParts(
@@ -194,7 +196,8 @@ class UserControllerTest {
         assertEquals(signupRequest.getPartnerSmoking(), dbUser.getPartner().getPartnerSmoking());
         assertEquals(signupRequest.getPartnerReligions().get(0), dbUser.getPartnerReligions().get(0).getName());
         assertEquals(signupRequest.getPartnerDrinking(), dbUser.getPartner().getPartnerDrinking());
-        assertEquals(signupRequest.getPartnerHeight(), dbUser.getPartner().getPartnerHeight());
+        assertEquals(signupRequest.getPartnerMinHeight(), dbUser.getPartner().getPartnerMinHeight());
+        assertEquals(signupRequest.getPartnerMaxHeight(), dbUser.getPartner().getPartnerMaxHeight());
         assertEquals(signupRequest.getPartnerBodyTypes().get(0), dbUser.getPartnerBodyTypes().get(0).getVal());
     }
 

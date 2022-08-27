@@ -21,7 +21,7 @@ public class UserFactory {
 
     private User createUserByRole(String name, String nickname, RoleType roleType, Boolean sort) {
         Partner partner = new Partner("any", "any",
-                1, "165, 175");
+                1, 160, 170);
         return User.builder()
                 .name(name)
                 .email("test@gmail.com")

@@ -44,94 +44,114 @@ public class UserService {
 
     @Transactional
     public User joinUser(SignupRequest signupRequest) throws IOException {
-        ProviderType providerType = getProviderType(signupRequest);
+        return userRepository.save(createUser(signupRequest, getProviderType(signupRequest), getProfiles(signupRequest)));
+    }
 
-        List<Profile> profiles = new ArrayList<>();
-        if (!CollectionUtils.isEmpty(signupRequest.getProfiles())) {
-            addProfiles(signupRequest, profiles);
-        } else {
-            throw new NoProfileException();
-        }
+    private List<Profile> getProfiles(SignupRequest signupRequest) throws IOException {
+        if (haveProfiles(signupRequest))
+            return addProfiles(signupRequest);
+        throw new NoProfileException();
+    }
 
-        signupRequest.setProfiles(new ArrayList<>());
-        User user = createUser(signupRequest, providerType, profiles);
-
-        return userRepository.save(user);
+    private boolean haveProfiles(SignupRequest signupRequest) {
+        return !CollectionUtils.isEmpty(signupRequest.getProfiles());
     }
 
     private User createUser(SignupRequest signupRequest, ProviderType providerType, List<Profile> profiles) {
-        List<Interest> interests = addInterests(signupRequest);
-        List<PartnerLocation> partnerLocations = addPartnerLocations(signupRequest);
-        List<PartnerReligion> partnerReligions = addPartnerReligions(signupRequest);
-        List<PartnerBodyType> partnerBodyTypes = addPartnerBodyTypes(signupRequest);
-        initializeInfoList(signupRequest);
         User user = modelMapper.map(signupRequest, User.class);
-        Partner partner = modelMapper.map(signupRequest, Partner.class);
-
         user.updateType(providerType, RoleType.GUEST);
-        user.updatePartner(partner);
-        addInfoList(profiles, interests, partnerLocations, partnerReligions, partnerBodyTypes, user);
+        user.addProfiles(profiles);
+        user.updatePartner(getPartner(signupRequest));
+        user.addInterests(getInterests(signupRequest));
+        user.addPartnerLocations(getPartnerLocations(signupRequest));
+        user.addPartnerReligions(getPartnerReligions(signupRequest));
+        user.addPartnerBodyTypes(getPartnerBodyTypes(signupRequest));
         user.updateSort();
         return user;
     }
 
-    private void addInfoList(List<Profile> profiles, List<Interest> interests, List<PartnerLocation> partnerLocations, List<PartnerReligion> partnerReligions, List<PartnerBodyType> partnerBodyTypes, User user) {
-        user.addProfiles(profiles);
-        user.addInterests(interests);
-        user.addPartnerLocations(partnerLocations);
-        user.addPartnerReligions(partnerReligions);
-        user.addPartnerBodyTypes(partnerBodyTypes);
+    private Partner getPartner(SignupRequest signupRequest) {
+        return modelMapper.map(signupRequest, Partner.class);
     }
 
-    private void initializeInfoList(SignupRequest signupRequest) {
-        signupRequest.setInterests(new ArrayList<>());
-        signupRequest.setPartnerLocations(new ArrayList<>());
-        signupRequest.setPartnerReligions(new ArrayList<>());
-        signupRequest.setPartnerBodyTypes(new ArrayList<>());
-    }
+//    private void initializeInfoList(SignupRequest signupRequest) {
+//        signupRequest.setProfiles(new ArrayList<>());
+//        signupRequest.setInterests(new ArrayList<>());
+//        signupRequest.setPartnerLocations(new ArrayList<>());
+//        signupRequest.setPartnerReligions(new ArrayList<>());
+//        signupRequest.setPartnerBodyTypes(new ArrayList<>());
+//    }
 
-    private List<PartnerBodyType> addPartnerBodyTypes(SignupRequest signupRequest) {
+    private List<PartnerBodyType> getPartnerBodyTypes(SignupRequest signupRequest) {
         List<PartnerBodyType> partnerBodyTypes = new ArrayList<>();
         for (Integer getPartnerBodyType : signupRequest.getPartnerBodyTypes()) {
-            PartnerBodyType partnerBodyType = PartnerBodyType.builder()
-                    .val(getPartnerBodyType)
-                    .build();
-            partnerBodyTypes.add(partnerBodyTypeRepository.save(partnerBodyType));
+            partnerBodyTypes.add(savePartnerBodyType(getPartnerBodyType));
         }
         return partnerBodyTypes;
     }
 
-    private List<PartnerReligion> addPartnerReligions(SignupRequest signupRequest) {
+    private PartnerBodyType savePartnerBodyType(Integer getPartnerBodyType) {
+        return partnerBodyTypeRepository.save(buildPartnerBodyType(getPartnerBodyType));
+    }
+
+    private PartnerBodyType buildPartnerBodyType(Integer getPartnerBodyType) {
+        return PartnerBodyType.builder()
+                .val(getPartnerBodyType)
+                .build();
+    }
+
+    private List<PartnerReligion> getPartnerReligions(SignupRequest signupRequest) {
         List<PartnerReligion> partnerReligions = new ArrayList<>();
         for (String getPartnerReligion : signupRequest.getPartnerReligions()) {
-            PartnerReligion partnerReligion = PartnerReligion.builder()
-                    .name(getPartnerReligion)
-                    .build();
-            partnerReligions.add(partnerReligionRepository.save(partnerReligion));
+            partnerReligions.add(savePartnerReligion(getPartnerReligion));
         }
         return partnerReligions;
     }
 
-    private List<PartnerLocation> addPartnerLocations(SignupRequest signupRequest) {
+    private PartnerReligion savePartnerReligion(String getPartnerReligion) {
+        return partnerReligionRepository.save(buildPartnerReligion(getPartnerReligion));
+    }
+
+    private PartnerReligion buildPartnerReligion(String getPartnerReligion) {
+        return PartnerReligion.builder()
+                .name(getPartnerReligion)
+                .build();
+    }
+
+    private List<PartnerLocation> getPartnerLocations(SignupRequest signupRequest) {
         List<PartnerLocation> partnerLocations = new ArrayList<>();
         for (String getPartnerLocation : signupRequest.getPartnerLocations()) {
-            PartnerLocation partnerLocation = PartnerLocation.builder()
-                    .name(getPartnerLocation)
-                    .build();
-            partnerLocations.add(partnerLocationRepository.save(partnerLocation));
+            partnerLocations.add(savePartnerLocation(getPartnerLocation));
         }
         return partnerLocations;
     }
 
-    private List<Interest> addInterests(SignupRequest signupRequest) {
+    private PartnerLocation savePartnerLocation(String getPartnerLocation) {
+        return partnerLocationRepository.save(buildPartnerLocation(getPartnerLocation));
+    }
+
+    private PartnerLocation buildPartnerLocation(String getPartnerLocation) {
+        return PartnerLocation.builder()
+                .name(getPartnerLocation)
+                .build();
+    }
+
+    private List<Interest> getInterests(SignupRequest signupRequest) {
         List<Interest> interests = new ArrayList<>();
         for (String getInterest : signupRequest.getInterests()) {
-            Interest interest = Interest.builder()
-                    .name(getInterest)
-                    .build();
-            interests.add(interestRepository.save(interest));
+            interests.add(saveInterest(getInterest));
         }
         return interests;
+    }
+
+    private Interest saveInterest(String getInterest) {
+        return interestRepository.save(buildInterest(getInterest));
+    }
+
+    private Interest buildInterest(String getInterest) {
+        return Interest.builder()
+                .name(getInterest)
+                .build();
     }
 
     private ProviderType getProviderType(SignupRequest signupRequest) {
@@ -182,16 +202,26 @@ public class UserService {
         }
     }
 
-    private void addProfiles(SignupRequest signupRequest, List<Profile> profiles) throws IOException {
+    private List<Profile> addProfiles(SignupRequest signupRequest) throws IOException {
+        List<Profile> profiles = new ArrayList<>();
         for (MultipartFile multipartFile : signupRequest.getProfiles()) {
-            S3Response s3Response = s3Uploader.upload(multipartFile, "static");
-
-            Profile profile = Profile.builder()
-                    .name(s3Response.getName())
-                    .path(s3Response.getPath())
-                    .build();
-
-            profiles.add(profileRepository.save(profile));
+            profiles.add(saveProfile(upload(multipartFile)));
         }
+        return profiles;
+    }
+
+    private S3Response upload(MultipartFile multipartFile) throws IOException {
+        return s3Uploader.upload(multipartFile, "static");
+    }
+
+    private Profile saveProfile(S3Response s3Response) {
+        return profileRepository.save(buildProfile(s3Response));
+    }
+
+    private Profile buildProfile(S3Response s3Response) {
+        return Profile.builder()
+                .name(s3Response.getName())
+                .path(s3Response.getPath())
+                .build();
     }
 }

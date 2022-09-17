@@ -74,14 +74,6 @@ public class UserService {
         return modelMapper.map(signupRequest, Partner.class);
     }
 
-//    private void initializeInfoList(SignupRequest signupRequest) {
-//        signupRequest.setProfiles(new ArrayList<>());
-//        signupRequest.setInterests(new ArrayList<>());
-//        signupRequest.setPartnerLocations(new ArrayList<>());
-//        signupRequest.setPartnerReligions(new ArrayList<>());
-//        signupRequest.setPartnerBodyTypes(new ArrayList<>());
-//    }
-
     private List<PartnerBodyType> getPartnerBodyTypes(SignupRequest signupRequest) {
         List<PartnerBodyType> partnerBodyTypes = new ArrayList<>();
         for (Integer getPartnerBodyType : signupRequest.getPartnerBodyTypes()) {
@@ -166,20 +158,32 @@ public class UserService {
     }
 
     public void returnAccessToken(HttpServletResponse response, User user) {
-        String accessToken = jwtUtil.createAccessToken(user.getProviderId(), "ROLE_GUEST");
-        response.setHeader("accessToken", accessToken);
+        response.setHeader("accessToken", createAccessToken(user));
+    }
+
+    private String createAccessToken(User user) {
+        return jwtUtil.createAccessToken(user.getProviderId(), "ROLE_GUEST");
     }
 
     @Transactional
     public void returnRefreshToken(HttpServletRequest request, HttpServletResponse response, User user) {
         String key = UUID.randomUUID().toString();
-        String refreshToken = jwtUtil.createRefreshToken(key);
 
         cookieUtil.deleteCookie(request, response, "refreshToken");
-        cookieUtil.addCookie(response, "refreshToken", refreshToken, jwtUtil.getRefreshTokenValidTime());
+        cookieUtil.addCookie(response, "refreshToken", createRefreshToken(key), getRefreshTokenValidTime());
+        refreshTokenRepository.save(createRefreshTokenEntity(user, key));
+    }
 
-        RefreshToken dbRefreshToken = new RefreshToken(key, user.getProviderId());
-        refreshTokenRepository.save(dbRefreshToken);
+    private RefreshToken createRefreshTokenEntity(User user, String key) {
+        return new RefreshToken(key, user.getProviderId());
+    }
+
+    private int getRefreshTokenValidTime() {
+        return jwtUtil.getRefreshTokenValidTime();
+    }
+
+    private String createRefreshToken(String key) {
+        return jwtUtil.createRefreshToken(key);
     }
 
     @Transactional

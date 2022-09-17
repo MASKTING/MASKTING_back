@@ -190,14 +190,21 @@ public class UserService {
     public void deleteAuth(HttpServletRequest request, HttpServletResponse response) {
         Optional<Cookie> cookie = cookieUtil.getCookie(request, "refreshToken");
         if (cookie.isPresent()) {
-            String token = cookie.get().getValue();
-            String key = jwtUtil.getSubject(token);
-            Optional<RefreshToken> refreshToken = refreshTokenRepository.findById(key);
-
-            deleteRefreshToken(refreshToken);
+            deleteRefreshToken(getRefreshToken(cookie));
+            cookieUtil.deleteCookie(request, response, "refreshToken");
         }
+    }
 
-        cookieUtil.deleteCookie(request, response, "refreshToken");
+    private Optional<RefreshToken> getRefreshToken(Optional<Cookie> cookie) {
+        return refreshTokenRepository.findById(getIdFromRefreshToken(cookie));
+    }
+
+    private String getIdFromRefreshToken(Optional<Cookie> cookie) {
+        return jwtUtil.getSubject(getKeyFromCookie(cookie));
+    }
+
+    private String getKeyFromCookie(Optional<Cookie> cookie) {
+        return cookie.get().getValue();
     }
 
     private void deleteRefreshToken(Optional<RefreshToken> refreshToken) {

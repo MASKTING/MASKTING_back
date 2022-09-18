@@ -25,10 +25,16 @@ public class AdminController {
 
     @GetMapping
     String home(HttpServletRequest request, Model model) {
-        User admin = adminService.getUser(request);
-        model.addAttribute("name", admin.getName());
-
+        model.addAttribute("name", getAdminName(request));
         return "admin/home";
+    }
+
+    private String getAdminName(HttpServletRequest request) {
+        return getAdmin(request).getName();
+    }
+
+    private User getAdmin(HttpServletRequest request) {
+        return adminService.getAdmin(request);
     }
 
     @ResponseBody

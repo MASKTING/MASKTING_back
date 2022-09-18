@@ -26,11 +26,20 @@ public class AdminService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
-    public User getUser(HttpServletRequest request) {
-        String accessToken = jwtUtil.resolveToken(request);
-        String providerId = jwtUtil.getSubject(accessToken);
-        User user = userRepository.findByProviderId(providerId);
-        return user;
+    public User getAdmin(HttpServletRequest request) {
+        return getUserByProviderId(request);
+    }
+
+    private User getUserByProviderId(HttpServletRequest request) {
+        return userRepository.findByProviderId(getProviderId(getAccessToken(request)));
+    }
+
+    private String getProviderId(String accessToken) {
+        return jwtUtil.getSubject(accessToken);
+    }
+
+    private String getAccessToken(HttpServletRequest request) {
+        return jwtUtil.resolveToken(request);
     }
 
     public List<User> findSortingUserByName(ReviewRequest reviewRequest, String name) {

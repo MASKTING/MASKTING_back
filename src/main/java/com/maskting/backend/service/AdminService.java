@@ -43,22 +43,24 @@ public class AdminService {
     }
 
     public List<User> findSortingUserByName(ReviewRequest reviewRequest, String name) {
-        PageRequest pageRequest = getPageRequest(reviewRequest);
-        List<User> guests = userRepository.findByNameContains(name, pageRequest).getContent();
-        return guests;
+        return userRepository.findByNameContains(name, getPageRequest(reviewRequest)).getContent();
     }
 
     private PageRequest getPageRequest(ReviewRequest reviewRequest) {
-        int start = reviewRequest.getStart();
         int length = reviewRequest.getLength();
-        int page = start/length;
-        return PageRequest.of(page, length);
+        return PageRequest.of(getPage(getStart(reviewRequest), length), length);
+    }
+
+    private int getStart(ReviewRequest reviewRequest) {
+        return reviewRequest.getStart();
+    }
+
+    private int getPage(int start, int length) {
+        return start / length;
     }
 
     public List<User> findSortingUser(ReviewRequest reviewRequest) {
-        PageRequest pageRequest = getPageRequest(reviewRequest);
-        List<User> guests = userRepository.findBySort(true, pageRequest).getContent();
-        return guests;
+        return userRepository.findBySort(true, getPageRequest(reviewRequest)).getContent();
     }
 
     public List<ReviewResponse> returnReviewResponse(List<User> guests) {

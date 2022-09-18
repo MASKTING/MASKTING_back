@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,33 +26,35 @@ public class AuthService {
     private final UserRepository userRepository;
 
     public RefreshToken getRefreshToken(HttpServletRequest request) {
-        String key = resolveRefreshToken(request);
-        RefreshToken dbRefreshToken = refreshTokenRepository
-                .findById(key)
+        return refreshTokenRepository
+                .findById(getKeyFromToken(request))
                 .orElseThrow(NoRefreshTokenException::new);
-
-        return dbRefreshToken;
     }
 
-    private String resolveRefreshToken(HttpServletRequest request) {
-        Cookie cookie = cookieUtil.getCookie(request, "refreshToken").orElseThrow(NoCookieException::new);
-        String refreshToken = cookie.getValue();
-        return jwtUtil.getSubject(refreshToken);
+    private String getKeyFromToken(HttpServletRequest request) {
+        return jwtUtil.getSubject(getCookie(request));
+    }
+
+    private String getCookie(HttpServletRequest request) {
+        return cookieUtil.getCookie(request, "refreshToken").orElseThrow(NoCookieException::new).getValue();
     }
 
     public void setAccessToken(HttpServletResponse response, RefreshToken refreshToken) {
-        User user = userRepository.findByProviderId(refreshToken.getProviderId());
-        if (user == null) {
+        User user = getUserByProviderId(refreshToken);
+        if (user == null)
             throw new UsernameNotFoundException("유저가 존재하지 않습니다.");
-        }
+        response.setHeader("accessToken", createAccessToken(user, getRole(user)));
+    }
 
-        String role;
-        if (user.getRoleType() == RoleType.USER)
-            role = "ROLE_USER";
-        else
-            role = "ROLE_ADMIN";
+    private String getRole(User user) {
+        return user.getRoleType() == RoleType.USER ? "ROLE_USER" : "ROLE_ADMIN";
+    }
 
-        String accessToken = jwtUtil.createAccessToken(user.getProviderId(), role);
-        response.setHeader("accessToken", accessToken);
+    private User getUserByProviderId(RefreshToken refreshToken) {
+        return userRepository.findByProviderId(refreshToken.getProviderId());
+    }
+
+    private String createAccessToken(User user, String role) {
+        return jwtUtil.createAccessToken(user.getProviderId(), role);
     }
 }

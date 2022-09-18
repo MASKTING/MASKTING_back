@@ -93,6 +93,7 @@ public class User extends BaseTimeEntity{
     }
 
     public void addProfiles(List<Profile> profiles) {
+        this.profiles = new ArrayList<>();
         for (Profile profile : profiles) {
             this.profiles.add(profile);
             profile.updateUser(this);
@@ -108,6 +109,7 @@ public class User extends BaseTimeEntity{
     }
 
     public void addInterests(List<Interest> interests) {
+        this.interests = new ArrayList<>();
         for (Interest interest : interests) {
             this.interests.add(interest);
             interest.updateUser(this);
@@ -115,6 +117,7 @@ public class User extends BaseTimeEntity{
     }
 
     public void addPartnerLocations(List<PartnerLocation> partnerLocations) {
+        this.partnerLocations = new ArrayList<>();
         for (PartnerLocation partnerLocation : partnerLocations) {
             this.partnerLocations.add(partnerLocation);
             partnerLocation.updateUser(this);
@@ -122,6 +125,7 @@ public class User extends BaseTimeEntity{
     }
 
     public void addPartnerReligions(List<PartnerReligion> partnerReligions) {
+        this.partnerReligions = new ArrayList<>();
         for (PartnerReligion partnerReligion : partnerReligions) {
             this.partnerReligions.add(partnerReligion);
             partnerReligion.updateUser(this);
@@ -129,6 +133,7 @@ public class User extends BaseTimeEntity{
     }
 
     public void addPartnerBodyTypes(List<PartnerBodyType> partnerBodyTypes) {
+        this.partnerBodyTypes = new ArrayList<>();
         for (PartnerBodyType partnerBodyType : partnerBodyTypes) {
             this.partnerBodyTypes.add(partnerBodyType);
             partnerBodyType.updateUser(this);

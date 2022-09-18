@@ -62,7 +62,7 @@ class AdminServiceTest {
         given(jwtUtil.getSubject(anyString())).willReturn("adminProviderId");
         given(userRepository.findByProviderId("adminProviderId")).willReturn(user);
 
-        User getUser = adminService.getUser(request);
+        User getUser = adminService.getAdmin(request);
 
         verify(userRepository).findByProviderId(anyString());
         assertEquals("admin", getUser.getName());

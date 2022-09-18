@@ -25,30 +25,39 @@ public class AdminController {
 
     @GetMapping
     String home(HttpServletRequest request, Model model) {
-        User admin = adminService.getUser(request);
-        model.addAttribute("name", admin.getName());
-
+        model.addAttribute("name", getAdminName(request));
         return "admin/home";
+    }
+
+    private String getAdminName(HttpServletRequest request) {
+        return getAdmin(request).getName();
+    }
+
+    private User getAdmin(HttpServletRequest request) {
+        return adminService.getAdmin(request);
     }
 
     @ResponseBody
     @GetMapping("/guests")
     DataTableResponse returnGuests(ReviewRequest reviewRequest, HttpServletRequest request) {
         String name = request.getParameter("search[value]");
-        int total = 0;
-        List<User> guests = new ArrayList<>();
+        return new DataTableResponse(getDraw(reviewRequest), getTotal(name), getTotal(name), getReviewResponses(getGuests(reviewRequest, name)));
+    }
 
-        if(isSearching(name)){
-            total = userRepository.countByNameContains(name);
-            guests = adminService.findSortingUserByName(reviewRequest, name);
-        }else{
-            total = (int)userRepository.count();
-            guests = adminService.findSortingUser(reviewRequest);
-        }
+    private List<User> getGuests(ReviewRequest reviewRequest, String name) {
+        return isSearching(name) ? adminService.findSortingUserByName(reviewRequest, name) : adminService.findSortingUser(reviewRequest);
+    }
 
-        List<ReviewResponse> reviewResponses = adminService.returnReviewResponse(guests);;
-        int draw = reviewRequest.getDraw();
-        return new DataTableResponse(draw, total, total, reviewResponses);
+    private int getTotal(String name) {
+        return isSearching(name) ? userRepository.countByNameContains(name) : (int) userRepository.count();
+    }
+
+    private int getDraw(ReviewRequest reviewRequest) {
+        return reviewRequest.getDraw();
+    }
+
+    private List<ReviewResponse> getReviewResponses(List<User> guests) {
+        return adminService.returnReviewResponse(guests);
     }
 
     private boolean isSearching(String name) {
@@ -57,8 +66,11 @@ public class AdminController {
 
     @PostMapping("/approval/{name}")
     String approval(@PathVariable String name){
-        User user = userRepository.findByName(name);
-        adminService.convertToUser(user);
+        adminService.convertToUser(getUserByName(name));
         return "admin/home";
+    }
+
+    private User getUserByName(@PathVariable String name) {
+        return userRepository.findByName(name);
     }
 }

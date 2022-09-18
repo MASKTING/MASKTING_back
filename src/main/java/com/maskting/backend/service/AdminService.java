@@ -26,30 +26,41 @@ public class AdminService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
-    public User getUser(HttpServletRequest request) {
-        String accessToken = jwtUtil.resolveToken(request);
-        String providerId = jwtUtil.getSubject(accessToken);
-        User user = userRepository.findByProviderId(providerId);
-        return user;
+    public User getAdmin(HttpServletRequest request) {
+        return getUserByProviderId(request);
+    }
+
+    private User getUserByProviderId(HttpServletRequest request) {
+        return userRepository.findByProviderId(getProviderId(getAccessToken(request)));
+    }
+
+    private String getProviderId(String accessToken) {
+        return jwtUtil.getSubject(accessToken);
+    }
+
+    private String getAccessToken(HttpServletRequest request) {
+        return jwtUtil.resolveToken(request);
     }
 
     public List<User> findSortingUserByName(ReviewRequest reviewRequest, String name) {
-        PageRequest pageRequest = getPageRequest(reviewRequest);
-        List<User> guests = userRepository.findByNameContains(name, pageRequest).getContent();
-        return guests;
+        return userRepository.findByNameContains(name, getPageRequest(reviewRequest)).getContent();
     }
 
     private PageRequest getPageRequest(ReviewRequest reviewRequest) {
-        int start = reviewRequest.getStart();
         int length = reviewRequest.getLength();
-        int page = start/length;
-        return PageRequest.of(page, length);
+        return PageRequest.of(getPage(getStart(reviewRequest), length), length);
+    }
+
+    private int getStart(ReviewRequest reviewRequest) {
+        return reviewRequest.getStart();
+    }
+
+    private int getPage(int start, int length) {
+        return start / length;
     }
 
     public List<User> findSortingUser(ReviewRequest reviewRequest) {
-        PageRequest pageRequest = getPageRequest(reviewRequest);
-        List<User> guests = userRepository.findBySort(true, pageRequest).getContent();
-        return guests;
+        return userRepository.findBySort(true, getPageRequest(reviewRequest)).getContent();
     }
 
     public List<ReviewResponse> returnReviewResponse(List<User> guests) {

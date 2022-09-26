@@ -14,7 +14,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SignupRequest {
+public class    SignupRequest {
 
     @NotBlank
     private String name;
@@ -84,6 +84,9 @@ public class SignupRequest {
 
     @NotNull
     private int partnerMaxHeight;
+
+    @NotNull
+    private String bio;
 
     private List<Integer> partnerBodyTypes;
 

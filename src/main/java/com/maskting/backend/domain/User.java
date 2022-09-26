@@ -53,6 +53,8 @@ public class User extends BaseTimeEntity{
 
     private String religion;
 
+    private String bio;
+
     @NotBlank
     @Column(unique = true)
     private String nickname;

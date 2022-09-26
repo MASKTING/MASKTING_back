@@ -36,7 +36,7 @@ public class RequestFactory {
                 interests, true, false,
                 5, 181, 3,
                 "무교", "알콜쟁이 라이언", partnerLocations, "any", "any",
-                partnerReligions, 1, 160, 170, partnerBodyTypes, profiles);
+                partnerReligions, 1, 160, 170, "운동 좋아합니다!", partnerBodyTypes, profiles);
         return signupRequest;
     }
 }

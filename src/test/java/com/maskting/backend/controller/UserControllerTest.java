@@ -136,6 +136,7 @@ class UserControllerTest {
                         .param("height", Integer.toString(signupRequest.getHeight()))
                         .param("bodyType", Integer.toString(signupRequest.getBodyType()))
                         .param("religion", signupRequest.getReligion())
+                        .param("bio", signupRequest.getBio())
                         .param("nickname", signupRequest.getNickname())
                         .params(partnerLocations)
                         .param("partnerDuty", signupRequest.getPartnerDuty())
@@ -171,6 +172,7 @@ class UserControllerTest {
                                 ,parameterWithName("height").description("키")
                                 ,parameterWithName("bodyType").description("체형")
                                 ,parameterWithName("religion").description("종교")
+                                ,parameterWithName("bio").description("한줄 자기소개")
                                 ,parameterWithName("nickname").description("닉네임")
                                 ,parameterWithName("partnerLocations").description("상대방 선호 지역(List)")
                                 ,parameterWithName("partnerDuty").description("상대방 군필여부(여자인경우만, 남자인 경우 any)")
@@ -217,6 +219,7 @@ class UserControllerTest {
         assertEquals(signupRequest.getHeight(), dbUser.getHeight());
         assertEquals(signupRequest.getBodyType(), dbUser.getBodyType());
         assertEquals(signupRequest.getReligion(), dbUser.getReligion());
+        assertEquals(signupRequest.getBio(), dbUser.getBio());
         assertEquals(signupRequest.getNickname(), dbUser.getNickname());
         assertTrue(dbUser.getProfiles().get(0).getName().contains("test.PNG"));
     }

@@ -4,6 +4,7 @@ import com.maskting.backend.dto.request.FeedRequest;
 import com.maskting.backend.service.MainService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,4 +24,11 @@ public class MainController {
         mainService.addFeed(request, feedRequest);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/partner")
+    public ResponseEntity<?> getPartner(HttpServletRequest request) {
+        mainService.getPartnerResponse(mainService.matchPartner(request));
+        return ResponseEntity.ok().build();
+    }
+
 }

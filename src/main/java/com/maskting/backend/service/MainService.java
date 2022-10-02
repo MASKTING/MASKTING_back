@@ -5,6 +5,7 @@ import com.maskting.backend.common.exception.NoFeedException;
 import com.maskting.backend.domain.*;
 import com.maskting.backend.dto.response.PartnerInfo;
 import com.maskting.backend.dto.request.FeedRequest;
+import com.maskting.backend.dto.response.PartnerResponse;
 import com.maskting.backend.dto.response.S3Response;
 import com.maskting.backend.repository.FeedRepository;
 import com.maskting.backend.repository.UserRepository;
@@ -200,5 +201,29 @@ public class MainService {
         for (int i = 0; i < user.getPartnerLocations().size(); i++) {
             check.put(user.getInterests().get(i).getName(), 1);
         }
+    }
+
+    public List<PartnerResponse> getPartnerResponse(List<User> partners) {
+        List<PartnerResponse> partnerResponses = new ArrayList<>();
+        for (User partner : partners) {
+            partnerResponses.add(getPartnerResponse(partner));
+        }
+
+        return partnerResponses;
+    }
+
+    private PartnerResponse getPartnerResponse(User partner) {
+        return new PartnerResponse(getProfile(partner), partner.getBio(),
+                getFeeds(partner));
+    }
+
+    private String getProfile(User partner) {
+        return partner.getProfiles().get(0).getPath();
+    }
+
+    private List<String> getFeeds(User partner) {
+        return partner.getFeeds().stream()
+                .map(Feed::getPath)
+                .collect(Collectors.toList());
     }
 }

@@ -15,8 +15,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class PartnerLocation {
 
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

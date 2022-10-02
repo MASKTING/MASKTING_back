@@ -13,7 +13,7 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Profile {
+public class Feed extends BaseTimeEntity{
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,5 +29,6 @@ public class Profile {
 
     public void updateUser(User user) {
         this.user = user;
+        user.getFeeds().add(this);
     }
 }

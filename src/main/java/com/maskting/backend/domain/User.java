@@ -87,6 +87,8 @@ public class User extends BaseTimeEntity{
     @OneToMany(mappedBy = "user")
     private List<Feed> feeds = new ArrayList<>();
 
+    private boolean latest;
+
     public void updateType(ProviderType providerType, RoleType roleType) {
         this.providerType = providerType;
         updateRoleType(roleType);

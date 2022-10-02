@@ -11,13 +11,16 @@ import com.maskting.backend.repository.UserRepository;
 import com.maskting.backend.util.JwtUtil;
 import com.maskting.backend.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MainService {
 
     private final S3Uploader s3Uploader;
@@ -25,6 +28,7 @@ public class MainService {
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
 
+    @Transactional
     public Feed addFeed(HttpServletRequest request, FeedRequest feedRequest) throws IOException {
         User user = getUserByProviderId(request);
         if (user.getFeeds().size() == 6)
@@ -57,5 +61,11 @@ public class MainService {
                 .name(uploadFile.getName())
                 .path(uploadFile.getPath())
                 .build();
+    }
+
+    @Transactional
+    @Scheduled(cron = "0 0 12 * * *")
+    public void updateAllUser() {
+        userRepository.updateAllUserLatest(false);
     }
 }

@@ -15,8 +15,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class Interest {
 
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

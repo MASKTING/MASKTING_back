@@ -105,7 +105,7 @@ public class MainService {
             double score = 0;
             User partner = partners.get(i);
 
-            score += getAgeScore(user, partner);
+            score += getAgeScore(user, partner) * 5;
             score += getInterestScore(check, partner) * 10;
             score *= getDrinkingScore(user, partner);
             score *= getHeightScore(partner);
@@ -186,7 +186,7 @@ public class MainService {
 
     private int getAgeScore(User user, User partner) {
         return (10 - Math.abs(Integer.parseInt(user.getBirth().substring(0, 4))
-                - Integer.parseInt(partner.getBirth().substring(0, 4)) - 2)) * 5;
+                - Integer.parseInt(partner.getBirth().substring(0, 4)) - 2));
     }
 
     private List<User> getPartners(User user) {

@@ -41,10 +41,13 @@ public class UserFactory {
                 .partnerReligions(new ArrayList<>())
                 .partnerBodyTypes(new ArrayList<>())
                 .roleType(roleType)
-                .profiles(new ArrayList<>())
+                .profiles(getProfiles())
+                .feeds(new ArrayList<>())
+                .matches(new ArrayList<>())
                 .providerId("testProviderId")
                 .providerType(ProviderType.GOOGLE)
                 .sort(sort)
+                .bio("자기소개")
                 .build();
     }
 
@@ -171,5 +174,64 @@ public class UserFactory {
         attributes.put("id", "123456789");
         OAuth2UserInfo oAuth2UserInfo = new KakaoUserInfo(attributes);
         return new UserPrincipal(user, oAuth2UserInfo, "accessToken");
+    }
+
+    public User createFemaleUser(String nickname) {
+        Partner partner = new Partner("any", "any",
+                1, 175, 180);
+        return User.builder()
+                .name("test")
+                .email("test@gmail.com")
+                .gender("female")
+                .birth("19990815")
+                .location("경기 북부")
+                .occupation("대학생")
+                .phone("01012345678")
+                .interests(new ArrayList<>())
+                .drinking(5)
+                .height(165)
+                .bodyType(3)
+                .religion("무교")
+                .nickname(nickname)
+                .partner(partner)
+                .partnerLocations(new ArrayList<>())
+                .partnerReligions(new ArrayList<>())
+                .partnerBodyTypes(new ArrayList<>())
+                .roleType(RoleType.USER)
+                .profiles(new ArrayList<>(getProfiles()))
+                .feeds(new ArrayList<>())
+                .matches(new ArrayList<>())
+                .providerId(nickname)
+                .providerType(ProviderType.GOOGLE)
+                .sort(false)
+                .bio("자기소개")
+                .build();
+    }
+
+    public User getFemaleUserByInterests(String nickname, String interest1, String interest2) {
+        User user = createFemaleUser(nickname);
+        addInterests(user, new ArrayList<>(Arrays.asList(interest1, interest2)));
+        return user;
+    }
+
+    public void addInterests(User user, List<String> names) {
+        List<Interest> interests = new ArrayList<>();
+        for (String name : names) {
+            interests.add(getInterest((name)));
+        }
+        user.addInterests(interests);
+    }
+
+    private Interest getInterest(String name) {
+        return Interest.builder()
+                .name(name)
+                .build();
+    }
+
+    private List<Profile> getProfiles() {
+        return Arrays.asList(Profile.builder()
+                .name("test")
+                .name("test")
+                .build());
     }
 }

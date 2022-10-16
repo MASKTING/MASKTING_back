@@ -27,8 +27,8 @@ public class MainController {
 
     @GetMapping("/partner")
     public ResponseEntity<?> getPartner(HttpServletRequest request) {
-        mainService.getPartnerResponse(mainService.matchPartner(request));
-        return ResponseEntity.ok().build();
+        //TODO 제외로직추가
+        return ResponseEntity.ok(mainService.getPartnerResponse(mainService.matchPartner(request)));
     }
 
 }

@@ -108,7 +108,7 @@ public class MainService {
             score += getAgeScore(user, partner) * 5;
             score += getInterestScore(check, partner) * 10;
             score *= getDrinkingScore(user, partner);
-            score *= getHeightScore(partner);
+            score *= getHeightScore(user, partner);
             if (notEqualSmoking(user, partner))
                 score *= 0.3;
             if (notEqualDuty(user, partner))
@@ -136,9 +136,9 @@ public class MainService {
         });
     }
 
-    private double getHeightScore(User partner) {
-        double partnerMaxHeight = partner.getPartner().getPartnerMaxHeight();
-        double partnerMinHeight = partner.getPartner().getPartnerMinHeight();
+    private double getHeightScore(User user, User partner) {
+        double partnerMaxHeight = user.getPartner().getPartnerMaxHeight();
+        double partnerMinHeight = user.getPartner().getPartnerMinHeight();
         return 1 - ((Math.abs(partner.getHeight() - (partnerMaxHeight + partnerMinHeight) / 2)
                 - (partnerMaxHeight - partnerMinHeight) / 2)) / 10;
     }
@@ -198,7 +198,7 @@ public class MainService {
     }
 
     private void initCheck(User user, HashMap<String, Integer> check) {
-        for (int i = 0; i < user.getPartnerLocations().size(); i++) {
+        for (int i = 0; i < user.getInterests().size(); i++) {
             check.put(user.getInterests().get(i).getName(), 1);
         }
     }

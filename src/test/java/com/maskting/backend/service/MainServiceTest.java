@@ -88,7 +88,7 @@ class MainServiceTest {
         User partner2 = userFactory.getFemaleUserByInterests("test2", "산책", "게임");
         User partner3 = userFactory.getFemaleUserByInterests("test3", "산책", "음악");
         given(userRepository.findByProviderId(any())).willReturn(user);
-        given(userRepository.findByLocationsAndGender(any(), anyString()))
+        given(userRepository.findByLocationsAndGender(any(), anyString(), any()))
                 .willReturn(new ArrayList<>(Arrays.asList(partner1, partner2, partner3)));
 
         List<User> partner = mainService.matchPartner(request);

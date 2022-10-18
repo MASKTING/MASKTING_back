@@ -99,7 +99,7 @@ public class User extends BaseTimeEntity{
     private User exclusion;
 
     @OneToMany(mappedBy = "exclusion")
-    private List<User> exclusions;
+    private List<User> exclusions = new ArrayList<>();
 
     private boolean latest;
 
@@ -174,5 +174,17 @@ public class User extends BaseTimeEntity{
 
     public void updateLatest() {
         latest = !latest;
+    }
+
+    public void updateExclusions(List<User> matches) {
+        for (User user : matches) {
+            exclusions.add(user);
+            user.updateExclusion(this);
+            user.updateMatch(null);
+        }
+    }
+
+    private void updateExclusion(User user) {
+        exclusion = user;
     }
 }

@@ -78,6 +78,7 @@ public class MainService {
         List<User> matches = new ArrayList<>();
         
         if (!user.isLatest()) {
+            addExclusions(user);
             List<User> partners = getPartners(user);
             List<PartnerInfo> partnerInfos = calculateScore(user, partners);
 
@@ -89,6 +90,12 @@ public class MainService {
         }
         matches.addAll(user.getMatches());
         return matches;
+    }
+
+    private void addExclusions(User user) {
+        if (!user.getMatches().isEmpty()) {
+            user.updateExclusions(user.getMatches());
+        }
     }
 
     private void updateUserMatching(User user, List<User> matches) {
@@ -191,10 +198,17 @@ public class MainService {
 
     private List<User> getPartners(User user) {
         return userRepository
-                .findByLocationsAndGender(user.getPartnerLocations()
-                        .stream()
-                        .map(PartnerLocation::getName)
-                        .collect(Collectors.toList()), user.getGender());
+                .findByLocationsAndGender(
+                        user.getPartnerLocations()
+                            .stream()
+                            .map(PartnerLocation::getName)
+                            .collect(Collectors.toList())
+                        , user.getGender()
+                        , user.getExclusions()
+                                .stream()
+                                .map(User::getId)
+                                .collect(Collectors.toList())
+                );
     }
 
     private void initCheck(User user, HashMap<String, Integer> check) {

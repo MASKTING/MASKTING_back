@@ -103,6 +103,13 @@ public class User extends BaseTimeEntity{
 
     private boolean latest;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "LIKE_ID")
+    private User like;
+
+    @OneToMany(mappedBy = "like")
+    private List<User> likes = new ArrayList<>();
+
     public void updateType(ProviderType providerType, RoleType roleType) {
         this.providerType = providerType;
         updateRoleType(roleType);
@@ -187,4 +194,14 @@ public class User extends BaseTimeEntity{
     private void updateExclusion(User user) {
         exclusion = user;
     }
+
+    public void addLike(User receiver) {
+        likes.add(receiver);
+        receiver.updateLike(this);
+    }
+
+    public void updateLike(User user) {
+        like = user;
+    }
+
 }

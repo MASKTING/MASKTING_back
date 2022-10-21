@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Optional;
+
 public interface UserRepository extends JpaRepository<User, Long>, UserRepositoryExtension{
     User findByProviderId(String providerId);
 
@@ -23,4 +25,6 @@ public interface UserRepository extends JpaRepository<User, Long>, UserRepositor
     @Modifying(clearAutomatically = true)
     @Query("update User u set u.latest = :latest")
     void updateAllUserLatest(@Param("latest") boolean latest);
+
+    Optional<User> findByNickname(String nickname);
 }

@@ -110,6 +110,9 @@ public class User extends BaseTimeEntity{
     @OneToMany(mappedBy = "like")
     private List<User> likes = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    private List<ChatUser> chatUsers = new ArrayList<>();
+
     public void updateType(ProviderType providerType, RoleType roleType) {
         this.providerType = providerType;
         updateRoleType(roleType);

@@ -32,6 +32,8 @@ public class MainService {
     private final FeedRepository feedRepository;
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
+    private final ChatRoomService chatRoomService;
+    private final ChatUserService chatUserService;
 
     @Transactional
     public Feed addFeed(HttpServletRequest request, FeedRequest feedRequest) throws IOException {
@@ -252,9 +254,14 @@ public class MainService {
             throw new ExistLikeException();
         sender.addLike(receiver);
 
-        //TODO 채팅방 개설
         if (isChatable(sender, receiver))
-            System.out.println("Chat Open");
+            openChat(sender, receiver);
+    }
+
+    private void openChat(User sender, User receiver) {
+        ChatRoom chatRoom = chatRoomService.createRoom();
+        chatUserService.createChatUser(sender, chatRoom);
+        chatUserService.createChatUser(receiver, chatRoom);
     }
 
     private boolean existLike(User sender, User receiver) {

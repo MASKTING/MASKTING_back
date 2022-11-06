@@ -7,6 +7,7 @@ import com.maskting.backend.repository.ChatMessageRepository;
 import com.maskting.backend.repository.ChatRoomRepository;
 import com.maskting.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ChatService {
+
+    private final SimpMessagingTemplate simpMessagingTemplate;
     private final ChatMessageRepository chatMessageRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final UserRepository userRepository;
@@ -36,5 +39,9 @@ public class ChatService {
             return null;
         }
         return userRepository.findByNickname(message.getSender()).orElseThrow();
+    }
+
+    public void sendMessage(ChatMessageRequest message) {
+        simpMessagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
     }
 }

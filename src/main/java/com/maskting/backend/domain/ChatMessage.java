@@ -6,23 +6,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatRoom extends BaseTimeEntity{
+public class ChatMessage extends BaseTimeEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "chatRoom")
-    private List<ChatUser> chatUsers = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 
-    @OneToMany(mappedBy = "chatRoom")
-    private List<ChatMessage> chatMessages = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    private ChatRoom chatRoom;
+
+    private String content;
+
+    private boolean checked;
+
 }

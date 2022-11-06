@@ -5,6 +5,7 @@ import com.maskting.backend.common.exception.ExistLikeException;
 import com.maskting.backend.common.exception.NoFeedException;
 import com.maskting.backend.common.exception.NoNicknameException;
 import com.maskting.backend.domain.*;
+import com.maskting.backend.dto.request.ChatMessageRequest;
 import com.maskting.backend.dto.response.PartnerInfo;
 import com.maskting.backend.dto.request.FeedRequest;
 import com.maskting.backend.dto.response.PartnerResponse;
@@ -34,6 +35,7 @@ public class MainService {
     private final UserRepository userRepository;
     private final ChatRoomService chatRoomService;
     private final ChatUserService chatUserService;
+    private final ChatService chatService;
 
     @Transactional
     public Feed addFeed(HttpServletRequest request, FeedRequest feedRequest) throws IOException {
@@ -262,6 +264,9 @@ public class MainService {
         ChatRoom chatRoom = chatRoomService.createRoom();
         chatUserService.createChatUser(sender, chatRoom);
         chatUserService.createChatUser(receiver, chatRoom);
+        ChatMessageRequest message = new ChatMessageRequest(chatRoom.getId(), "System", "앞으로 72시간 대화를 나누며 서로를 알아갈 수 있어요.");
+        chatService.sendMessage(message);
+        chatService.saveChatMessage(message);
     }
 
     private boolean existLike(User sender, User receiver) {

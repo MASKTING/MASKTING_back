@@ -1,13 +1,11 @@
 package com.maskting.backend.controller;
 
 import com.maskting.backend.dto.request.FeedRequest;
+import com.maskting.backend.dto.request.SendLikeRequest;
 import com.maskting.backend.service.MainService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -27,8 +25,12 @@ public class MainController {
 
     @GetMapping("/partner")
     public ResponseEntity<?> getPartner(HttpServletRequest request) {
-        //TODO 제외로직추가
         return ResponseEntity.ok(mainService.getPartnerResponse(mainService.matchPartner(request)));
     }
 
+    @PostMapping("/like")
+    public ResponseEntity<?> sendLike(HttpServletRequest request, @RequestBody SendLikeRequest sendLikeRequest) {
+        mainService.sendLike(request, sendLikeRequest.getNickname());
+        return ResponseEntity.ok().build();
+    }
 }

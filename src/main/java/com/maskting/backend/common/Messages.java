@@ -12,4 +12,6 @@ public class Messages {
     public static final String NO_PROFILE = "등록한 프로필 사진이 없습니다.";
     public static final String NO_FEED = "등록한 피드 사진이 없습니다.";
     public static final String EXCEED_FEED_LIMIT = "피드 사진이 이미 6장입니다.";
+    public static final String NO_NICKNAME = "그런 닉네임의 유저는 없습니다.";
+    public static final String EXIST_LIKE = "이미 좋아요를 했습니다.";
 }

@@ -19,4 +19,9 @@ public class ChatRoomController {
         return ResponseEntity.ok(chatRoomService.getAllChatRoom(user));
     }
 
+    @GetMapping("/room/{roomId}")
+    public ResponseEntity<?> getChatRoom(@PathVariable Long roomId, @AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(chatRoomService.getChatRoom(roomId, user));
+    }
+
 }

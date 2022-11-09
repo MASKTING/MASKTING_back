@@ -3,7 +3,6 @@ package com.maskting.backend.controller;
 import com.maskting.backend.dto.request.FeedRequest;
 import com.maskting.backend.dto.request.SendLikeRequest;
 import com.maskting.backend.service.MainService;
-import com.maskting.backend.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,7 +17,6 @@ import java.io.IOException;
 public class MainController {
 
     private final MainService mainService;
-    private final JwtUtil jwtUtil;
 
     @PostMapping("/feed")
     public ResponseEntity<?> addFeed(@AuthenticationPrincipal User user, FeedRequest feedRequest) throws IOException {

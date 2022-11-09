@@ -1,5 +1,6 @@
 package com.maskting.backend.controller;
 
+import com.maskting.backend.Auth.WithAuthUser;
 import com.maskting.backend.domain.PartnerLocation;
 import com.maskting.backend.domain.User;
 import com.maskting.backend.factory.UserFactory;
@@ -83,6 +84,7 @@ class MainControllerTest {
     @Test
     @Transactional
     @DisplayName("피드 추가")
+    @WithAuthUser(id = "testProviderId", role = "ROLE_USER")
     void addFeed() throws Exception {
         User user = userFactory.createUser("test", "test");
         userRepository.save(user);
@@ -108,6 +110,7 @@ class MainControllerTest {
     @Test
     @Transactional
     @DisplayName("파트너 매칭")
+    @WithAuthUser(id = "testProviderId", role = "ROLE_USER")
     void getPartner() throws Exception {
         User user = getUser();
         getPartner("test1", "공부", "게임");

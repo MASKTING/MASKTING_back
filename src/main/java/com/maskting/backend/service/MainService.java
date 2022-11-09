@@ -12,14 +12,12 @@ import com.maskting.backend.dto.response.PartnerResponse;
 import com.maskting.backend.dto.response.S3Response;
 import com.maskting.backend.repository.FeedRepository;
 import com.maskting.backend.repository.UserRepository;
-import com.maskting.backend.util.JwtUtil;
 import com.maskting.backend.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -31,15 +29,14 @@ public class MainService {
 
     private final S3Uploader s3Uploader;
     private final FeedRepository feedRepository;
-    private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
     private final ChatRoomService chatRoomService;
     private final ChatUserService chatUserService;
     private final ChatService chatService;
 
     @Transactional
-    public Feed addFeed(HttpServletRequest request, FeedRequest feedRequest) throws IOException {
-        User user = getUserByProviderId(request);
+    public Feed addFeed(org.springframework.security.core.userdetails.User userDetail, FeedRequest feedRequest) throws IOException {
+        User user = getUserByProviderId(userDetail);
         if (user.getFeeds().size() == 6)
             throw new ExceedFeedLimitException();
         if (feedRequest.getFeed().isEmpty())
@@ -49,16 +46,8 @@ public class MainService {
         return feedRepository.save(feed);
     }
 
-    private User getUserByProviderId(HttpServletRequest request) {
-        return userRepository.findByProviderId(getProviderId(request));
-    }
-
-    private String getProviderId(HttpServletRequest request) {
-        return jwtUtil.getSubject(getAccessToken(request));
-    }
-
-    private String getAccessToken(HttpServletRequest request) {
-        return jwtUtil.resolveToken(request);
+    private User getUserByProviderId(org.springframework.security.core.userdetails.User userDetail) {
+        return userRepository.findByProviderId(userDetail.getUsername());
     }
 
     private S3Response upload(FeedRequest feedRequest) throws IOException {
@@ -79,8 +68,8 @@ public class MainService {
     }
 
     @Transactional
-    public List<User> matchPartner(HttpServletRequest request) {
-        User user = getUserByProviderId(request);
+    public List<User> matchPartner(org.springframework.security.core.userdetails.User userDetail) {
+        User user = getUserByProviderId(userDetail);
         List<User> matches = new ArrayList<>();
         
         if (!user.isLatest()) {
@@ -248,8 +237,8 @@ public class MainService {
     }
 
     @Transactional
-    public void sendLike(HttpServletRequest request, String nickname) {
-        User sender = getUserByProviderId(request);
+    public void sendLike(org.springframework.security.core.userdetails.User userDetail, String nickname) {
+        User sender = getUserByProviderId(userDetail);
         User receiver = userRepository.findByNickname(nickname).orElseThrow(NoNicknameException::new);
 
         if (existLike(sender, receiver))

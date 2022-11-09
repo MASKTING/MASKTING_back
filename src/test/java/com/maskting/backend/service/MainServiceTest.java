@@ -6,6 +6,7 @@ import com.maskting.backend.domain.User;
 import com.maskting.backend.dto.request.FeedRequest;
 import com.maskting.backend.dto.response.PartnerResponse;
 import com.maskting.backend.dto.response.S3Response;
+import com.maskting.backend.dto.response.UserResponse;
 import com.maskting.backend.factory.UserFactory;
 import com.maskting.backend.repository.FeedRepository;
 import com.maskting.backend.repository.UserRepository;
@@ -18,7 +19,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.IOException;
@@ -35,6 +35,8 @@ import static org.mockito.BDDMockito.given;
 class MainServiceTest {
 
     private UserFactory userFactory;
+    private User user;
+    private org.springframework.security.core.userdetails.User userDetail;
 
     @InjectMocks
     MainService mainService;
@@ -51,13 +53,24 @@ class MainServiceTest {
     @BeforeEach
     void setUp() {
         userFactory = new UserFactory();
+        user = userFactory.createUser("테스트이름", "테스트닉네임");
+        userDetail = new org.springframework.security.core.userdetails.User(user.getProviderId(), "", new ArrayList<>());
+    }
+
+    @Test
+    @DisplayName("홈 유저 DTO 반환")
+    void getUser() {
+        given(userRepository.findByProviderId(any())).willReturn(user);
+
+        UserResponse user = mainService.getUser(userDetail);
+
+        assertEquals("test", user.getProfile());
+        assertEquals("테스트닉네임", user.getNickname());
     }
 
     @Test
     @DisplayName("피드 추가")
     void addFeed() throws IOException {
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        User user = userFactory.createUser("피드테스트이름", "피드테스트닉네임");
         S3Response s3Response = new S3Response("feedName", "feedPath");
         given(userRepository.findByProviderId(any())).willReturn(user);
         given(s3Uploader.upload(any(), anyString())).willReturn(s3Response);
@@ -65,7 +78,7 @@ class MainServiceTest {
                 .willReturn(new Feed(1L, user, s3Response.getPath(), s3Response.getName()));
         given(feedRepository.count()).willReturn(1L);
 
-        Feed feed = mainService.addFeed(new org.springframework.security.core.userdetails.User(user.getProviderId(), "", new ArrayList<>()),
+        Feed feed = mainService.addFeed(userDetail,
                 new FeedRequest(new MockMultipartFile("test", "test.png",
                 "image/png", "test data".getBytes())));
 
@@ -78,8 +91,6 @@ class MainServiceTest {
     @Test
     @DisplayName("파트너 매칭")
     void matchPartner() {
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        User user = userFactory.createUser("매칭테스트이름", "매칭테스트닉네임");
         addInterests(user, new ArrayList<>(Arrays.asList("산책", "음악")));
         User partner1 = userFactory.getFemaleUserByInterests("test1", "공부", "게임");
         User partner2 = userFactory.getFemaleUserByInterests("test2", "산책", "게임");
@@ -88,7 +99,7 @@ class MainServiceTest {
         given(userRepository.findByLocationsAndGender(any(), anyString(), any()))
                 .willReturn(new ArrayList<>(Arrays.asList(partner1, partner2, partner3)));
 
-        List<User> partner = mainService.matchPartner(new org.springframework.security.core.userdetails.User(user.getProviderId(), "", new ArrayList<>()));
+        List<User> partner = mainService.matchPartner(userDetail);
 
         assertEquals(partner3, partner.get(0));
         assertEquals(partner2, partner.get(1));

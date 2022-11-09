@@ -83,6 +83,23 @@ class MainControllerTest {
 
     @Test
     @Transactional
+    @DisplayName("홈 유저 반환")
+    @WithAuthUser(id = "testProviderId", role = "ROLE_USER")
+    void getUser() throws Exception {
+        User user = userFactory.createUser("이름", "닉네임");
+        userRepository.save(user);
+
+        mockMvc.perform(
+                get(pre + "/user")
+                        .header("accessToken", jwtUtil.createAccessToken(user.getProviderId(), "ROLE_USER")))
+                .andExpect(status().isOk())
+                .andExpect(result -> result.getResponse().getContentAsString().contains("닉네임"))
+                .andExpect(result -> result.getResponse().getContentAsString().contains("amazon"))
+                .andDo(document("main/user"));
+    }
+
+    @Test
+    @Transactional
     @DisplayName("피드 추가")
     @WithAuthUser(id = "testProviderId", role = "ROLE_USER")
     void addFeed() throws Exception {
@@ -112,7 +129,7 @@ class MainControllerTest {
     @DisplayName("파트너 매칭")
     @WithAuthUser(id = "testProviderId", role = "ROLE_USER")
     void getPartner() throws Exception {
-        User user = getUser();
+        User user = createUser();
         getPartner("test1", "공부", "게임");
         User partner2 = getPartner("test2", "산책", "게임");
         User partner3 = getPartner("test3", "산책", "음악");
@@ -133,7 +150,7 @@ class MainControllerTest {
         return partner;
     }
 
-    private User getUser() {
+    private User createUser() {
         User user = userFactory.createUser("test", "test");
         userFactory.addInterests(user, new ArrayList<>(Arrays.asList("산책", "음악")));
         PartnerLocation partnerLocation = PartnerLocation.builder()

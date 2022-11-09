@@ -18,6 +18,11 @@ public class MainController {
 
     private final MainService mainService;
 
+    @GetMapping("/user")
+    public ResponseEntity<?> getUser(@AuthenticationPrincipal User user) throws IOException {
+        return ResponseEntity.ok(mainService.getUser(user));
+    }
+
     @PostMapping("/feed")
     public ResponseEntity<?> addFeed(@AuthenticationPrincipal User user, FeedRequest feedRequest) throws IOException {
         mainService.addFeed(user, feedRequest);

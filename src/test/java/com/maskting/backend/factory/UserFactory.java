@@ -232,7 +232,7 @@ public class UserFactory {
 
     private List<Profile> getProfiles() {
         return Arrays.asList(Profile.builder()
-                .name("test")
+                .path("https://amazon.com/asd2.png")
                 .name("test")
                 .build());
     }

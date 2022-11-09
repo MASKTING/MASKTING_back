@@ -93,3 +93,37 @@ include::{snippets}/admin/approval/http-request.adoc[]
 ==== RESPONSE
 
 include::{snippets}/admin/approval/http-response.adoc[]
+
+## Main(홈)
+
+=== user (유저 정보)
+
+==== REQUEST
+
+include::{snippets}/main/user/http-request.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/main/user//http-response.adoc[]
+
+=== feed (피드 추가)
+
+==== REQUEST
+
+include::{snippets}/main/feed/httpie-request.adoc[]
+
+include::{snippets}/main/feed/request-parts.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/main/feed//http-response.adoc[]
+
+=== partner (파트너 매칭)
+
+==== REQUEST
+
+include::{snippets}/main/partner/http-request.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/main/partner/http-response.adoc[]

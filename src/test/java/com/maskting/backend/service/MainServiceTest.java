@@ -64,7 +64,7 @@ class MainServiceTest {
 
         UserResponse user = mainService.getUser(userDetail);
 
-        assertEquals("test", user.getProfile());
+        assertTrue(user.getProfile().contains("amazon"));
         assertEquals("테스트닉네임", user.getNickname());
     }
 

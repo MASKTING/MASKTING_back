@@ -9,7 +9,7 @@ import com.maskting.backend.dto.response.S3Response;
 import com.maskting.backend.factory.UserFactory;
 import com.maskting.backend.repository.FeedRepository;
 import com.maskting.backend.repository.UserRepository;
-import com.maskting.backend.util.JwtUtil;
+
 import com.maskting.backend.util.S3Uploader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -48,9 +48,6 @@ class MainServiceTest {
     @Mock
     FeedRepository feedRepository;
 
-    @Mock
-    JwtUtil jwtUtil;
-
     @BeforeEach
     void setUp() {
         userFactory = new UserFactory();
@@ -68,7 +65,7 @@ class MainServiceTest {
                 .willReturn(new Feed(1L, user, s3Response.getPath(), s3Response.getName()));
         given(feedRepository.count()).willReturn(1L);
 
-        Feed feed = mainService.addFeed(request,
+        Feed feed = mainService.addFeed(new org.springframework.security.core.userdetails.User(user.getProviderId(), "", new ArrayList<>()),
                 new FeedRequest(new MockMultipartFile("test", "test.png",
                 "image/png", "test data".getBytes())));
 
@@ -91,7 +88,7 @@ class MainServiceTest {
         given(userRepository.findByLocationsAndGender(any(), anyString(), any()))
                 .willReturn(new ArrayList<>(Arrays.asList(partner1, partner2, partner3)));
 
-        List<User> partner = mainService.matchPartner(request);
+        List<User> partner = mainService.matchPartner(new org.springframework.security.core.userdetails.User(user.getProviderId(), "", new ArrayList<>()));
 
         assertEquals(partner3, partner.get(0));
         assertEquals(partner2, partner.get(1));

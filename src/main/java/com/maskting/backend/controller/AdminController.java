@@ -12,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -64,13 +63,11 @@ public class AdminController {
         return name.length() > 0;
     }
 
-    @PostMapping("/approval/{name}")
-    String approval(@PathVariable String name){
-        adminService.convertToUser(getUserByName(name));
+    @PostMapping("/approval/{nickname}")
+    String approval(@PathVariable String nickname){
+        System.out.println(nickname);
+        adminService.convertToUser(adminService.getUserByNickName(nickname));
         return "admin/home";
     }
 
-    private User getUserByName(@PathVariable String name) {
-        return userRepository.findByName(name);
-    }
 }

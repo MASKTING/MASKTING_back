@@ -90,4 +90,8 @@ public class AdminService {
         user.updateSort();
         user.updateRoleType(RoleType.USER);
     }
+
+    public User getUserByNickName(String nickname) {
+        return userRepository.findByNickname(nickname).orElseThrow();
+    }
 }

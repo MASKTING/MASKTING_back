@@ -4,7 +4,6 @@ import com.maskting.backend.domain.User;
 import com.maskting.backend.dto.request.ReviewRequest;
 import com.maskting.backend.dto.response.DataTableResponse;
 import com.maskting.backend.dto.response.ReviewResponse;
-import com.maskting.backend.repository.UserRepository;
 import com.maskting.backend.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -64,7 +63,7 @@ public class AdminController {
     String approval(@PathVariable String nickname){
         System.out.println(nickname);
         adminService.convertToUser(adminService.getUserByNickName(nickname));
-        return "admin/home";
+        return "redirect:/admin";
     }
 
 }

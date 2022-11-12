@@ -42,6 +42,14 @@ public class AdminService {
         return jwtUtil.resolveToken(request);
     }
 
+    public int getTotal(String name) {
+        return isSearching(name) ? userRepository.countByNameContains(name) : (int) userRepository.count();
+    }
+
+    private boolean isSearching(String name) {
+        return name.length() > 0;
+    }
+
     public List<User> findSortingUserByName(ReviewRequest reviewRequest, String name) {
         return userRepository.findByNameContains(name, getPageRequest(reviewRequest)).getContent();
     }
@@ -89,5 +97,9 @@ public class AdminService {
     public void convertToUser(User user) {
         user.updateSort();
         user.updateRoleType(RoleType.USER);
+    }
+
+    public User getUserByNickName(String nickname) {
+        return userRepository.findByNickname(nickname).orElseThrow();
     }
 }

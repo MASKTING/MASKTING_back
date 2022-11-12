@@ -4,7 +4,6 @@ import com.maskting.backend.domain.User;
 import com.maskting.backend.dto.request.ReviewRequest;
 import com.maskting.backend.dto.response.DataTableResponse;
 import com.maskting.backend.dto.response.ReviewResponse;
-import com.maskting.backend.repository.UserRepository;
 import com.maskting.backend.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -12,15 +11,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/admin")
 public class AdminController {
-
-    private final UserRepository userRepository;
     private final AdminService adminService;
 
     @GetMapping
@@ -41,15 +37,14 @@ public class AdminController {
     @GetMapping("/guests")
     DataTableResponse returnGuests(ReviewRequest reviewRequest, HttpServletRequest request) {
         String name = request.getParameter("search[value]");
-        return new DataTableResponse(getDraw(reviewRequest), getTotal(name), getTotal(name), getReviewResponses(getGuests(reviewRequest, name)));
+        return new DataTableResponse(getDraw(reviewRequest),
+                adminService.getTotal(name),
+                adminService.getTotal(name),
+                getReviewResponses(getGuests(reviewRequest, name)));
     }
 
     private List<User> getGuests(ReviewRequest reviewRequest, String name) {
         return isSearching(name) ? adminService.findSortingUserByName(reviewRequest, name) : adminService.findSortingUser(reviewRequest);
-    }
-
-    private int getTotal(String name) {
-        return isSearching(name) ? userRepository.countByNameContains(name) : (int) userRepository.count();
     }
 
     private int getDraw(ReviewRequest reviewRequest) {
@@ -64,13 +59,11 @@ public class AdminController {
         return name.length() > 0;
     }
 
-    @PostMapping("/approval/{name}")
-    String approval(@PathVariable String name){
-        adminService.convertToUser(getUserByName(name));
-        return "admin/home";
+    @PostMapping("/approval/{nickname}")
+    String approval(@PathVariable String nickname){
+        System.out.println(nickname);
+        adminService.convertToUser(adminService.getUserByNickName(nickname));
+        return "redirect:/admin";
     }
 
-    private User getUserByName(@PathVariable String name) {
-        return userRepository.findByName(name);
-    }
 }

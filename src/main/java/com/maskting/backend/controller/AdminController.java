@@ -18,8 +18,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/admin")
 public class AdminController {
-
-    private final UserRepository userRepository;
     private final AdminService adminService;
 
     @GetMapping
@@ -40,15 +38,14 @@ public class AdminController {
     @GetMapping("/guests")
     DataTableResponse returnGuests(ReviewRequest reviewRequest, HttpServletRequest request) {
         String name = request.getParameter("search[value]");
-        return new DataTableResponse(getDraw(reviewRequest), getTotal(name), getTotal(name), getReviewResponses(getGuests(reviewRequest, name)));
+        return new DataTableResponse(getDraw(reviewRequest),
+                adminService.getTotal(name),
+                adminService.getTotal(name),
+                getReviewResponses(getGuests(reviewRequest, name)));
     }
 
     private List<User> getGuests(ReviewRequest reviewRequest, String name) {
         return isSearching(name) ? adminService.findSortingUserByName(reviewRequest, name) : adminService.findSortingUser(reviewRequest);
-    }
-
-    private int getTotal(String name) {
-        return isSearching(name) ? userRepository.countByNameContains(name) : (int) userRepository.count();
     }
 
     private int getDraw(ReviewRequest reviewRequest) {

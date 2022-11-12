@@ -42,6 +42,14 @@ public class AdminService {
         return jwtUtil.resolveToken(request);
     }
 
+    public int getTotal(String name) {
+        return isSearching(name) ? userRepository.countByNameContains(name) : (int) userRepository.count();
+    }
+
+    private boolean isSearching(String name) {
+        return name.length() > 0;
+    }
+
     public List<User> findSortingUserByName(ReviewRequest reviewRequest, String name) {
         return userRepository.findByNameContains(name, getPageRequest(reviewRequest)).getContent();
     }

@@ -1,8 +1,10 @@
 package com.maskting.backend.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maskting.backend.Auth.WithAuthUser;
 import com.maskting.backend.domain.PartnerLocation;
 import com.maskting.backend.domain.User;
+import com.maskting.backend.dto.request.SendLikeRequest;
 import com.maskting.backend.factory.UserFactory;
 import com.maskting.backend.repository.FeedRepository;
 import com.maskting.backend.repository.UserRepository;
@@ -27,7 +29,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -36,8 +37,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -64,6 +64,9 @@ class MainControllerTest {
 
     @Autowired
     private FeedRepository feedRepository;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
@@ -162,4 +165,23 @@ class MainControllerTest {
         return user;
     }
 
+    @Test
+    @Transactional
+    @DisplayName("좋아요 전송")
+    @WithAuthUser(id = "testProviderId", role = "ROLE_USER")
+    void sendLike() throws Exception {
+        User user = createUser();
+        User partner = getPartner("test1", "공부", "게임");
+        String content = objectMapper.writeValueAsString(new SendLikeRequest(partner.getNickname()));
+
+        mockMvc.perform(
+                post(pre + "/like")
+                        .header("accessToken", jwtUtil.createAccessToken(user.getProviderId(), "ROLE_USER"))
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(document("main/like"));
+
+        assertTrue(user.getLikes().contains(partner));
+    }
 }

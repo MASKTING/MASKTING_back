@@ -1,8 +1,7 @@
 package com.maskting.backend.service;
 
-import com.maskting.backend.domain.Feed;
-import com.maskting.backend.domain.Interest;
-import com.maskting.backend.domain.User;
+import com.maskting.backend.common.exception.ExistLikeException;
+import com.maskting.backend.domain.*;
 import com.maskting.backend.dto.request.FeedRequest;
 import com.maskting.backend.dto.response.PartnerResponse;
 import com.maskting.backend.dto.response.S3Response;
@@ -10,7 +9,6 @@ import com.maskting.backend.dto.response.UserResponse;
 import com.maskting.backend.factory.UserFactory;
 import com.maskting.backend.repository.FeedRepository;
 import com.maskting.backend.repository.UserRepository;
-
 import com.maskting.backend.util.S3Uploader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,12 +18,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -49,6 +48,15 @@ class MainServiceTest {
 
     @Mock
     FeedRepository feedRepository;
+
+    @Mock
+    ChatRoomService chatRoomService;
+
+    @Mock
+    ChatUserService chatUserService;
+
+    @Mock
+    ChatService chatService;
 
     @BeforeEach
     void setUp() {
@@ -141,4 +149,56 @@ class MainServiceTest {
         build.updateUser(partner1);
     }
 
+    @Test
+    @DisplayName("좋아요 이미 있을 때 전송 한 경우 예외 처리")
+    void sendLikeWithExistedLike() {
+        User partner = sendLikeInit();
+        user.addLike(partner);
+
+        assertThatThrownBy(() -> mainService.sendLike(userDetail, partner.getNickname()))
+                .isInstanceOf(ExistLikeException.class);
+    }
+
+    private User sendLikeInit() {
+        User partner = userFactory.getFemaleUserByInterests("test1", "산책", "게임");
+        given(userRepository.findByNickname(partner.getNickname())).willReturn(Optional.of(partner));
+        given(userRepository.findByProviderId(any())).willReturn(user);
+        return partner;
+    }
+
+    @Test
+    @DisplayName("좋아요 전송")
+    void sendLike() {
+        User partner = sendLikeInit();
+        assertTrue(user.getLikes().isEmpty());
+
+        mainService.sendLike(userDetail, partner.getNickname());
+
+        assertEquals(partner, user.getLikes().get(0));
+    }
+
+    @Test
+    @DisplayName("상대가 나에게 좋아요가 있을 때 좋아요 전송시 매칭")
+    void sendLikeWithMatching() {
+        User partner = sendLikeInit();
+        partner.addLike(user);
+        ChatRoom chatRoom = new ChatRoom();
+        ChatUser sendUser = getChatUser(chatRoom, user);
+        ChatUser receiveUser = getChatUser(chatRoom, partner);
+        given(chatRoomService.createRoom()).willReturn(chatRoom);
+        given(chatUserService.createChatUser(user, chatRoom)).willReturn(sendUser);
+        given(chatUserService.createChatUser(partner, chatRoom)).willReturn(receiveUser);
+
+        mainService.sendLike(userDetail, partner.getNickname());
+
+        assertTrue(chatRoom.getChatUsers().contains(sendUser));
+        assertTrue(chatRoom.getChatUsers().contains(receiveUser));
+    }
+
+    private ChatUser getChatUser(ChatRoom chatRoom, User user) {
+        return ChatUser.builder()
+                .user(user)
+                .chatRoom(chatRoom)
+                .build();
+    }
 }

@@ -5,9 +5,12 @@ import com.maskting.backend.domain.ChatRoom;
 import com.maskting.backend.domain.User;
 import com.maskting.backend.dto.request.ChatMessageRequest;
 import com.maskting.backend.factory.UserFactory;
+import com.maskting.backend.repository.ChatMessageRepository;
 import com.maskting.backend.repository.ChatRoomRepository;
+import com.maskting.backend.repository.ChatUserRepository;
 import com.maskting.backend.repository.UserRepository;
 import com.maskting.backend.util.JwtUtil;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -53,12 +56,26 @@ class ChatControllerTest {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Autowired
+    private ChatMessageRepository chatMessageRepository;
+
+    @Autowired
+    private ChatUserRepository chatUserRepository;
+
     @BeforeEach
     void setUp() {
         userFactory = new UserFactory();
         messages = new LinkedBlockingDeque<>();
         userRepository.save(userFactory.createUser("홍길동", "jason"));
         chatRoomRepository.save(new ChatRoom(1L, new ArrayList<>(), new ArrayList<>()));
+    }
+
+    @AfterEach
+    void tearDown() {
+        chatMessageRepository.deleteAll();
+        chatUserRepository.deleteAll();
+        chatRoomRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test

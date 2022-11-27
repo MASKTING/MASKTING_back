@@ -30,4 +30,8 @@ public class ChatRoom extends BaseTimeEntity{
         chatUsers.add(sendUser);
         chatUsers.add(receiveUser);
     }
+
+    public void addMessage(ChatMessage message) {
+        chatMessages.add(message);
+    }
 }

@@ -90,10 +90,22 @@ class ChatRoomControllerTest {
         User partner1 = userRepository.save(userFactory.createUser("짱구", "gu"));
         User partner2 = userRepository.save(userFactory.createUser("철수", "su"));
 
-        ChatRoom chatRoom1 = chatRoomRepository.save(new ChatRoom(1L, new ArrayList<>(), new ArrayList<>()));
-        chatService.saveChatMessage(new ChatMessageRequest(1L, user.getNickname(), "room1 마지막 메시지"));
-        ChatRoom chatRoom2 = chatRoomRepository.save(new ChatRoom(2L, new ArrayList<>(), new ArrayList<>()));
-        chatService.saveChatMessage(new ChatMessageRequest(2L, user.getNickname(), "room2 마지막 메시지"));
+        ChatRoom chatRoom1 = chatRoomRepository.save(
+                ChatRoom
+                .builder()
+                .chatUsers(new ArrayList<>())
+                .chatMessages(new ArrayList<>())
+                .build()
+        );
+        chatService.saveChatMessage(new ChatMessageRequest(chatRoom1.getId(), user.getNickname(), "room1 마지막 메시지"));
+        ChatRoom chatRoom2 = chatRoomRepository.save(
+                ChatRoom
+                .builder()
+                .chatUsers(new ArrayList<>())
+                .chatMessages(new ArrayList<>())
+                .build()
+        );
+        chatService.saveChatMessage(new ChatMessageRequest(chatRoom2.getId(), user.getNickname(), "room2 마지막 메시지"));
 
         ChatUser chatUserInRoom1 = chatUserRepository.save(new ChatUser(1L, user, chatRoom1));
         ChatUser chatPartner1 = chatUserRepository.save(new ChatUser(2L, partner1, chatRoom1));

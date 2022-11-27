@@ -127,3 +127,35 @@ include::{snippets}/main/partner/http-request.adoc[]
 ==== RESPONSE
 
 include::{snippets}/main/partner/http-response.adoc[]
+
+=== like (좋아요 전송)
+
+==== REQUEST
+
+include::{snippets}/main/like/http-request.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/main/like/http-response.adoc[]
+
+## Chat(채팅)
+
+=== rooms (전체 채팅방 조회)
+
+==== REQUEST
+
+include::{snippets}/chat/rooms/http-request.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/chat/rooms//http-response.adoc[]
+
+=== room (특정 채팅방 조회)
+
+==== REQUEST
+
+include::{snippets}/chat/room/http-request.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/chat/room//http-response.adoc[]

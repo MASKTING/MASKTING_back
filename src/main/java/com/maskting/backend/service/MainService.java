@@ -252,10 +252,8 @@ public class MainService {
 
     private void openChat(User sender, User receiver) {
         ChatRoom chatRoom = chatRoomService.createRoom();
-        chatUserService.createChatUser(sender, chatRoom);
-        chatUserService.createChatUser(receiver, chatRoom);
+        chatRoom.addUser(chatUserService.createChatUser(sender, chatRoom), chatUserService.createChatUser(receiver, chatRoom));
         ChatMessageRequest message = new ChatMessageRequest(chatRoom.getId(), "System", "앞으로 72시간 대화를 나누며 서로를 알아갈 수 있어요.");
-        chatService.sendMessage(message);
         chatService.saveChatMessage(message);
     }
 

@@ -130,7 +130,7 @@ class AdminControllerTest {
 
         assertTrue(user.isSort());
         assertEquals(RoleType.GUEST, user.getRoleType());
-        mockMvc.perform(post(pre + "/approval/"  + user.getName())
+        mockMvc.perform(post(pre + "/approval/"  + user.getNickname())
                 .header("accessToken", accessToken))
                 .andDo(document("admin/approval"));
 

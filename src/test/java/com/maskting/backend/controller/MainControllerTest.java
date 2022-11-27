@@ -1,8 +1,10 @@
 package com.maskting.backend.controller;
 
-import com.maskting.backend.Auth.WithAuthUser;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.maskting.backend.auth.WithAuthUser;
 import com.maskting.backend.domain.PartnerLocation;
 import com.maskting.backend.domain.User;
+import com.maskting.backend.dto.request.SendLikeRequest;
 import com.maskting.backend.factory.UserFactory;
 import com.maskting.backend.repository.FeedRepository;
 import com.maskting.backend.repository.UserRepository;
@@ -27,7 +29,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -36,8 +37,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -65,6 +65,9 @@ class MainControllerTest {
     @Autowired
     private FeedRepository feedRepository;
 
+    @Autowired
+    ObjectMapper objectMapper;
+
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
@@ -84,9 +87,9 @@ class MainControllerTest {
     @Test
     @Transactional
     @DisplayName("홈 유저 반환")
-    @WithAuthUser(id = "testProviderId", role = "ROLE_USER")
+    @WithAuthUser(id = "providerId_" + "test", role = "ROLE_USER")
     void getUser() throws Exception {
-        User user = userFactory.createUser("이름", "닉네임");
+        User user = userFactory.createUser("test", "test");
         userRepository.save(user);
 
         mockMvc.perform(
@@ -101,7 +104,7 @@ class MainControllerTest {
     @Test
     @Transactional
     @DisplayName("피드 추가")
-    @WithAuthUser(id = "testProviderId", role = "ROLE_USER")
+    @WithAuthUser(id = "providerId_" + "test", role = "ROLE_USER")
     void addFeed() throws Exception {
         User user = userFactory.createUser("test", "test");
         userRepository.save(user);
@@ -127,7 +130,7 @@ class MainControllerTest {
     @Test
     @Transactional
     @DisplayName("파트너 매칭")
-    @WithAuthUser(id = "testProviderId", role = "ROLE_USER")
+    @WithAuthUser(id = "providerId_" + "test", role = "ROLE_USER")
     void getPartner() throws Exception {
         User user = createUser();
         getPartner("test1", "공부", "게임");
@@ -162,4 +165,23 @@ class MainControllerTest {
         return user;
     }
 
+    @Test
+    @Transactional
+    @DisplayName("좋아요 전송")
+    @WithAuthUser(id = "providerId_" + "test", role = "ROLE_USER")
+    void sendLike() throws Exception {
+        User user = createUser();
+        User partner = getPartner("test1", "공부", "게임");
+        String content = objectMapper.writeValueAsString(new SendLikeRequest(partner.getNickname()));
+
+        mockMvc.perform(
+                post(pre + "/like")
+                        .header("accessToken", jwtUtil.createAccessToken(user.getProviderId(), "ROLE_USER"))
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(document("main/like"));
+
+        assertTrue(user.getLikes().contains(partner));
+    }
 }

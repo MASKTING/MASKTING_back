@@ -20,8 +20,6 @@ public interface UserRepository extends JpaRepository<User, Long>, UserRepositor
 
     Page<User> findByNameContains(String name, PageRequest pageRequest);
 
-    User findByName(String name);
-
     @Modifying(clearAutomatically = true)
     @Query("update User u set u.latest = :latest")
     void updateAllUserLatest(@Param("latest") boolean latest);

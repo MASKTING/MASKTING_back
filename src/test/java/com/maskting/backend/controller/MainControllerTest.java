@@ -1,7 +1,7 @@
 package com.maskting.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.maskting.backend.Auth.WithAuthUser;
+import com.maskting.backend.auth.WithAuthUser;
 import com.maskting.backend.domain.PartnerLocation;
 import com.maskting.backend.domain.User;
 import com.maskting.backend.dto.request.SendLikeRequest;

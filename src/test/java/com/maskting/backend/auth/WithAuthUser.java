@@ -1,4 +1,4 @@
-package com.maskting.backend.Auth;
+package com.maskting.backend.auth;
 
 import org.springframework.security.test.context.support.WithSecurityContext;
 

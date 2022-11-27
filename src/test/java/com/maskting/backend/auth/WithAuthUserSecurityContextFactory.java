@@ -1,4 +1,4 @@
-package com.maskting.backend.Auth;
+package com.maskting.backend.auth;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

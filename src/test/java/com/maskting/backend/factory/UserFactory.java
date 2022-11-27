@@ -46,7 +46,7 @@ public class UserFactory {
                 .matches(new ArrayList<>())
                 .exclusions(new ArrayList<>())
                 .likes(new ArrayList<>())
-                .providerId("testProviderId")
+                .providerId("providerId_" + nickname)
                 .providerType(ProviderType.GOOGLE)
                 .sort(sort)
                 .bio("자기소개")

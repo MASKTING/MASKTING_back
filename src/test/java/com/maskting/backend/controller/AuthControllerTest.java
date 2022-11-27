@@ -78,7 +78,7 @@ class AuthControllerTest {
         String key = UUID.randomUUID().toString();
         String refreshToken = jwtUtil.createRefreshToken(key);
         Cookie cookie = createCookie(refreshToken);
-        RefreshToken dbRefreshToken = new RefreshToken(key, "testProviderId");
+        RefreshToken dbRefreshToken = new RefreshToken(key, "providerId_" + user.getNickname());
         refreshTokenRepository.save(dbRefreshToken);
 
         mockMvc.perform(

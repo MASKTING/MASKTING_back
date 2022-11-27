@@ -87,9 +87,9 @@ class MainControllerTest {
     @Test
     @Transactional
     @DisplayName("홈 유저 반환")
-    @WithAuthUser(id = "testProviderId", role = "ROLE_USER")
+    @WithAuthUser(id = "providerId_" + "test", role = "ROLE_USER")
     void getUser() throws Exception {
-        User user = userFactory.createUser("이름", "닉네임");
+        User user = userFactory.createUser("test", "test");
         userRepository.save(user);
 
         mockMvc.perform(
@@ -104,7 +104,7 @@ class MainControllerTest {
     @Test
     @Transactional
     @DisplayName("피드 추가")
-    @WithAuthUser(id = "testProviderId", role = "ROLE_USER")
+    @WithAuthUser(id = "providerId_" + "test", role = "ROLE_USER")
     void addFeed() throws Exception {
         User user = userFactory.createUser("test", "test");
         userRepository.save(user);
@@ -130,7 +130,7 @@ class MainControllerTest {
     @Test
     @Transactional
     @DisplayName("파트너 매칭")
-    @WithAuthUser(id = "testProviderId", role = "ROLE_USER")
+    @WithAuthUser(id = "providerId_" + "test", role = "ROLE_USER")
     void getPartner() throws Exception {
         User user = createUser();
         getPartner("test1", "공부", "게임");
@@ -168,7 +168,7 @@ class MainControllerTest {
     @Test
     @Transactional
     @DisplayName("좋아요 전송")
-    @WithAuthUser(id = "testProviderId", role = "ROLE_USER")
+    @WithAuthUser(id = "providerId_" + "test", role = "ROLE_USER")
     void sendLike() throws Exception {
         User user = createUser();
         User partner = getPartner("test1", "공부", "게임");

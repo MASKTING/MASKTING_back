@@ -113,4 +113,30 @@ class ChatRoomControllerTest {
                 .andDo(document("chat/rooms"));
     }
 
+    @Test
+    @Transactional
+    @DisplayName("특정 채팅방 조회")
+    @WithAuthUser(id = "providerId_" + "jason", role = "ROLE_USER")
+    void getChatRoom() throws Exception {
+        User user = userRepository.save(userFactory.createUser("홍길동", "jason"));
+        User partner = userRepository.save(userFactory.createUser("짱구", "gu"));
+
+        ChatRoom chatRoom = chatRoomRepository.save(new ChatRoom(1L, new ArrayList<>(), new ArrayList<>()));
+        chatService.saveChatMessage(new ChatMessageRequest(1L, partner.getNickname(), "안녕"));
+        chatService.saveChatMessage(new ChatMessageRequest(1L, partner.getNickname(), "이름이 뭐야?"));
+
+        ChatUser chatUser = chatUserRepository.save(new ChatUser(1L, user, chatRoom));
+        ChatUser chatPartner = chatUserRepository.save(new ChatUser(2L, partner, chatRoom));
+        chatRoom.addUser(chatUser, chatPartner);
+
+        mockMvc.perform(
+                get(pre + "/room/" + chatRoom.getId())
+                        .header("accessToken", jwtUtil.createAccessToken(user.getProviderId(), "ROLE_USER")))
+                .andExpect(status().isOk())
+                .andExpect(result -> result.getResponse().getContentAsString().contains("amazon"))
+                .andExpect(result -> result.getResponse().getContentAsString().contains("gu"))
+                .andExpect(result -> result.getResponse().getContentAsString().contains("안녕"))
+                .andExpect(result -> result.getResponse().getContentAsString().contains("이름이 뭐야?"))
+                .andDo(document("chat/room"));
+    }
 }

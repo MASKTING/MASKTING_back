@@ -134,8 +134,8 @@ class ChatRoomControllerTest {
         User partner = userRepository.save(userFactory.createUser("짱구", "gu"));
 
         ChatRoom chatRoom = chatRoomRepository.save(new ChatRoom(1L, new ArrayList<>(), new ArrayList<>()));
-        chatService.saveChatMessage(new ChatMessageRequest(1L, partner.getNickname(), "안녕"));
-        chatService.saveChatMessage(new ChatMessageRequest(1L, partner.getNickname(), "이름이 뭐야?"));
+        chatService.saveChatMessage(new ChatMessageRequest(chatRoom.getId(), partner.getNickname(), "안녕"));
+        chatService.saveChatMessage(new ChatMessageRequest(chatRoom.getId(), partner.getNickname(), "이름이 뭐야?"));
 
         ChatUser chatUser = chatUserRepository.save(new ChatUser(1L, user, chatRoom));
         ChatUser chatPartner = chatUserRepository.save(new ChatUser(2L, partner, chatRoom));

@@ -235,4 +235,8 @@ public class UserService {
                 .path(s3Response.getPath())
                 .build();
     }
+
+    public boolean checkNickname(String nickname) {
+        return userRepository.findByNickname(nickname).isEmpty();
+    }
 }

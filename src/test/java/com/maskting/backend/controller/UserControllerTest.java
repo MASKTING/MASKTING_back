@@ -6,6 +6,7 @@ import com.maskting.backend.domain.RefreshToken;
 import com.maskting.backend.domain.User;
 import com.maskting.backend.dto.request.SignupRequest;
 import com.maskting.backend.factory.RequestFactory;
+import com.maskting.backend.factory.UserFactory;
 import com.maskting.backend.repository.ProfileRepository;
 import com.maskting.backend.repository.RefreshTokenRepository;
 import com.maskting.backend.repository.UserRepository;
@@ -29,6 +30,7 @@ import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
@@ -46,8 +48,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -59,6 +60,7 @@ class UserControllerTest {
 
     private final String pre = "/api/user";
     private RequestFactory requestFactory;
+    private UserFactory userFactory;
 
     @Autowired
     UserRepository userRepository;
@@ -93,6 +95,7 @@ class UserControllerTest {
                 .apply(documentationConfiguration(restDocumentation))
                 .build();
         requestFactory = new RequestFactory();
+        userFactory = new UserFactory();
     }
 
     @AfterEach
@@ -101,6 +104,43 @@ class UserControllerTest {
         userRepository.deleteAll();
         refreshTokenRepository.deleteAll();
         s3Mock.stop();
+    }
+
+    @Test
+    @DisplayName("닉네임 중복 확인 - 가능")
+    void checkNicknameWithSuccess() throws Exception {
+        String nickname = "test";
+        String result = "true";
+
+        MvcResult mvcResult = mockMvc.perform(
+                get(pre + "/check-nickname")
+                        .param("nickname", nickname)
+                        .header("accessToken", "testAccessToken"))
+                .andExpect(status().isOk())
+                .andDo(document("user/check-nickname-success",
+                        preprocessRequest(prettyPrint())))
+                .andReturn();
+
+        assertTrue(mvcResult.getResponse().getContentAsString().contains(result));
+    }
+
+    @Test
+    @DisplayName("닉네임 중복 확인 - 불가능")
+    void checkNicknameWithFail() throws Exception {
+        String nickname = "test";
+        String result = "false";
+        userRepository.save(userFactory.createUser("이름", nickname));
+
+        MvcResult mvcResult = mockMvc.perform(
+                get(pre + "/check-nickname")
+                        .param("nickname", nickname)
+                        .header("accessToken", "testAccessToken"))
+                .andExpect(status().isOk())
+                .andDo(document("user/check-nickname-fail",
+                        preprocessRequest(prettyPrint())))
+                .andReturn();
+
+        assertTrue(mvcResult.getResponse().getContentAsString().contains(result));
     }
 
     @Test

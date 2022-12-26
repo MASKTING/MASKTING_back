@@ -1,5 +1,6 @@
 package com.maskting.backend.service;
 
+import com.maskting.backend.common.exception.ExistNicknameException;
 import com.maskting.backend.common.exception.NoProfileException;
 import com.maskting.backend.domain.*;
 import com.maskting.backend.dto.request.SignupRequest;
@@ -44,6 +45,9 @@ public class UserService {
 
     @Transactional
     public User joinUser(SignupRequest signupRequest) throws IOException {
+        if (userRepository.findByNickname(signupRequest.getNickname()).isPresent()) {
+            throw new ExistNicknameException();
+        }
         return userRepository.save(createUser(signupRequest, getProviderType(signupRequest), getProfiles(signupRequest)));
     }
 

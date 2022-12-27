@@ -6,11 +6,8 @@ import com.maskting.backend.common.exception.NoFeedException;
 import com.maskting.backend.common.exception.NoNicknameException;
 import com.maskting.backend.domain.*;
 import com.maskting.backend.dto.request.ChatMessageRequest;
-import com.maskting.backend.dto.response.PartnerInfo;
+import com.maskting.backend.dto.response.*;
 import com.maskting.backend.dto.request.FeedRequest;
-import com.maskting.backend.dto.response.PartnerResponse;
-import com.maskting.backend.dto.response.S3Response;
-import com.maskting.backend.dto.response.UserResponse;
 import com.maskting.backend.repository.FeedRepository;
 import com.maskting.backend.repository.UserRepository;
 import com.maskting.backend.util.S3Uploader;
@@ -268,5 +265,10 @@ public class MainService {
     public UserResponse getUser(org.springframework.security.core.userdetails.User userDetail) {
         User user = getUserByProviderId(userDetail);
         return new UserResponse(getProfile(user), user.getNickname());
+    }
+
+    public FeedResponse getFeed(org.springframework.security.core.userdetails.User userDetail) {
+        User user = getUserByProviderId(userDetail);
+        return new FeedResponse(user.getBio(), getFeeds(user));
     }
 }

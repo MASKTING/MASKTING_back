@@ -520,22 +520,28 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_response_10">RESPONSE</a></li>
 </ul>
 </li>
-<li><a href="#_feed_피드_추가">feed (피드 추가)</a>
+<li><a href="#_get_feed_피드_얻기">get-feed (피드 얻기)</a>
 <ul class="sectlevel3">
 <li><a href="#_request_11">REQUEST</a></li>
 <li><a href="#_response_11">RESPONSE</a></li>
 </ul>
 </li>
-<li><a href="#_partner_파트너_매칭">partner (파트너 매칭)</a>
+<li><a href="#_feed_피드_추가">feed (피드 추가)</a>
 <ul class="sectlevel3">
 <li><a href="#_request_12">REQUEST</a></li>
 <li><a href="#_response_12">RESPONSE</a></li>
 </ul>
 </li>
-<li><a href="#_like_좋아요_전송">like (좋아요 전송)</a>
+<li><a href="#_partner_파트너_매칭">partner (파트너 매칭)</a>
 <ul class="sectlevel3">
 <li><a href="#_request_13">REQUEST</a></li>
 <li><a href="#_response_13">RESPONSE</a></li>
+</ul>
+</li>
+<li><a href="#_like_좋아요_전송">like (좋아요 전송)</a>
+<ul class="sectlevel3">
+<li><a href="#_request_14">REQUEST</a></li>
+<li><a href="#_response_14">RESPONSE</a></li>
 </ul>
 </li>
 </ul>
@@ -544,14 +550,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_rooms_전체_채팅방_조회">rooms (전체 채팅방 조회)</a>
 <ul class="sectlevel3">
-<li><a href="#_request_14">REQUEST</a></li>
-<li><a href="#_response_14">RESPONSE</a></li>
+<li><a href="#_request_15">REQUEST</a></li>
+<li><a href="#_response_15">RESPONSE</a></li>
 </ul>
 </li>
 <li><a href="#_room_특정_채팅방_조회">room (특정 채팅방 조회)</a>
 <ul class="sectlevel3">
-<li><a href="#_request_15">REQUEST</a></li>
-<li><a href="#_response_15">RESPONSE</a></li>
+<li><a href="#_request_16">REQUEST</a></li>
+<li><a href="#_response_16">RESPONSE</a></li>
 </ul>
 </li>
 </ul>
@@ -571,7 +577,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/auth/silent-refresh HTTP/1.1
 Host: localhost:8080
-Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlNjJkMjE3OC01OGRhLTRhZjktYWE2OS1kMjllMzhmOTVmMTMiLCJpYXQiOjE2NzIwNTkxMzAsImV4cCI6MTY3MzI2ODczMH0.Qk0x6cvJjzGYN9nnO09i0H3670oXeEzSheiXf3rnplU</code></pre>
+Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1YzU4MTBiNC0yNTdiLTRlMWYtYjJhOS1mY2UyYTdjMjE5NTIiLCJpYXQiOjE2NzIxNDQ1ODgsImV4cCI6MTY3MzM1NDE4OH0.mWlX8nMe-oOIR_7T6vGYxUwCsgHGk5olsI9SYSpuruQ</code></pre>
 </div>
 </div>
 </div>
@@ -580,7 +586,7 @@ Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlNjJkMjE3OC01OGRhLTRhZjktYW
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX-yVjOy9nOyfgeydtCDrnbzsnbTslrgiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjcyMDU5MTMxLCJleHAiOjE2NzIwNjA5MzF9.v1GQIPdvOFwiFlf649m-Rz0J-8S5TmEXP-qHzlj3IjU</code></pre>
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX-yVjOy9nOyfgeydtCDrnbzsnbTslrgiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjcyMTQ0NTkwLCJleHAiOjE2NzIxNDYzOTB9.sMDX_k3KhtEAhB6TIQX1fmMOe2VFQKj9l9-YZDKRCcs</code></pre>
 </div>
 </div>
 </div>
@@ -816,8 +822,8 @@ false</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0UHJvdmlkZXJJZCIsInJvbGUiOiJST0xFX0dVRVNUIiwiaWF0IjoxNjcyMDU5MTQzLCJleHAiOjE2NzIwNjA5NDN9.uuEzNhYIqUK6ba_71EoqS2PvpQ7-_k1EyBbgHj3rTaM
-Set-Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5MmNhYjM5Yi0zODk1LTRlOTktOWE5ZC1jOThjY2FiYWE0MTciLCJpYXQiOjE2NzIwNTkxNDMsImV4cCI6MTY3MzI2ODc0M30.pbychOfmgBEGCcVJyJBj7DNK-qIVTc-GPu_31qbBb4I; Path=/; Max-Age=1209600000; Expires=Mon, 25 Apr 2061 12:52:23 GMT; HttpOnly</code></pre>
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0UHJvdmlkZXJJZCIsInJvbGUiOiJST0xFX0dVRVNUIiwiaWF0IjoxNjcyMTQ0NjAwLCJleHAiOjE2NzIxNDY0MDB9.XuBu8v7sE9eNNGMBa5Gm--CwdxyE5XRreTdwl-Y4F7A
+Set-Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyZTJiMWIyOS1lZGU4LTRiMGUtYWZiOC1iMWQzYTIzYWJhYzciLCJpYXQiOjE2NzIxNDQ2MDAsImV4cCI6MTY3MzM1NDIwMH0.oGbxS3mmU-mVrG1WzPxyJ0p0V_qhPfFEsGHl82y9bhc; Path=/; Max-Age=1209600000; Expires=Tue, 26 Apr 2061 12:36:40 GMT; HttpOnly</code></pre>
 </div>
 </div>
 </div>
@@ -857,7 +863,7 @@ Set-Cookie: refreshToken=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /admin HTTP/1.1
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY3MjA1OTEyOCwiZXhwIjoxNjcyMDYwOTI4fQ.is_ygZEH4a-KoVm_5vbyQmsgqqXLZTMY037JcRGqljE
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY3MjE0NDU4NiwiZXhwIjoxNjcyMTQ2Mzg2fQ.vIWQrQONEzo7pWBjfQrSxo4X0tCyfP7QcUDN-iseWTw
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -1117,7 +1123,7 @@ Content-Length: 7657
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /admin/guests?search%5Bvalue%5D=&amp;draw=1&amp;start=0&amp;length=10&amp;search%5Bvalue%5D= HTTP/1.1
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY3MjA1OTEzMCwiZXhwIjoxNjcyMDYwOTMwfQ.w5GCsMeziL_elylJ-Emuke9-YCt4f_JybRjVDhjQSfI
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY3MjE0NDU4OCwiZXhwIjoxNjcyMTQ2Mzg4fQ.PlpwbGsR2LTVv6WLt0bxnMf4hQoYQYOpxk8APEg0BLU
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -1172,7 +1178,7 @@ Content-Length: 888
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /admin/guests?search%5Bvalue%5D=Second&amp;draw=1&amp;start=0&amp;length=10 HTTP/1.1
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY3MjA1OTEzMCwiZXhwIjoxNjcyMDYwOTMwfQ.w5GCsMeziL_elylJ-Emuke9-YCt4f_JybRjVDhjQSfI
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY3MjE0NDU4OCwiZXhwIjoxNjcyMTQ2Mzg4fQ.PlpwbGsR2LTVv6WLt0bxnMf4hQoYQYOpxk8APEg0BLU
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -1227,7 +1233,7 @@ Content-Length: 481
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /admin/approval/testNickname HTTP/1.1
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY3MjA1OTEzMCwiZXhwIjoxNjcyMDYwOTMwfQ.w5GCsMeziL_elylJ-Emuke9-YCt4f_JybRjVDhjQSfI
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY3MjE0NDU4OCwiZXhwIjoxNjcyMTQ2Mzg4fQ.PlpwbGsR2LTVv6WLt0bxnMf4hQoYQYOpxk8APEg0BLU
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -1255,7 +1261,7 @@ Location: /admin</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/user HTTP/1.1
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjcyMDU5MTQyLCJleHAiOjE2NzIwNjA5NDJ9.KhRNb5Fr4V508os3C28hx-afspbrvyQydfhqcNoFZjM
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjcyMTQ0NjAwLCJleHAiOjE2NzIxNDY0MDB9.GCmG-1_IDjuKe_K6ehhaORK9P8LJiWqfLJ3PPTxRWes
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -1274,14 +1280,39 @@ Content-Length: 59
 </div>
 </div>
 <div class="sect2">
-<h3 id="_feed_피드_추가"><a class="link" href="#_feed_피드_추가">feed (피드 추가)</a></h3>
+<h3 id="_get_feed_피드_얻기"><a class="link" href="#_get_feed_피드_얻기">get-feed (피드 얻기)</a></h3>
 <div class="sect3">
 <h4 id="_request_11"><a class="link" href="#_request_11">REQUEST</a></h4>
 <div class="listingblock">
 <div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/feed HTTP/1.1
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjcyMTQ0NjAwLCJleHAiOjE2NzIxNDY0MDB9.GCmG-1_IDjuKe_K6ehhaORK9P8LJiWqfLJ3PPTxRWes
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_11"><a class="link" href="#_response_11">RESPONSE</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 56
+
+{"bio":"자기소개","feeds":["test1Path","test2Path"]}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_feed_피드_추가"><a class="link" href="#_feed_피드_추가">feed (피드 추가)</a></h3>
+<div class="sect3">
+<h4 id="_request_12"><a class="link" href="#_request_12">REQUEST</a></h4>
+<div class="listingblock">
+<div class="content">
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ http --multipart POST 'http://localhost:8080/api/feed' \
     'feed'@'test.PNG' \
-    'accessToken:eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjcyMDU5MTQyLCJleHAiOjE2NzIwNjA5NDJ9.KhRNb5Fr4V508os3C28hx-afspbrvyQydfhqcNoFZjM'</code></pre>
+    'accessToken:eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjcyMTQ0NjAwLCJleHAiOjE2NzIxNDY0MDB9.GCmG-1_IDjuKe_K6ehhaORK9P8LJiWqfLJ3PPTxRWes'</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
@@ -1304,7 +1335,7 @@ Content-Length: 59
 </table>
 </div>
 <div class="sect3">
-<h4 id="_response_11"><a class="link" href="#_response_11">RESPONSE</a></h4>
+<h4 id="_response_12"><a class="link" href="#_response_12">RESPONSE</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK</code></pre>
@@ -1315,17 +1346,17 @@ Content-Length: 59
 <div class="sect2">
 <h3 id="_partner_파트너_매칭"><a class="link" href="#_partner_파트너_매칭">partner (파트너 매칭)</a></h3>
 <div class="sect3">
-<h4 id="_request_12"><a class="link" href="#_request_12">REQUEST</a></h4>
+<h4 id="_request_13"><a class="link" href="#_request_13">REQUEST</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/partner HTTP/1.1
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjcyMDU5MTQzLCJleHAiOjE2NzIwNjA5NDN9.A1lcGD7AucpDo7stdObUe4xPz4IeU23U7hSxirIfrVs
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjcyMTQ0NjAwLCJleHAiOjE2NzIxNDY0MDB9.GCmG-1_IDjuKe_K6ehhaORK9P8LJiWqfLJ3PPTxRWes
 Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_12"><a class="link" href="#_response_12">RESPONSE</a></h4>
+<h4 id="_response_13"><a class="link" href="#_response_13">RESPONSE</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
@@ -1340,12 +1371,12 @@ Content-Length: 147
 <div class="sect2">
 <h3 id="_like_좋아요_전송"><a class="link" href="#_like_좋아요_전송">like (좋아요 전송)</a></h3>
 <div class="sect3">
-<h4 id="_request_13"><a class="link" href="#_request_13">REQUEST</a></h4>
+<h4 id="_request_14"><a class="link" href="#_request_14">REQUEST</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/like HTTP/1.1
 Content-Type: application/json
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjcyMDU5MTQzLCJleHAiOjE2NzIwNjA5NDN9.A1lcGD7AucpDo7stdObUe4xPz4IeU23U7hSxirIfrVs
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjcyMTQ0NjAwLCJleHAiOjE2NzIxNDY0MDB9.GCmG-1_IDjuKe_K6ehhaORK9P8LJiWqfLJ3PPTxRWes
 Content-Length: 20
 Host: localhost:8080
 
@@ -1354,7 +1385,7 @@ Host: localhost:8080
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_13"><a class="link" href="#_response_13">RESPONSE</a></h4>
+<h4 id="_response_14"><a class="link" href="#_response_14">RESPONSE</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK</code></pre>
@@ -1370,17 +1401,17 @@ Host: localhost:8080
 <div class="sect2">
 <h3 id="_rooms_전체_채팅방_조회"><a class="link" href="#_rooms_전체_채팅방_조회">rooms (전체 채팅방 조회)</a></h3>
 <div class="sect3">
-<h4 id="_request_14"><a class="link" href="#_request_14">REQUEST</a></h4>
+<h4 id="_request_15"><a class="link" href="#_request_15">REQUEST</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /chat/rooms HTTP/1.1
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX2phc29uIiwicm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTY3MjA1OTEzNiwiZXhwIjoxNjcyMDYwOTM2fQ.FzHOpEJQVsEM1Lej-cqUg85aUc8zsNR-q18tfCnyhjg
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX2phc29uIiwicm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTY3MjE0NDU5NCwiZXhwIjoxNjcyMTQ2Mzk0fQ._InpUWijfcA39fyg_gMpB6jaT42W1eY0OnBDCUQ1_NM
 Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_14"><a class="link" href="#_response_14">RESPONSE</a></h4>
+<h4 id="_response_15"><a class="link" href="#_response_15">RESPONSE</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
@@ -1395,24 +1426,24 @@ Content-Length: 164
 <div class="sect2">
 <h3 id="_room_특정_채팅방_조회"><a class="link" href="#_room_특정_채팅방_조회">room (특정 채팅방 조회)</a></h3>
 <div class="sect3">
-<h4 id="_request_15"><a class="link" href="#_request_15">REQUEST</a></h4>
+<h4 id="_request_16"><a class="link" href="#_request_16">REQUEST</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /chat/room/2 HTTP/1.1
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX2phc29uIiwicm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTY3MjA1OTEzNiwiZXhwIjoxNjcyMDYwOTM2fQ.FzHOpEJQVsEM1Lej-cqUg85aUc8zsNR-q18tfCnyhjg
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX2phc29uIiwicm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTY3MjE0NDU5NCwiZXhwIjoxNjcyMTQ2Mzk0fQ._InpUWijfcA39fyg_gMpB6jaT42W1eY0OnBDCUQ1_NM
 Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_15"><a class="link" href="#_response_15">RESPONSE</a></h4>
+<h4 id="_response_16"><a class="link" href="#_response_16">RESPONSE</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
 Content-Length: 229
 
-{"profile":"https://amazon.com/asd2.png","roomName":"jason","remainingTime":72,"messages":[{"nickname":"gu","content":"안녕","createdAt":"오후 9:52"},{"nickname":"gu","content":"이름이 뭐야?","createdAt":"오후 9:52"}]}</code></pre>
+{"profile":"https://amazon.com/asd2.png","roomName":"jason","remainingTime":72,"messages":[{"nickname":"gu","content":"안녕","createdAt":"오후 9:36"},{"nickname":"gu","content":"이름이 뭐야?","createdAt":"오후 9:36"}]}</code></pre>
 </div>
 </div>
 </div>
@@ -1423,7 +1454,7 @@ Content-Length: 229
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-12-26 21:39:08 +0900
+Last updated 2022-12-27 21:35:46 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

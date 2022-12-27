@@ -2,6 +2,7 @@ package com.maskting.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maskting.backend.auth.WithAuthUser;
+import com.maskting.backend.domain.Feed;
 import com.maskting.backend.domain.PartnerLocation;
 import com.maskting.backend.domain.User;
 import com.maskting.backend.dto.request.SendLikeRequest;
@@ -99,6 +100,35 @@ class MainControllerTest {
                 .andExpect(result -> result.getResponse().getContentAsString().contains("닉네임"))
                 .andExpect(result -> result.getResponse().getContentAsString().contains("amazon"))
                 .andDo(document("main/user"));
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("피드 얻기")
+    @WithAuthUser(id = "providerId_" + "test", role = "ROLE_USER")
+    void getFeed() throws Exception {
+        User user = userFactory.createUser("test", "test");
+        userRepository.save(user);
+        addFeed(user, "test1Path", "test1");
+        addFeed(user, "test2Path", "test2");
+
+        mockMvc.perform(
+                get(pre + "/feed")
+                        .header("accessToken", jwtUtil.createAccessToken(user.getProviderId(), "ROLE_USER")))
+                .andExpect(status().isOk())
+                .andExpect(result -> result.getResponse().getContentAsString().contains("자기소개"))
+                .andExpect(result -> result.getResponse().getContentAsString().contains("test1Path"))
+                .andExpect(result -> result.getResponse().getContentAsString().contains("test2Path"))
+                .andDo(document("main/get-feed"));
+    }
+
+    private void addFeed(User user, String path, String name) {
+        Feed feed = Feed.builder()
+                .name(name)
+                .path(path)
+                .build();
+        feed.updateUser(user);
+        feedRepository.save(feed);
     }
 
     @Test

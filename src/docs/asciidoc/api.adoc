@@ -124,7 +124,17 @@ include::{snippets}/main/user/http-request.adoc[]
 
 ==== RESPONSE
 
-include::{snippets}/main/user//http-response.adoc[]
+include::{snippets}/main/user/http-response.adoc[]
+
+=== get-feed (피드 얻기)
+
+==== REQUEST
+
+include::{snippets}/main/get-feed/http-request.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/main/get-feed/http-response.adoc[]
 
 === feed (피드 추가)
 

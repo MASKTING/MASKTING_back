@@ -1,6 +1,7 @@
 package com.maskting.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.maskting.backend.auth.WithAuthUser;
 import com.maskting.backend.domain.ProviderType;
 import com.maskting.backend.domain.RefreshToken;
 import com.maskting.backend.domain.User;
@@ -36,9 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
-
 import javax.servlet.http.Cookie;
-
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -292,5 +291,25 @@ class UserControllerTest {
         cookie.setHttpOnly(true);
         cookie.setMaxAge(10000);
         return cookie;
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("반려 사유 반환")
+    @WithAuthUser(id = "providerId_" + "test", role = "ROLE_GUEST")
+    void sendLike() throws Exception {
+        String reason = "부적절한 프로필입니다.";
+        User guest = userFactory.createGuest("test", "test");
+        userRepository.save(guest);
+        guest.updateRejection(reason);
+
+        MvcResult mvcResult = mockMvc.perform(
+                get(pre + "/rejection")
+                        .header("accessToken", jwtUtil.createAccessToken(guest.getProviderId(), "ROLE_GUEST")))
+                .andExpect(status().isOk())
+                .andDo(document("user/rejection"))
+                .andReturn();
+
+        assertTrue(mvcResult.getResponse().getContentAsString().contains(reason));
     }
 }

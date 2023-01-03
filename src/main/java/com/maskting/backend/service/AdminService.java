@@ -102,4 +102,10 @@ public class AdminService {
     public User getUserByNickName(String nickname) {
         return userRepository.findByNickname(nickname).orElseThrow();
     }
+
+    @Transactional
+    public void rejectSignUp(User user, String reason) {
+        user.updateSort();
+        user.updateRejection(reason);
+    }
 }

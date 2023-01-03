@@ -113,6 +113,8 @@ public class User extends BaseTimeEntity{
     @OneToMany(mappedBy = "user")
     private List<ChatUser> chatUsers = new ArrayList<>();
 
+    private String rejection;
+
     public void updateType(ProviderType providerType, RoleType roleType) {
         this.providerType = providerType;
         updateRoleType(roleType);
@@ -207,4 +209,7 @@ public class User extends BaseTimeEntity{
         like = user;
     }
 
+    public void updateRejection(String reason) {
+        rejection = reason;
+    }
 }

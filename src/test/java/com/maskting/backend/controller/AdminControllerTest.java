@@ -137,4 +137,24 @@ class AdminControllerTest {
         assertFalse(user.isSort());
         assertEquals(RoleType.USER, user.getRoleType());
     }
+
+    @Test
+    @Transactional
+    @DisplayName("유저 반려")
+    void reject() throws Exception {
+        String reason = "프로필이 부적절합니다.";
+        User user = userFactory.createGuest("test", "testNickname");
+        userRepository.save(user);
+
+        assertTrue(user.isSort());
+        assertEquals(RoleType.GUEST, user.getRoleType());
+        mockMvc.perform(post(pre + "/reject/" + user.getNickname())
+                .param("reason", reason)
+                .header("accessToken", accessToken))
+                .andDo(document("admin/reject"));
+
+        assertFalse(user.isSort());
+        assertEquals(RoleType.GUEST, user.getRoleType());
+        assertEquals(reason, user.getRejection());
+    }
 }

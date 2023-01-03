@@ -68,17 +68,27 @@ include::{snippets}/user/logout/http-request.adoc[]
 
 include::{snippets}/user/logout/http-response.adoc[]
 
-## Admin
-
-=== home (관리자 홈)
+=== rejection (반려 사유 반환)
 
 ==== REQUEST
 
-include::{snippets}/admin/http-request.adoc[]
+include::{snippets}/user/rejection/http-request.adoc[]
 
 ==== RESPONSE
 
-include::{snippets}/admin/http-response.adoc[]
+include::{snippets}/user/rejection/http-response.adoc[]
+
+## Admin
+
+//=== home (관리자 홈)
+//
+//==== REQUEST
+
+//include::{snippets}/admin/http-request.adoc[]
+//
+//==== RESPONSE
+//
+//include::{snippets}/admin/http-response.adoc[]
 
 === guests (페이징 게스트 반환)
 
@@ -113,6 +123,16 @@ include::{snippets}/admin/approval/http-request.adoc[]
 ==== RESPONSE
 
 include::{snippets}/admin/approval/http-response.adoc[]
+
+=== reject (심사 거절)
+
+==== REQUEST
+
+include::{snippets}/admin/reject/httpie-request.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/admin/reject/http-response.adoc[]
 
 ## Main(홈)
 

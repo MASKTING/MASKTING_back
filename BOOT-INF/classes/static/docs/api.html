@@ -520,22 +520,28 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_response_10">RESPONSE</a></li>
 </ul>
 </li>
-<li><a href="#_feed_피드_추가">feed (피드 추가)</a>
+<li><a href="#_get_feed_피드_얻기">get-feed (피드 얻기)</a>
 <ul class="sectlevel3">
 <li><a href="#_request_11">REQUEST</a></li>
 <li><a href="#_response_11">RESPONSE</a></li>
 </ul>
 </li>
-<li><a href="#_partner_파트너_매칭">partner (파트너 매칭)</a>
+<li><a href="#_feed_피드_추가">feed (피드 추가)</a>
 <ul class="sectlevel3">
 <li><a href="#_request_12">REQUEST</a></li>
 <li><a href="#_response_12">RESPONSE</a></li>
 </ul>
 </li>
-<li><a href="#_like_좋아요_전송">like (좋아요 전송)</a>
+<li><a href="#_partner_파트너_매칭">partner (파트너 매칭)</a>
 <ul class="sectlevel3">
 <li><a href="#_request_13">REQUEST</a></li>
 <li><a href="#_response_13">RESPONSE</a></li>
+</ul>
+</li>
+<li><a href="#_like_좋아요_전송">like (좋아요 전송)</a>
+<ul class="sectlevel3">
+<li><a href="#_request_14">REQUEST</a></li>
+<li><a href="#_response_14">RESPONSE</a></li>
 </ul>
 </li>
 </ul>
@@ -544,14 +550,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_rooms_전체_채팅방_조회">rooms (전체 채팅방 조회)</a>
 <ul class="sectlevel3">
-<li><a href="#_request_14">REQUEST</a></li>
-<li><a href="#_response_14">RESPONSE</a></li>
+<li><a href="#_request_15">REQUEST</a></li>
+<li><a href="#_response_15">RESPONSE</a></li>
 </ul>
 </li>
 <li><a href="#_room_특정_채팅방_조회">room (특정 채팅방 조회)</a>
 <ul class="sectlevel3">
-<li><a href="#_request_15">REQUEST</a></li>
-<li><a href="#_response_15">RESPONSE</a></li>
+<li><a href="#_request_16">REQUEST</a></li>
+<li><a href="#_response_16">RESPONSE</a></li>
 </ul>
 </li>
 </ul>
@@ -571,7 +577,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/auth/silent-refresh HTTP/1.1
 Host: localhost:8080
-Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5MzBhYjFmZi1kNWYyLTRiYTUtOTgyOC1hZTY2MGE2OWNjYWYiLCJpYXQiOjE2NzIxNDQzNjMsImV4cCI6MTY3MzM1Mzk2M30.eGW6aBh65d7JUhtDUGxOHzRZy3uXSIpfmb0UFAfD1X0</code></pre>
+Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmYjZkZWUzZC1iMzBjLTQ2YTgtYWVkMS01N2NhODY3NGRmNjgiLCJpYXQiOjE2NzI3NDk4NjUsImV4cCI6MTY3Mzk1OTQ2NX0.v8fcygj47So5irJzgzXbRuFZb4SmoRXrBOSNDExjJTU</code></pre>
 </div>
 </div>
 </div>
@@ -580,7 +586,7 @@ Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5MzBhYjFmZi1kNWYyLTRiYTUtOT
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX-yVjOy9nOyfgeydtCDrnbzsnbTslrgiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjcyMTQ0MzY1LCJleHAiOjE2NzIxNDYxNjV9.Fr5mom8OOuKPHKFemCdj6AlVUq9MaOGWPAbAH1nP0Aw</code></pre>
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX-yVjOy9nOyfgeydtCDrnbzsnbTslrgiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjcyNzQ5ODY2LCJleHAiOjE2NzI3NTE2NjZ9.bIRDsF7NvnLAivwZTmhseJS2uVIEHFYz7UYXkWN0hQc</code></pre>
 </div>
 </div>
 </div>
@@ -606,7 +612,7 @@ accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX-yVjOy9nOyfgeydtCDrnb
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-Content-Type: application/json
+Content-Type: application/json;charset=UTF-8
 Content-Length: 4
 
 true</code></pre>
@@ -630,7 +636,7 @@ true</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-Content-Type: application/json
+Content-Type: application/json;charset=UTF-8
 Content-Length: 5
 
 false</code></pre>
@@ -816,8 +822,8 @@ false</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0UHJvdmlkZXJJZCIsInJvbGUiOiJST0xFX0dVRVNUIiwiaWF0IjoxNjcyMTQ0Mzc2LCJleHAiOjE2NzIxNDYxNzZ9.xUrfzDsqKjzUMK91LZQUd1SHTSgsFjE1ZpU-b09r-DM
-Set-Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhNGE4MTMyYS00MzY3LTRjOTMtOWQ0OC1iZGUwOTEyY2QxZDEiLCJpYXQiOjE2NzIxNDQzNzYsImV4cCI6MTY3MzM1Mzk3Nn0.KgyGtNq7r1r9AWt8Eeqsa3eAyCc8aKUwUdQO0pDfzzo; Path=/; Max-Age=1209600000; Expires=Tue, 26 Apr 2061 12:32:56 GMT; HttpOnly</code></pre>
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0UHJvdmlkZXJJZCIsInJvbGUiOiJST0xFX0dVRVNUIiwiaWF0IjoxNjcyNzQ5ODc2LCJleHAiOjE2NzI3NTE2NzZ9.sJmBVVkR4xFzSZzcSrjVSzBl6VDrs94dLZdWquEaIcs
+Set-Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3Yzk5ZDIwMi04ZWMzLTQ4OWYtOGZkOC05NzZmNWVhYmEzZDkiLCJpYXQiOjE2NzI3NDk4NzYsImV4cCI6MTY3Mzk1OTQ3Nn0.s6cNjOypsA-_YcekmdEy4E8lghFEyt0BHctKruDSly0; Path=/; Max-Age=1209600000; Expires=Tue, 03 May 2061 12:44:36 GMT; HttpOnly</code></pre>
 </div>
 </div>
 </div>
@@ -854,259 +860,14 @@ Set-Cookie: refreshToken=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 
 <h3 id="_home_관리자_홈"><a class="link" href="#_home_관리자_홈">home (관리자 홈)</a></h3>
 <div class="sect3">
 <h4 id="_request_6"><a class="link" href="#_request_6">REQUEST</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /admin HTTP/1.1
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY3MjE0NDM2MiwiZXhwIjoxNjcyMTQ2MTYyfQ.kvrLTfgPoy494X9m85x2DFXQJDwSWPqtI9iCb_R_t5M
-Host: localhost:8080</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in api.adoc - include::./build/generated-snippets/admin/http-request.adoc[]</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_response_6"><a class="link" href="#_response_6">RESPONSE</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-Content-Language: en
-Content-Type: text/html;charset=UTF-8
-Content-Length: 7657
-
-&lt;!DOCTYPE html&gt;
-&lt;html lang="ko"&gt;
-
-&lt;!-- 공통 헤더--&gt;
-
-  &lt;head&gt;
-    &lt;meta charset="UTF-8"/&gt;
-    &lt;meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"&gt;
-
-    &lt;title&gt;Admin Page&lt;/title&gt;
-
-    &lt;link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet"&gt;
-    &lt;link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css"&gt;
-    &lt;link href="/css/sb-admin-2.min.css" rel="stylesheet"&gt;
-
-    &lt;!-- DataTable --&gt;
-    &lt;link href="/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet"&gt;
-
-  &lt;/head&gt;
-
-
-&lt;body id="page-top"&gt;
-&lt;div id="wrapper"&gt;
-  &lt;!-- 사이드바--&gt;
-
-
-  &lt;!-- Sidebar --&gt;
-  &lt;ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar"&gt;
-
-    &lt;!-- Sidebar - Brand --&gt;
-    &lt;a class="sidebar-brand d-flex align-items-center justify-content-center" href="/admin"&gt;
-      &lt;div class="sidebar-brand-icon rotate-n-15"&gt;
-        &lt;i class="fas fa-laugh-wink"&gt;&lt;/i&gt;
-      &lt;/div&gt;
-      &lt;div class="sidebar-brand-text mx-3"&gt;Maskting Admin&lt;/div&gt;
-    &lt;/a&gt;
-
-      &lt;!-- Divider --&gt;
-    &lt;hr class="sidebar-divider my-0"&gt;
-
-    &lt;li class="nav-item active"&gt;
-      &lt;a class="nav-link" href="/admin"&gt;
-        &lt;i class="fas fa-fw fa-table"&gt;&lt;/i&gt;
-        &lt;span&gt;Membership Review&lt;/span&gt;&lt;/a&gt;
-    &lt;/li&gt;
-
-    &lt;!-- Divider --&gt;
-    &lt;hr class="sidebar-divider"&gt;
-
-  &lt;/ul&gt;
-  &lt;!-- End of Sidebar --&gt;
-
-
-
-  &lt;div id="content-wrapper" class="d-flex flex-column"&gt;
-    &lt;div id="content"&gt;
-      &lt;!-- 상단바--&gt;
-
-
-  &lt;!-- Topbar --&gt;
-  &lt;nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"&gt;
-    &lt;ul class="navbar-nav ml-auto"&gt;
-      &lt;li class="nav-item dropdown no-arrow"&gt;
-        &lt;a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"&gt;
-          &lt;span class="mr-2 d-none d-lg-inline text-gray-600 small"&gt;admin&lt;/span&gt;
-        &lt;/a&gt;
-        &lt;!-- Dropdown - User Information --&gt;
-        &lt;div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-             aria-labelledby="userDropdown"&gt;
-          &lt;a class="dropdown-item" href="#"&gt;
-            &lt;i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"&gt;&lt;/i&gt;
-            test
-          &lt;/a&gt;
-          &lt;a class="dropdown-item" href="#"&gt;
-            &lt;i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"&gt;&lt;/i&gt;
-            test
-          &lt;/a&gt;
-          &lt;a class="dropdown-item" href="#"&gt;
-            &lt;i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"&gt;&lt;/i&gt;
-            test
-          &lt;/a&gt;
-          &lt;div class="dropdown-divider"&gt;&lt;/div&gt;
-          &lt;a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal"&gt;
-            &lt;i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"&gt;&lt;/i&gt;
-            Logout
-          &lt;/a&gt;
-        &lt;/div&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/nav&gt;
-  &lt;!-- End of Topbar --&gt;
-
-
-      &lt;!-- 본문--&gt;
-
-    &lt;!-- Begin Page Content --&gt;
-    &lt;div class="container-fluid"&gt;
-        &lt;!-- DataTales Example --&gt;
-        &lt;div class="card shadow mb-4"&gt;
-            &lt;div class="card-header py-3"&gt;
-                &lt;h6 class="m-0 font-weight-bold text-primary"&gt;심사 유저 목록&lt;/h6&gt;
-            &lt;/div&gt;
-            &lt;div class="card-body"&gt;
-                &lt;div style="float: right"&gt;
-                    &lt;i class="fa fa-search" aria-hidden="true"&gt;&lt;/i&gt;
-                    Search
-                    &lt;input type="search" size="15" &gt;
-                &lt;/div&gt;
-                &lt;div class="table-responsive"&gt;
-                    &lt;table class="table table-bordered" id="dataTable" width="100%" cellspacing="0"&gt;
-                        &lt;thead&gt;
-                        &lt;tr&gt;
-                            &lt;th&gt;Name&lt;/th&gt;
-                            &lt;th&gt;Phone&lt;/th&gt;
-                            &lt;th&gt;Nickname&lt;/th&gt;
-                            &lt;th&gt;Profile1&lt;/th&gt;
-                            &lt;th&gt;Profile2&lt;/th&gt;
-                        &lt;/tr&gt;
-                        &lt;/thead&gt;
-                    &lt;/table&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-
-    &lt;/div&gt;
-    &lt;!-- /.container-fluid --&gt;
-
-
-    &lt;/div&gt;
-    &lt;!-- 공통 하단--&gt;
-
-  &lt;footer class="sticky-footer bg-white"&gt;
-    &lt;div class="container my-auto"&gt;
-      &lt;div class="copyright text-center my-auto"&gt;
-        &lt;span&gt;Copyright &amp;copy; maskting 2022&lt;/span&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-  &lt;/footer&gt;
-
-  &lt;/div&gt;
-&lt;/div&gt;
-
-&lt;!-- 공통 스크립트--&gt;
-
-
-
-  &lt;!-- Bootstrap core JavaScript--&gt;
-  &lt;script src="/vendor/jquery/jquery.min.js"&gt;&lt;/script&gt;
-  &lt;script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"&gt;&lt;/script&gt;
-
-  &lt;!-- Core plugin JavaScript--&gt;
-  &lt;script src="/vendor/jquery-easing/jquery.easing.min.js"&gt;&lt;/script&gt;
-
-  &lt;!-- Custom scripts for all pages--&gt;
-  &lt;script src="/js/sb-admin-2.min.js"&gt;&lt;/script&gt;
-
-  &lt;!-- Page level plugins --&gt;
-  &lt;script src="/vendor/chart.js/Chart.min.js"&gt;&lt;/script&gt;
-
-  &lt;!--  DataTable  --&gt;
-  &lt;script src="/vendor/datatables/jquery.dataTables.js"&gt;&lt;/script&gt;
-  &lt;script src="/vendor/datatables/dataTables.bootstrap4.js"&gt;&lt;/script&gt;
-
-  &lt;!-- Page level custom scripts --&gt;
-  &lt;!--    &lt;script th:src="@{/js/demo/chart-area-demo.js}"&gt;&lt;/script&gt;--&gt;
-  &lt;!--    &lt;script th:src="@{/js/demo/chart-pie-demo.js}"&gt;&lt;/script&gt;--&gt;
-
-
-&lt;/body&gt;
-&lt;/html&gt;
-
-&lt;script type="application/javascript"&gt;
-    $(document).ready( function () {
-        $('#dataTable').DataTable({
-            "searching": true,
-            "paging": true,
-            "serverSide":true,
-            "processing": true,
-            "ajax": {
-                "url": "/admin/guests",
-                "dataSrc": function (res) {
-                    return res.data;
-                }
-            },
-            "columns": [
-                {"data": "name",
-                    "render": function (data, type, row){
-                        return '&lt;a href="javascript:void(0)" onclick="approval(\''+ row.nickname +'\')"&gt;' + data + '&lt;/a&gt;'
-                    }
-                },
-                {"data": "phone"},
-                {"data": "nickname"},
-                {"data": "profiles.0",
-                    "render": function (data){
-                        if (data.length &lt;= 1)
-                            return 'X';
-                        else
-                            return '&lt;a href="'+data+'"&gt;프로필1&lt;a&gt;'
-                    }
-                },
-                {"data": "profiles.1",
-                    "render": function (data){
-                        if (data.length &lt;= 1)
-                            return 'X';
-                        else
-                            return '&lt;a href="'+data+'"&gt;프로필2&lt;a&gt;'
-                    }
-                }
-            ]
-        });
-
-        $("#dataTable_filter").attr("hidden", "hidden");
-        var table = $('#dataTable').DataTable();
-        $('input').on('keyup', function (e) {
-            if(e.keyCode === 13){
-                console.log("hi");
-                var searchValue = $('input').val();
-                table.search(searchValue).draw();
-            }});
-    } );
-
-    function approval(data){
-        console.log(data);
-        var check = confirm('정말 승인하시겠습니까?');
-        console.log(check);
-        if (check){
-            let f = document.createElement('form');
-            f.setAttribute('method', 'post');
-            f.setAttribute('action', '/admin/approval/' + data);
-            document.body.appendChild(f);
-            f.submit();
-        }
-    }
-&lt;/script&gt;</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in api.adoc - include::./build/generated-snippets/admin/http-response.adoc[]</p>
 </div>
 </div>
 </div>
@@ -1117,7 +878,7 @@ Content-Length: 7657
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /admin/guests?search%5Bvalue%5D=&amp;draw=1&amp;start=0&amp;length=10&amp;search%5Bvalue%5D= HTTP/1.1
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY3MjE0NDM2MywiZXhwIjoxNjcyMTQ2MTYzfQ.vOCk3BMh8StUyXgzYtcSA-NdtYdKjTD2Iq2fhdzr1Jw
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY3Mjc0OTg2NSwiZXhwIjoxNjcyNzUxNjY1fQ.BDtUQ-j0zMGhFiuqks4LtMaePP2TcR_iVlgZ_Tr5ABQ
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -1172,7 +933,7 @@ Content-Length: 888
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /admin/guests?search%5Bvalue%5D=Second&amp;draw=1&amp;start=0&amp;length=10 HTTP/1.1
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY3MjE0NDM2MywiZXhwIjoxNjcyMTQ2MTYzfQ.vOCk3BMh8StUyXgzYtcSA-NdtYdKjTD2Iq2fhdzr1Jw
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY3Mjc0OTg2NSwiZXhwIjoxNjcyNzUxNjY1fQ.BDtUQ-j0zMGhFiuqks4LtMaePP2TcR_iVlgZ_Tr5ABQ
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -1227,7 +988,7 @@ Content-Length: 481
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /admin/approval/testNickname HTTP/1.1
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY3MjE0NDM2MywiZXhwIjoxNjcyMTQ2MTYzfQ.vOCk3BMh8StUyXgzYtcSA-NdtYdKjTD2Iq2fhdzr1Jw
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY3Mjc0OTg2NSwiZXhwIjoxNjcyNzUxNjY1fQ.BDtUQ-j0zMGhFiuqks4LtMaePP2TcR_iVlgZ_Tr5ABQ
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -1255,7 +1016,7 @@ Location: /admin</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/user HTTP/1.1
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjcyMTQ0Mzc2LCJleHAiOjE2NzIxNDYxNzZ9.q_7lBA6nne10gKXQPgEz_FozRIqJT6K21YyOUAlU1t8
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjcyNzQ5ODc2LCJleHAiOjE2NzI3NTE2NzZ9.7nw0DWOylIZ7kK0Piw1J0r_K1bNQKt_i1XiodudbZwA
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -1274,14 +1035,39 @@ Content-Length: 59
 </div>
 </div>
 <div class="sect2">
-<h3 id="_feed_피드_추가"><a class="link" href="#_feed_피드_추가">feed (피드 추가)</a></h3>
+<h3 id="_get_feed_피드_얻기"><a class="link" href="#_get_feed_피드_얻기">get-feed (피드 얻기)</a></h3>
 <div class="sect3">
 <h4 id="_request_11"><a class="link" href="#_request_11">REQUEST</a></h4>
 <div class="listingblock">
 <div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/feed HTTP/1.1
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjcyNzQ5ODc2LCJleHAiOjE2NzI3NTE2NzZ9.7nw0DWOylIZ7kK0Piw1J0r_K1bNQKt_i1XiodudbZwA
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_11"><a class="link" href="#_response_11">RESPONSE</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 56
+
+{"bio":"자기소개","feeds":["test1Path","test2Path"]}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_feed_피드_추가"><a class="link" href="#_feed_피드_추가">feed (피드 추가)</a></h3>
+<div class="sect3">
+<h4 id="_request_12"><a class="link" href="#_request_12">REQUEST</a></h4>
+<div class="listingblock">
+<div class="content">
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ http --multipart POST 'http://localhost:8080/api/feed' \
     'feed'@'test.PNG' \
-    'accessToken:eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjcyMTQ0Mzc1LCJleHAiOjE2NzIxNDYxNzV9.q_wA4tHsWO54MrE0RFMdFSN2sAjpUD6Ll2Od215deYM'</code></pre>
+    'accessToken:eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjcyNzQ5ODc1LCJleHAiOjE2NzI3NTE2NzV9.7eZpbTiUWITht3vM7ipEQ2HNByieydQHTfAFvrCDAKg'</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
@@ -1304,7 +1090,7 @@ Content-Length: 59
 </table>
 </div>
 <div class="sect3">
-<h4 id="_response_11"><a class="link" href="#_response_11">RESPONSE</a></h4>
+<h4 id="_response_12"><a class="link" href="#_response_12">RESPONSE</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK</code></pre>
@@ -1315,17 +1101,17 @@ Content-Length: 59
 <div class="sect2">
 <h3 id="_partner_파트너_매칭"><a class="link" href="#_partner_파트너_매칭">partner (파트너 매칭)</a></h3>
 <div class="sect3">
-<h4 id="_request_12"><a class="link" href="#_request_12">REQUEST</a></h4>
+<h4 id="_request_13"><a class="link" href="#_request_13">REQUEST</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/partner HTTP/1.1
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjcyMTQ0Mzc2LCJleHAiOjE2NzIxNDYxNzZ9.q_7lBA6nne10gKXQPgEz_FozRIqJT6K21YyOUAlU1t8
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjcyNzQ5ODc2LCJleHAiOjE2NzI3NTE2NzZ9.7nw0DWOylIZ7kK0Piw1J0r_K1bNQKt_i1XiodudbZwA
 Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_12"><a class="link" href="#_response_12">RESPONSE</a></h4>
+<h4 id="_response_13"><a class="link" href="#_response_13">RESPONSE</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
@@ -1340,12 +1126,12 @@ Content-Length: 147
 <div class="sect2">
 <h3 id="_like_좋아요_전송"><a class="link" href="#_like_좋아요_전송">like (좋아요 전송)</a></h3>
 <div class="sect3">
-<h4 id="_request_13"><a class="link" href="#_request_13">REQUEST</a></h4>
+<h4 id="_request_14"><a class="link" href="#_request_14">REQUEST</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/like HTTP/1.1
 Content-Type: application/json
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjcyMTQ0Mzc2LCJleHAiOjE2NzIxNDYxNzZ9.q_7lBA6nne10gKXQPgEz_FozRIqJT6K21YyOUAlU1t8
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjcyNzQ5ODc2LCJleHAiOjE2NzI3NTE2NzZ9.7nw0DWOylIZ7kK0Piw1J0r_K1bNQKt_i1XiodudbZwA
 Content-Length: 20
 Host: localhost:8080
 
@@ -1354,7 +1140,7 @@ Host: localhost:8080
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_13"><a class="link" href="#_response_13">RESPONSE</a></h4>
+<h4 id="_response_14"><a class="link" href="#_response_14">RESPONSE</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK</code></pre>
@@ -1370,17 +1156,17 @@ Host: localhost:8080
 <div class="sect2">
 <h3 id="_rooms_전체_채팅방_조회"><a class="link" href="#_rooms_전체_채팅방_조회">rooms (전체 채팅방 조회)</a></h3>
 <div class="sect3">
-<h4 id="_request_14"><a class="link" href="#_request_14">REQUEST</a></h4>
+<h4 id="_request_15"><a class="link" href="#_request_15">REQUEST</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /chat/rooms HTTP/1.1
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX2phc29uIiwicm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTY3MjE0NDM3MCwiZXhwIjoxNjcyMTQ2MTcwfQ.KFvNu6Z_YG8m0IaqQKfpz9BKDAFFoDmqhUNQsutfAKI
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX2phc29uIiwicm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTY3Mjc0OTg3MSwiZXhwIjoxNjcyNzUxNjcxfQ._oJnu9UzpcduqWLVIYdmxvDFUlWvuiEe6Fut83EgjP8
 Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_14"><a class="link" href="#_response_14">RESPONSE</a></h4>
+<h4 id="_response_15"><a class="link" href="#_response_15">RESPONSE</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
@@ -1395,24 +1181,24 @@ Content-Length: 164
 <div class="sect2">
 <h3 id="_room_특정_채팅방_조회"><a class="link" href="#_room_특정_채팅방_조회">room (특정 채팅방 조회)</a></h3>
 <div class="sect3">
-<h4 id="_request_15"><a class="link" href="#_request_15">REQUEST</a></h4>
+<h4 id="_request_16"><a class="link" href="#_request_16">REQUEST</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /chat/room/2 HTTP/1.1
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX2phc29uIiwicm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTY3MjE0NDM3MCwiZXhwIjoxNjcyMTQ2MTcwfQ.KFvNu6Z_YG8m0IaqQKfpz9BKDAFFoDmqhUNQsutfAKI
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX2phc29uIiwicm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTY3Mjc0OTg3MCwiZXhwIjoxNjcyNzUxNjcwfQ._eywiy5dmOO4aJGsg5LsusIwXmp4TuF8iCR_rhD43KA
 Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_15"><a class="link" href="#_response_15">RESPONSE</a></h4>
+<h4 id="_response_16"><a class="link" href="#_response_16">RESPONSE</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
 Content-Length: 229
 
-{"profile":"https://amazon.com/asd2.png","roomName":"jason","remainingTime":72,"messages":[{"nickname":"gu","content":"안녕","createdAt":"오후 9:32"},{"nickname":"gu","content":"이름이 뭐야?","createdAt":"오후 9:32"}]}</code></pre>
+{"profile":"https://amazon.com/asd2.png","roomName":"jason","remainingTime":72,"messages":[{"nickname":"gu","content":"안녕","createdAt":"오후 9:44"},{"nickname":"gu","content":"이름이 뭐야?","createdAt":"오후 9:44"}]}</code></pre>
 </div>
 </div>
 </div>
@@ -1423,7 +1209,7 @@ Content-Length: 229
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-12-27 21:01:31 +0900
+Last updated 2023-01-03 15:29:14 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

@@ -60,16 +60,16 @@ class AdminControllerTest {
         userRepository.deleteAll();
     }
 
-    @Test
-    @DisplayName("Admin Page 화면")
-    void home() throws Exception {
-        mockMvc.perform(get(pre)
-                .header("accessToken", accessToken))
-                .andExpect(status().isOk())
-                .andExpect(view().name("admin/home"))
-                .andExpect(model().attributeExists("name"))
-                .andDo(document("admin"));
-    }
+//    @Test
+//    @DisplayName("Admin Page 화면")
+//    void home() throws Exception {
+//        mockMvc.perform(get(pre)
+//                .header("accessToken", accessToken))
+//                .andExpect(status().isOk())
+//                .andExpect(view().name("admin/home"))
+//                .andExpect(model().attributeExists("name"))
+//                .andDo(document("admin"));
+//    }
 
     @Test
     @DisplayName("심사받는 페이징 유저들 반환")

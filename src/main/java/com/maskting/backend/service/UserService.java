@@ -5,6 +5,7 @@ import com.maskting.backend.common.exception.NoProfileException;
 import com.maskting.backend.domain.*;
 import com.maskting.backend.dto.request.SignupRequest;
 import com.maskting.backend.dto.response.S3Response;
+import com.maskting.backend.dto.response.SignUpRejectResponse;
 import com.maskting.backend.repository.*;
 import com.maskting.backend.util.CookieUtil;
 import com.maskting.backend.util.JwtUtil;
@@ -242,5 +243,14 @@ public class UserService {
 
     public boolean checkNickname(String nickname) {
         return userRepository.findByNickname(nickname).isEmpty();
+    }
+
+    public SignUpRejectResponse getRejection(org.springframework.security.core.userdetails.User userDetail) {
+        User user = getUserByProviderId(userDetail);
+        return new SignUpRejectResponse(user.getRejection());
+    }
+
+    private User getUserByProviderId(org.springframework.security.core.userdetails.User userDetail) {
+        return userRepository.findByProviderId(userDetail.getUsername());
     }
 }

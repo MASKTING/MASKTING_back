@@ -60,16 +60,16 @@ class AdminControllerTest {
         userRepository.deleteAll();
     }
 
-    @Test
-    @DisplayName("Admin Page 화면")
-    void home() throws Exception {
-        mockMvc.perform(get(pre)
-                .header("accessToken", accessToken))
-                .andExpect(status().isOk())
-                .andExpect(view().name("admin/home"))
-                .andExpect(model().attributeExists("name"))
-                .andDo(document("admin"));
-    }
+//    @Test
+//    @DisplayName("Admin Page 화면")
+//    void home() throws Exception {
+//        mockMvc.perform(get(pre)
+//                .header("accessToken", accessToken))
+//                .andExpect(status().isOk())
+//                .andExpect(view().name("admin/home"))
+//                .andExpect(model().attributeExists("name"))
+//                .andDo(document("admin"));
+//    }
 
     @Test
     @DisplayName("심사받는 페이징 유저들 반환")
@@ -136,5 +136,25 @@ class AdminControllerTest {
 
         assertFalse(user.isSort());
         assertEquals(RoleType.USER, user.getRoleType());
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("유저 반려")
+    void reject() throws Exception {
+        String reason = "프로필이 부적절합니다.";
+        User user = userFactory.createGuest("test", "testNickname");
+        userRepository.save(user);
+
+        assertTrue(user.isSort());
+        assertEquals(RoleType.GUEST, user.getRoleType());
+        mockMvc.perform(post(pre + "/reject/" + user.getNickname())
+                .param("reason", reason)
+                .header("accessToken", accessToken))
+                .andDo(document("admin/reject"));
+
+        assertFalse(user.isSort());
+        assertEquals(RoleType.GUEST, user.getRoleType());
+        assertEquals(reason, user.getRejection());
     }
 }

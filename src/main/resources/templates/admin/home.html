@@ -21,6 +21,7 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                         <tr>
+                            <th>reject</th>
                             <th>Name</th>
                             <th>Phone</th>
                             <th>Nickname</th>
@@ -53,6 +54,11 @@
                 }
             },
             "columns": [
+                {
+                    "render": function (data, type, row) {
+                        return '<a href="javascript:void(0)" onclick="reject(\'' + row.nickname + '\')">' + `반려하기` + '</a>'
+                    }
+                },
                 {"data": "name",
                     "render": function (data, type, row){
                         return '<a href="javascript:void(0)" onclick="approval(\''+ row.nickname +'\')">' + data + '</a>'
@@ -89,10 +95,23 @@
             }});
     } );
 
+    function reject(data){
+        var reason = prompt('반려 사유를 입력하세요.');
+        if (reason != null){
+            let f = document.createElement('form');
+            f.setAttribute('method', 'post');
+            f.setAttribute('action', '/admin/reject/' + data);
+            let reasonField = document.createElement("input");
+            reasonField.setAttribute("name", "reason");
+            reasonField.setAttribute("value", reason);
+            f.appendChild(reasonField);
+            document.body.appendChild(f);
+            f.submit();
+        }
+    }
+
     function approval(data){
-        console.log(data);
         var check = confirm('정말 승인하시겠습니까?');
-        console.log(check);
         if (check){
             let f = document.createElement('form');
             f.setAttribute('method', 'post');

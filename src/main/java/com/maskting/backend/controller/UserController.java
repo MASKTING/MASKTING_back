@@ -5,6 +5,7 @@ import com.maskting.backend.dto.request.SignupRequest;
 import com.maskting.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,5 +40,10 @@ public class UserController {
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
         userService.deleteAuth(request, response);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/rejection")
+    public ResponseEntity<?> getRejection(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user) {
+        return ResponseEntity.ok(userService.getRejection(user));
     }
 }

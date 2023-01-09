@@ -46,4 +46,9 @@ public class UserController {
     public ResponseEntity<?> getRejection(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user) {
         return ResponseEntity.ok(userService.getRejection(user));
     }
+
+    @GetMapping("/re-signup")
+    public ResponseEntity<?> getReSignupInfo(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user) {
+        return ResponseEntity.ok(userService.getReSignupInfo(user));
+    }
 }

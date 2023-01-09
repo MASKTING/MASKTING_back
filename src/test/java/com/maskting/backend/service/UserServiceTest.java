@@ -113,7 +113,7 @@ class UserServiceTest {
         User joinUser = userService.joinUser(signupRequest);
 
         assertNotNull(joinUser);
-        assertEquals(1, joinUser.getProfiles().size());
+        assertEquals(2, joinUser.getProfiles().size());
         assertEquals(1, joinUser.getInterests().size());
         assertEquals(1, joinUser.getPartnerLocations().size());
         assertEquals(1, joinUser.getPartnerReligions().size());

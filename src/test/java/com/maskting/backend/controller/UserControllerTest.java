@@ -2,10 +2,13 @@ package com.maskting.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maskting.backend.auth.WithAuthUser;
+import com.maskting.backend.domain.Profile;
 import com.maskting.backend.domain.ProviderType;
 import com.maskting.backend.domain.RefreshToken;
 import com.maskting.backend.domain.User;
+import com.maskting.backend.dto.request.ReSignupRequest;
 import com.maskting.backend.dto.request.SignupRequest;
+import com.maskting.backend.dto.response.S3Response;
 import com.maskting.backend.factory.RequestFactory;
 import com.maskting.backend.factory.UserFactory;
 import com.maskting.backend.repository.ProfileRepository;
@@ -38,9 +41,11 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
-
 import javax.servlet.http.Cookie;
+import javax.validation.constraints.NotBlank;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -347,5 +352,78 @@ class UserControllerTest {
         assertTrue(mvcResult.getResponse().getContentAsString().contains(guest.getBio()));
         assertTrue(mvcResult.getResponse().getContentAsString().contains(guest.getProfiles().get(DEFAULT_PROFILE).getPath()));
         assertTrue(mvcResult.getResponse().getContentAsString().contains(guest.getProfiles().get(MASK_PROFILE).getPath()));
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("재 회원가입")
+    @WithAuthUser(id = "providerId_" + "웃고있는 라이언", role = "ROLE_GUEST")
+    void reSignup() throws Exception {
+        S3Response defaultImage = s3Uploader.upload(getMultipartFile("DEFAULT.PNG", "DEFAULT"), "static");
+        S3Response maskImage = s3Uploader.upload(getMultipartFile("MASK.PNG", "MASK"), "static");
+        User guest = userFactory.createGuest("김철수", "웃고있는 라이언");
+        guest.addProfiles(getProfiles(defaultImage.getName(), maskImage.getName()));
+        userRepository.save(guest);
+        ReSignupRequest reSignupRequest = requestFactory.createReSignupRequest();
+
+        mockMvc.perform(
+                multipart(pre + "/re-signup")
+                        .file((MockMultipartFile) reSignupRequest.getProfiles().get(DEFAULT_PROFILE))
+                        .file((MockMultipartFile) reSignupRequest.getProfiles().get(MASK_PROFILE))
+                        .param("name", reSignupRequest.getName())
+                        .param("birth", reSignupRequest.getBirth())
+                        .param("height", Integer.toString(reSignupRequest.getHeight()))
+                        .param("bio", reSignupRequest.getBio())
+                        .param("nickname", reSignupRequest.getNickname())
+                        .with(requestPostProcessor -> {
+                            requestPostProcessor.setMethod("POST");
+                            return requestPostProcessor;
+                        })
+                        .header("accessToken", jwtUtil.createAccessToken(guest.getProviderId(), "ROLE_USER"))
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andExpect(status().isOk())
+                .andDo(document("user/re-signup(post)",
+                        requestParameters(
+                                parameterWithName("name").description("이름")
+                                ,parameterWithName("birth").description("생년월일")
+                                ,parameterWithName("height").description("키")
+                                ,parameterWithName("bio").description("한줄 자기소개")
+                                ,parameterWithName("nickname").description("닉네임")
+                        )
+                        , requestParts(
+                                partWithName("profiles").description("첨부 프로필(기본 프로필, 마스크 프로필)")
+                        )));
+
+        assertEquals(reSignupRequest.getName(), guest.getName());
+        assertEquals(reSignupRequest.getBirth(), guest.getBirth());
+        assertEquals(reSignupRequest.getHeight(), guest.getHeight());
+        assertEquals(reSignupRequest.getNickname(), guest.getNickname());
+        assertEquals(reSignupRequest.getBio(), guest.getBio());
+        assertTrue(getGuestProfile(guest, DEFAULT_PROFILE).contains(getReSignupRequestProfile(reSignupRequest, DEFAULT_PROFILE)));
+        assertTrue(getGuestProfile(guest, MASK_PROFILE).contains(getReSignupRequestProfile(reSignupRequest, MASK_PROFILE)));
+    }
+
+    private MockMultipartFile getMultipartFile(String originalFilename, String imageByte) {
+        return new MockMultipartFile("profiles", originalFilename, MediaType.IMAGE_PNG_VALUE, imageByte.getBytes());
+    }
+
+    private String getGuestProfile(User guest, int profileType) {
+        return guest.getProfiles().get(profileType).getName();
+    }
+
+    private String getReSignupRequestProfile(ReSignupRequest reSignupRequest, int profileType) {
+        return reSignupRequest.getProfiles().get(profileType).getOriginalFilename();
+    }
+
+    private List<Profile> getProfiles(String defaultProfileName, String maskProfileName) {
+        return Arrays.asList(getProfile("https://amazon.com/DEFAULT_PROFILE.png", defaultProfileName),
+                getProfile("https://amazon.com/MASK_PROFILE.png", maskProfileName));
+    }
+
+    private Profile getProfile(String path, String name) {
+        return Profile.builder()
+                .path(path)
+                .name(name)
+                .build();
     }
 }

@@ -1,5 +1,6 @@
 package com.maskting.backend.factory;
 
+import com.maskting.backend.dto.request.ReSignupRequest;
 import com.maskting.backend.dto.request.SignupRequest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
@@ -13,10 +14,7 @@ import java.util.List;
 public class RequestFactory {
 
     public SignupRequest createSignupRequest() {
-        List<MultipartFile> profiles = List.of(
-                new MockMultipartFile("profiles", "DEFAULT_IMAGE.PNG", MediaType.IMAGE_PNG_VALUE, "DEFAULT_IMAGE".getBytes()),
-                new MockMultipartFile("profiles", "MASK_IMAGE.PNG", MediaType.IMAGE_PNG_VALUE, "MASK_IMAGE".getBytes())
-        );
+        List<MultipartFile> profiles = getProfiles();
 
         List<String> interests = new ArrayList<>();
         interests.add("산책");
@@ -39,5 +37,17 @@ public class RequestFactory {
                 "무교", "알콜쟁이 라이언", partnerLocations, "any", "any",
                 partnerReligions, 1, 160, 170, "운동 좋아합니다!", partnerBodyTypes, profiles);
         return signupRequest;
+    }
+
+    private List<MultipartFile> getProfiles() {
+        return List.of(
+                new MockMultipartFile("profiles", "DEFAULT_IMAGE.PNG", MediaType.IMAGE_PNG_VALUE, "DEFAULT_IMAGE".getBytes()),
+                new MockMultipartFile("profiles", "MASK_IMAGE.PNG", MediaType.IMAGE_PNG_VALUE, "MASK_IMAGE".getBytes())
+        );
+    }
+
+    public ReSignupRequest createReSignupRequest() {
+        List<MultipartFile> profiles = getProfiles();
+        return new ReSignupRequest("홍길동", "19921123", 181, "심심한 무지", "안녕하세요~", profiles);
     }
 }

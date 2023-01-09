@@ -233,9 +233,14 @@ public class UserFactory {
     }
 
     private List<Profile> getProfiles() {
-        return Arrays.asList(Profile.builder()
-                .path("https://amazon.com/asd2.png")
-                .name("test")
-                .build());
+        return Arrays.asList(getProfile("https://amazon.com/DEFAULT_PROFILE.png", "DEFAULT_PROFILE"),
+                getProfile("https://amazon.com/MASK_PROFILE.png", "MASK_PROFILE"));
+    }
+
+    private Profile getProfile(String path, String name) {
+        return Profile.builder()
+                .path(path)
+                .name(name)
+                .build();
     }
 }

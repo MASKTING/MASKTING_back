@@ -14,7 +14,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class    SignupRequest {
+public class SignupRequest {
 
     @NotBlank
     private String name;

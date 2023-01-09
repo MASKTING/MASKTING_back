@@ -3,7 +3,9 @@ package com.maskting.backend.service;
 import com.maskting.backend.common.exception.ExistNicknameException;
 import com.maskting.backend.common.exception.NoProfileException;
 import com.maskting.backend.domain.*;
+import com.maskting.backend.dto.request.ReSignupRequest;
 import com.maskting.backend.dto.request.SignupRequest;
+import com.maskting.backend.dto.response.ReSignupResponse;
 import com.maskting.backend.dto.response.S3Response;
 import com.maskting.backend.dto.response.SignUpRejectResponse;
 import com.maskting.backend.repository.*;
@@ -17,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,6 +32,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UserService {
+    private static final int DEFAULT_PROFILE = 0;
+    private static final int MASK_PROFILE = 1;
 
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
@@ -49,17 +52,18 @@ public class UserService {
         if (userRepository.findByNickname(signupRequest.getNickname()).isPresent()) {
             throw new ExistNicknameException();
         }
-        return userRepository.save(createUser(signupRequest, getProviderType(signupRequest), getProfiles(signupRequest)));
+        return userRepository.save(createUser(signupRequest, getProviderType(signupRequest), getProfiles(signupRequest.getProfiles())));
     }
 
-    private List<Profile> getProfiles(SignupRequest signupRequest) throws IOException {
-        if (haveProfiles(signupRequest))
-            return addProfiles(signupRequest);
+    private List<Profile> getProfiles(List<MultipartFile> profiles) throws IOException {
+        if (haveProfiles(profiles)) {
+            return addProfiles(profiles);
+        }
         throw new NoProfileException();
     }
 
-    private boolean haveProfiles(SignupRequest signupRequest) {
-        return !CollectionUtils.isEmpty(signupRequest.getProfiles());
+    private boolean haveProfiles(List<MultipartFile> profiles) {
+        return !CollectionUtils.isEmpty(profiles);
     }
 
     private User createUser(SignupRequest signupRequest, ProviderType providerType, List<Profile> profiles) {
@@ -218,9 +222,9 @@ public class UserService {
         }
     }
 
-    private List<Profile> addProfiles(SignupRequest signupRequest) throws IOException {
+    private List<Profile> addProfiles(List<MultipartFile> requestProfiles) throws IOException {
         List<Profile> profiles = new ArrayList<>();
-        for (MultipartFile multipartFile : signupRequest.getProfiles()) {
+        for (MultipartFile multipartFile : requestProfiles) {
             profiles.add(saveProfile(upload(multipartFile)));
         }
         return profiles;
@@ -252,5 +256,31 @@ public class UserService {
 
     private User getUserByProviderId(org.springframework.security.core.userdetails.User userDetail) {
         return userRepository.findByProviderId(userDetail.getUsername());
+    }
+
+    public ReSignupResponse getReSignupInfo(org.springframework.security.core.userdetails.User userDetail) {
+        User user = getUserByProviderId(userDetail);
+        return getReSignupResponse(user);
+    }
+
+    private ReSignupResponse getReSignupResponse(User user) {
+        ReSignupResponse reSignupResponse = modelMapper.map(user, ReSignupResponse.class);
+        reSignupResponse.setProfile(user.getProfiles().get(DEFAULT_PROFILE).getPath());
+        reSignupResponse.setMaskProfile(user.getProfiles().get(MASK_PROFILE).getPath());
+        return reSignupResponse;
+    }
+
+    public void reSignup(org.springframework.security.core.userdetails.User userDetail, ReSignupRequest reSignupRequest) throws IOException {
+        User user = getUserByProviderId(userDetail);
+        user.reUpdate(reSignupRequest);
+        //이미지 삭제 후 다시 넣기
+        deleteProfiles(user);
+        user.addProfiles(getProfiles(reSignupRequest.getProfiles()));
+    }
+
+    private void deleteProfiles(User user) {
+        for (Profile profile : user.getProfiles()) {
+            s3Uploader.delete(profile.getName());
+        }
     }
 }

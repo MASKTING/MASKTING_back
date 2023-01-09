@@ -125,7 +125,7 @@ class AdminServiceTest {
         List<User> filterUser = new ArrayList<>();
         pagingUser(allUser, filterUser);
         ReviewResponse reviewResponse = new ReviewResponse(
-                "test", "testNum", "testNickname", new ArrayList<>());
+                "test", "19951123", 181, "testNum", "testNickname", "자기소개", new ArrayList<>());
         given(modelMapper.map(any(), any())).willReturn(reviewResponse);
 
         List<ReviewResponse> reviewResponses = adminService.returnReviewResponse(filterUser);

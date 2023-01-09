@@ -23,8 +23,11 @@
                         <tr>
                             <th>reject</th>
                             <th>Name</th>
+                            <th>생년월일</th>
+                            <th>키</th>
                             <th>Phone</th>
                             <th>Nickname</th>
+                            <th>자기소개</th>
                             <th>Profile1</th>
                             <th>Profile2</th>
                         </tr>
@@ -64,8 +67,11 @@
                         return '<a href="javascript:void(0)" onclick="approval(\''+ row.nickname +'\')">' + data + '</a>'
                     }
                 },
+                {"data": "birth"},
+                {"data": "height"},
                 {"data": "phone"},
                 {"data": "nickname"},
+                {"data": "bio"},
                 {"data": "profiles.0",
                     "render": function (data){
                         if (data.length <= 1)

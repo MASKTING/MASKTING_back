@@ -1,6 +1,7 @@
 package com.maskting.backend.controller;
 
 import com.maskting.backend.domain.User;
+import com.maskting.backend.dto.request.ReSignupRequest;
 import com.maskting.backend.dto.request.SignupRequest;
 import com.maskting.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -50,5 +51,11 @@ public class UserController {
     @GetMapping("/re-signup")
     public ResponseEntity<?> getReSignupInfo(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user) {
         return ResponseEntity.ok(userService.getReSignupInfo(user));
+    }
+
+    @PostMapping("/re-signup")
+    public ResponseEntity<?> reSignup(@Valid ReSignupRequest reSignupRequest, @AuthenticationPrincipal org.springframework.security.core.userdetails.User user) throws IOException {
+        userService.reSignup(user, reSignupRequest);
+        return ResponseEntity.ok().build();
     }
 }

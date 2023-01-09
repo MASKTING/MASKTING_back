@@ -1,5 +1,6 @@
 package com.maskting.backend.domain;
 
+import com.maskting.backend.dto.request.ReSignupRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -211,5 +212,13 @@ public class User extends BaseTimeEntity{
 
     public void updateRejection(String reason) {
         rejection = reason;
+    }
+
+    public void reUpdate(ReSignupRequest reSignupRequest) {
+        name = reSignupRequest.getName();
+        birth = reSignupRequest.getBirth();
+        height = reSignupRequest.getHeight();
+        nickname = reSignupRequest.getNickname();
+        bio = reSignupRequest.getBio();
     }
 }

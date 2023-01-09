@@ -78,6 +78,16 @@ include::{snippets}/user/rejection/http-request.adoc[]
 
 include::{snippets}/user/rejection/http-response.adoc[]
 
+=== getReSignupInfo (수정 정보 반환)
+
+==== REQUEST
+
+include::{snippets}/user/re-signup/http-request.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/user/re-signup/http-response.adoc[]
+
 ## Admin
 
 //=== home (관리자 홈)

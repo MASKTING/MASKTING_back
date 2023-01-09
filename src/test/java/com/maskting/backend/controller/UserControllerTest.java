@@ -331,7 +331,7 @@ class UserControllerTest {
                 get(pre + "/re-signup")
                         .header("accessToken", jwtUtil.createAccessToken(guest.getProviderId(), "ROLE_GUEST")))
                 .andExpect(status().isOk())
-                .andDo(document("user/rejection"))
+                .andDo(document("user/re-signup"))
                 .andReturn();
 
         checkReSignupInfo(guest, mvcResult);

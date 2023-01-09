@@ -40,6 +40,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import javax.servlet.http.Cookie;
+import java.io.UnsupportedEncodingException;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -59,7 +60,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(RestDocumentationExtension.class)
 class UserControllerTest {
 
-    private final String pre = "/api/user";
+    private static final int DEFAULT_PROFILE = 0;
+    private static final int MASK_PROFILE = 1;
+    private static final String pre = "/api/user";
     private RequestFactory requestFactory;
     private UserFactory userFactory;
 
@@ -300,7 +303,7 @@ class UserControllerTest {
     @Transactional
     @DisplayName("반려 사유 반환")
     @WithAuthUser(id = "providerId_" + "test", role = "ROLE_GUEST")
-    void sendLike() throws Exception {
+    void getRejection() throws Exception {
         String reason = "부적절한 프로필입니다.";
         User guest = userFactory.createGuest("test", "test");
         userRepository.save(guest);
@@ -314,5 +317,33 @@ class UserControllerTest {
                 .andReturn();
 
         assertTrue(mvcResult.getResponse().getContentAsString().contains(reason));
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("수정 정보 반환")
+    @WithAuthUser(id = "providerId_" + "test", role = "ROLE_GUEST")
+    void getReSignupInfo() throws Exception {
+        User guest = userFactory.createGuest("test", "test");
+        userRepository.save(guest);
+
+        MvcResult mvcResult = mockMvc.perform(
+                get(pre + "/re-signup")
+                        .header("accessToken", jwtUtil.createAccessToken(guest.getProviderId(), "ROLE_GUEST")))
+                .andExpect(status().isOk())
+                .andDo(document("user/rejection"))
+                .andReturn();
+
+        checkReSignupInfo(guest, mvcResult);
+    }
+
+    private void checkReSignupInfo(User guest, MvcResult mvcResult) throws UnsupportedEncodingException {
+        assertTrue(mvcResult.getResponse().getContentAsString().contains(guest.getName()));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains(guest.getBirth()));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains(String.valueOf(guest.getHeight())));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains(guest.getNickname()));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains(guest.getBio()));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains(guest.getProfiles().get(DEFAULT_PROFILE).getPath()));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains(guest.getProfiles().get(MASK_PROFILE).getPath()));
     }
 }

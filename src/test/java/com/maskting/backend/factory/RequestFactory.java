@@ -14,7 +14,8 @@ public class RequestFactory {
 
     public SignupRequest createSignupRequest() {
         List<MultipartFile> profiles = List.of(
-                new MockMultipartFile("profiles", "test.PNG", MediaType.IMAGE_PNG_VALUE, "test".getBytes())
+                new MockMultipartFile("profiles", "DEFAULT_IMAGE.PNG", MediaType.IMAGE_PNG_VALUE, "DEFAULT_IMAGE".getBytes()),
+                new MockMultipartFile("profiles", "MASK_IMAGE.PNG", MediaType.IMAGE_PNG_VALUE, "MASK_IMAGE".getBytes())
         );
 
         List<String> interests = new ArrayList<>();

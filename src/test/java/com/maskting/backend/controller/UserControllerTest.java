@@ -164,7 +164,8 @@ class UserControllerTest {
 
         mockMvc.perform(
                 multipart(pre + "/signup")
-                        .file((MockMultipartFile) signupRequest.getProfiles().get(0))
+                        .file((MockMultipartFile) signupRequest.getProfiles().get(DEFAULT_PROFILE))
+                        .file((MockMultipartFile) signupRequest.getProfiles().get(MASK_PROFILE))
                         .param("name", signupRequest.getName())
                         .param("email", signupRequest.getEmail())
                         .param("gender", signupRequest.getGender())
@@ -229,7 +230,7 @@ class UserControllerTest {
                                 ,parameterWithName("partnerBodyTypes").description("상대방 선호 체형(List)")
                         )
                         , requestParts(
-                                partWithName("profiles").description("첨부 프로필")
+                                partWithName("profiles").description("첨부 프로필(기본 프로필, 마스크 프로필)")
                         )));
 
         User dbUser = userRepository.findByProviderId(signupRequest.getProviderId());
@@ -266,7 +267,8 @@ class UserControllerTest {
         assertEquals(signupRequest.getReligion(), dbUser.getReligion());
         assertEquals(signupRequest.getBio(), dbUser.getBio());
         assertEquals(signupRequest.getNickname(), dbUser.getNickname());
-        assertTrue(dbUser.getProfiles().get(0).getName().contains("test.PNG"));
+        assertTrue(dbUser.getProfiles().get(DEFAULT_PROFILE).getName().contains("DEFAULT_IMAGE.PNG"));
+        assertTrue(dbUser.getProfiles().get(MASK_PROFILE).getName().contains("MASK_IMAGE.PNG"));
     }
 
     @Test

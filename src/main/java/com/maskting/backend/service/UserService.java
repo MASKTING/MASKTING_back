@@ -273,9 +273,9 @@ public class UserService {
     public void reSignup(org.springframework.security.core.userdetails.User userDetail, ReSignupRequest reSignupRequest) throws IOException {
         User user = getUserByProviderId(userDetail);
         user.reUpdate(reSignupRequest);
-        //이미지 삭제 후 다시 넣기
         deleteProfiles(user);
         user.addProfiles(getProfiles(reSignupRequest.getProfiles()));
+        user.updateSort();
     }
 
     private void deleteProfiles(User user) {

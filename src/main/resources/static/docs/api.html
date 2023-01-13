@@ -500,32 +500,38 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_response_8">RESPONSE</a></li>
 </ul>
 </li>
+<li><a href="#_screening_심사_결과_반환">screening (심사 결과 반환)</a>
+<ul class="sectlevel3">
+<li><a href="#_request_9">REQUEST</a></li>
+<li><a href="#_response_9">RESPONSE</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_admin">Admin</a>
 <ul class="sectlevel2">
 <li><a href="#_guests_페이징_게스트_반환">guests (페이징 게스트 반환)</a>
 <ul class="sectlevel3">
-<li><a href="#_request_9">REQUEST</a></li>
-<li><a href="#_response_9">RESPONSE</a></li>
-</ul>
-</li>
-<li><a href="#_guestswithsearch_검색_페이징_게스트_반환">guestsWithSearch (검색 페이징 게스트 반환)</a>
-<ul class="sectlevel3">
 <li><a href="#_request_10">REQUEST</a></li>
 <li><a href="#_response_10">RESPONSE</a></li>
 </ul>
 </li>
-<li><a href="#_approval_심사_승인">approval (심사 승인)</a>
+<li><a href="#_guestswithsearch_검색_페이징_게스트_반환">guestsWithSearch (검색 페이징 게스트 반환)</a>
 <ul class="sectlevel3">
 <li><a href="#_request_11">REQUEST</a></li>
 <li><a href="#_response_11">RESPONSE</a></li>
 </ul>
 </li>
-<li><a href="#_reject_심사_거절">reject (심사 거절)</a>
+<li><a href="#_approval_심사_승인">approval (심사 승인)</a>
 <ul class="sectlevel3">
 <li><a href="#_request_12">REQUEST</a></li>
 <li><a href="#_response_12">RESPONSE</a></li>
+</ul>
+</li>
+<li><a href="#_reject_심사_거절">reject (심사 거절)</a>
+<ul class="sectlevel3">
+<li><a href="#_request_13">REQUEST</a></li>
+<li><a href="#_response_13">RESPONSE</a></li>
 </ul>
 </li>
 </ul>
@@ -534,32 +540,32 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_user_유저_정보">user (유저 정보)</a>
 <ul class="sectlevel3">
-<li><a href="#_request_13">REQUEST</a></li>
-<li><a href="#_response_13">RESPONSE</a></li>
-</ul>
-</li>
-<li><a href="#_get_feed_피드_얻기">get-feed (피드 얻기)</a>
-<ul class="sectlevel3">
 <li><a href="#_request_14">REQUEST</a></li>
 <li><a href="#_response_14">RESPONSE</a></li>
 </ul>
 </li>
-<li><a href="#_feed_피드_추가">feed (피드 추가)</a>
+<li><a href="#_get_feed_피드_얻기">get-feed (피드 얻기)</a>
 <ul class="sectlevel3">
 <li><a href="#_request_15">REQUEST</a></li>
 <li><a href="#_response_15">RESPONSE</a></li>
 </ul>
 </li>
-<li><a href="#_partner_파트너_매칭">partner (파트너 매칭)</a>
+<li><a href="#_feed_피드_추가">feed (피드 추가)</a>
 <ul class="sectlevel3">
 <li><a href="#_request_16">REQUEST</a></li>
 <li><a href="#_response_16">RESPONSE</a></li>
 </ul>
 </li>
-<li><a href="#_like_좋아요_전송">like (좋아요 전송)</a>
+<li><a href="#_partner_파트너_매칭">partner (파트너 매칭)</a>
 <ul class="sectlevel3">
 <li><a href="#_request_17">REQUEST</a></li>
 <li><a href="#_response_17">RESPONSE</a></li>
+</ul>
+</li>
+<li><a href="#_like_좋아요_전송">like (좋아요 전송)</a>
+<ul class="sectlevel3">
+<li><a href="#_request_18">REQUEST</a></li>
+<li><a href="#_response_18">RESPONSE</a></li>
 </ul>
 </li>
 </ul>
@@ -568,14 +574,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_rooms_전체_채팅방_조회">rooms (전체 채팅방 조회)</a>
 <ul class="sectlevel3">
-<li><a href="#_request_18">REQUEST</a></li>
-<li><a href="#_response_18">RESPONSE</a></li>
+<li><a href="#_request_19">REQUEST</a></li>
+<li><a href="#_response_19">RESPONSE</a></li>
 </ul>
 </li>
 <li><a href="#_room_특정_채팅방_조회">room (특정 채팅방 조회)</a>
 <ul class="sectlevel3">
-<li><a href="#_request_19">REQUEST</a></li>
-<li><a href="#_response_19">RESPONSE</a></li>
+<li><a href="#_request_20">REQUEST</a></li>
+<li><a href="#_response_20">RESPONSE</a></li>
 </ul>
 </li>
 </ul>
@@ -595,7 +601,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/auth/silent-refresh HTTP/1.1
 Host: localhost:8080
-Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5ODZlODg3OC1jMmJhLTQ5YjUtOGFhYy1lMzkwNmUyNTRmZDIiLCJpYXQiOjE2NzMyNzkzODgsImV4cCI6MTY3NDQ4ODk4OH0.kf_vY8r3YUS4C0sXL0R6FDeAGs_TA99l1zK6Hr8EpPU</code></pre>
+Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNjE1MzJkMy1lYzVmLTQ4ZDgtYmRiOS01YTM0ODViN2U5ODYiLCJpYXQiOjE2NzM2MTI3MzQsImV4cCI6MTY3NDgyMjMzNH0.FdyIz-Nge9ACJslFnccxg5GuSluNao1ARAL87RexpSQ</code></pre>
 </div>
 </div>
 </div>
@@ -604,7 +610,7 @@ Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5ODZlODg3OC1jMmJhLTQ5YjUtOG
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX-yVjOy9nOyfgeydtCDrnbzsnbTslrgiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjczMjc5Mzg5LCJleHAiOjE2NzMyODExODl9.2--Fo5kIPqCwebAA6ISR-8DadGC7i1W0pQjc0Q6dDCQ</code></pre>
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX-yVjOy9nOyfgeydtCDrnbzsnbTslrgiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjczNjEyNzM1LCJleHAiOjE2NzM2MTQ1MzV9.nzwDpAR8Eax32mx58-TMlyvWDWgh1meKM5wydqNOkSY</code></pre>
 </div>
 </div>
 </div>
@@ -841,8 +847,8 @@ false</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0UHJvdmlkZXJJZCIsInJvbGUiOiJST0xFX0dVRVNUIiwiaWF0IjoxNjczMjc5NDAxLCJleHAiOjE2NzMyODEyMDF9.mQAMiX-orSxH5F0qYV2SRxqK1XGmyDbVyZbprdUmVyc
-Set-Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhMjk1MmM4Yy03NjUwLTQ5YzUtOTVlZC1iYTA5MjkzNmI5NDEiLCJpYXQiOjE2NzMyNzk0MDEsImV4cCI6MTY3NDQ4OTAwMX0.xnqFYk2mPjLSxjnZEBbVbJh5NNkzCe7OIsbavZa_XSU; Path=/; Max-Age=1209600000; Expires=Mon, 09 May 2061 15:50:01 GMT; HttpOnly</code></pre>
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0UHJvdmlkZXJJZCIsInJvbGUiOiJST0xFX0dVRVNUIiwiaWF0IjoxNjczNjEyNzQ2LCJleHAiOjE2NzM2MTQ1NDZ9.6A5Twt8UukyDOeUSGyExpDzCKKKQNb9DngFvzDOW3Ek
+Set-Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1MjM3MTUwMC03YTg0LTQ1M2QtYTAxZS0wZjIzMTgzYzRiYjYiLCJpYXQiOjE2NzM2MTI3NDYsImV4cCI6MTY3NDgyMjM0Nn0.jJWuk5jYtdQ8WSVA1SCHgtgQeJLyX7XYknMZPQ7Y3Wg; Path=/; Max-Age=1209600000; Expires=Fri, 13 May 2061 12:25:46 GMT; HttpOnly</code></pre>
 </div>
 </div>
 </div>
@@ -877,7 +883,7 @@ Set-Cookie: refreshToken=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/user/rejection HTTP/1.1
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9HVUVTVCIsImlhdCI6MTY3MzI3OTQwMSwiZXhwIjoxNjczMjgxMjAxfQ.Yti8Dwvb0S6JBq77PAjMUH5lfaURmuCldMl2KR8uCSQ
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9HVUVTVCIsImlhdCI6MTY3MzYxMjc0NiwiZXhwIjoxNjczNjE0NTQ2fQ.LOnU9n8PIoT8TrIzpLeiui-mXBEoYKajLTxJUELBjsU
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -902,7 +908,7 @@ Content-Length: 45
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/user/re-signup HTTP/1.1
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9HVUVTVCIsImlhdCI6MTY3MzI3OTQwMiwiZXhwIjoxNjczMjgxMjAyfQ.yLTAb2SQpr4E1LPOcWcLYbRSEWIY_J9axooXmisb9mE
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9HVUVTVCIsImlhdCI6MTY3MzYxMjc0NiwiZXhwIjoxNjczNjE0NTQ2fQ.LOnU9n8PIoT8TrIzpLeiui-mXBEoYKajLTxJUELBjsU
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -929,7 +935,7 @@ Content-Length: 189
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ http --multipart POST 'http://localhost:8080/api/user/re-signup' \
     'profiles'@'DEFAULT_IMAGE.PNG' \
     'profiles'@'MASK_IMAGE.PNG' \
-    'accessToken:eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX-ybg-qzoOyeiOuKlCDrnbzsnbTslrgiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjczMjc5NDAxLCJleHAiOjE2NzMyODEyMDF9.ojw6nEOHg6FpS30DpMn5a3VJqd-yOBUOVbGj8Fkk3RM' \
+    'accessToken:eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX-ybg-qzoOyeiOuKlCDrnbzsnbTslrgiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjczNjEyNzQ2LCJleHAiOjE2NzM2MTQ1NDZ9.nqat7BKuaw_BCVSq5sZYRoJwDPRyjBuo0BDIA3Hyq8w' \
     'name=홍길동' \
     'birth=19921123' \
     'height=181' \
@@ -999,6 +1005,44 @@ Content-Length: 189
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_screening_심사_결과_반환"><a class="link" href="#_screening_심사_결과_반환">screening (심사 결과 반환)</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>pass(통과) &#8594; 홈으로</p>
+</li>
+<li>
+<p>wait(대기) &#8594; 알람(대기중) 띄우고 페이지 그대로</p>
+</li>
+<li>
+<p>fail(실패) &#8594; 실패 페이지로</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="_request_9"><a class="link" href="#_request_9">REQUEST</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/user/screening HTTP/1.1
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9HVUVTVCIsImlhdCI6MTY3MzYxMjc0NiwiZXhwIjoxNjczNjE0NTQ2fQ.LOnU9n8PIoT8TrIzpLeiui-mXBEoYKajLTxJUELBjsU
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_9"><a class="link" href="#_response_9">RESPONSE</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: text/plain;charset=UTF-8
+Content-Length: 4
+
+wait</code></pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1007,66 +1051,11 @@ Content-Length: 189
 <div class="sect2">
 <h3 id="_guests_페이징_게스트_반환"><a class="link" href="#_guests_페이징_게스트_반환">guests (페이징 게스트 반환)</a></h3>
 <div class="sect3">
-<h4 id="_request_9"><a class="link" href="#_request_9">REQUEST</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /admin/guests?search%5Bvalue%5D=&amp;draw=1&amp;start=0&amp;length=10&amp;search%5Bvalue%5D= HTTP/1.1
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY3MzI3OTM4NywiZXhwIjoxNjczMjgxMTg3fQ.S01YWgwP1fHCKDNSrJtJDSDlvoISRq0XinFClFC9Hcw
-Host: localhost:8080</code></pre>
-</div>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>draw</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">몇번째 draw</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>start</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">시작(offset)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>length</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">길이(limit)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>search[value]</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">검색값</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_response_9"><a class="link" href="#_response_9">RESPONSE</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-Content-Type: application/json
-Content-Length: 1418
-
-{"draw":1,"recordsTotal":16,"recordsFiltered":16,"data":[{"name":"First","birth":"19990815","height":181,"phone":"01012345678","nickname":"user0","bio":"자기소개","profiles":["x","x","x"]},{"name":"First","birth":"19990815","height":181,"phone":"01012345678","nickname":"user1","bio":"자기소개","profiles":["x","x","x"]},{"name":"First","birth":"19990815","height":181,"phone":"01012345678","nickname":"user2","bio":"자기소개","profiles":["x","x","x"]},{"name":"First","birth":"19990815","height":181,"phone":"01012345678","nickname":"user3","bio":"자기소개","profiles":["x","x","x"]},{"name":"First","birth":"19990815","height":181,"phone":"01012345678","nickname":"user4","bio":"자기소개","profiles":["x","x","x"]},{"name":"First","birth":"19990815","height":181,"phone":"01012345678","nickname":"user5","bio":"자기소개","profiles":["x","x","x"]},{"name":"First","birth":"19990815","height":181,"phone":"01012345678","nickname":"user6","bio":"자기소개","profiles":["x","x","x"]},{"name":"First","birth":"19990815","height":181,"phone":"01012345678","nickname":"user7","bio":"자기소개","profiles":["x","x","x"]},{"name":"First","birth":"19990815","height":181,"phone":"01012345678","nickname":"user8","bio":"자기소개","profiles":["x","x","x"]},{"name":"First","birth":"19990815","height":181,"phone":"01012345678","nickname":"user9","bio":"자기소개","profiles":["x","x","x"]}]}</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_guestswithsearch_검색_페이징_게스트_반환"><a class="link" href="#_guestswithsearch_검색_페이징_게스트_반환">guestsWithSearch (검색 페이징 게스트 반환)</a></h3>
-<div class="sect3">
 <h4 id="_request_10"><a class="link" href="#_request_10">REQUEST</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /admin/guests?search%5Bvalue%5D=Second&amp;draw=1&amp;start=0&amp;length=10 HTTP/1.1
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY3MzI3OTM4OCwiZXhwIjoxNjczMjgxMTg4fQ._PuAxvy_GcgUReUlUH3uRHW26JpqYcdOHd6o5Xy9RRM
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /admin/guests?search%5Bvalue%5D=&amp;draw=1&amp;start=0&amp;length=10&amp;search%5Bvalue%5D= HTTP/1.1
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY3MzYxMjczNCwiZXhwIjoxNjczNjE0NTM0fQ.FcYuY5A11qQj_qzOaXyGLgXHQe6oh6tfkX4KGvlWQLs
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -1107,6 +1096,61 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
+Content-Length: 1418
+
+{"draw":1,"recordsTotal":16,"recordsFiltered":16,"data":[{"name":"First","birth":"19990815","height":181,"phone":"01012345678","nickname":"user0","bio":"자기소개","profiles":["x","x","x"]},{"name":"First","birth":"19990815","height":181,"phone":"01012345678","nickname":"user1","bio":"자기소개","profiles":["x","x","x"]},{"name":"First","birth":"19990815","height":181,"phone":"01012345678","nickname":"user2","bio":"자기소개","profiles":["x","x","x"]},{"name":"First","birth":"19990815","height":181,"phone":"01012345678","nickname":"user3","bio":"자기소개","profiles":["x","x","x"]},{"name":"First","birth":"19990815","height":181,"phone":"01012345678","nickname":"user4","bio":"자기소개","profiles":["x","x","x"]},{"name":"First","birth":"19990815","height":181,"phone":"01012345678","nickname":"user5","bio":"자기소개","profiles":["x","x","x"]},{"name":"First","birth":"19990815","height":181,"phone":"01012345678","nickname":"user6","bio":"자기소개","profiles":["x","x","x"]},{"name":"First","birth":"19990815","height":181,"phone":"01012345678","nickname":"user7","bio":"자기소개","profiles":["x","x","x"]},{"name":"First","birth":"19990815","height":181,"phone":"01012345678","nickname":"user8","bio":"자기소개","profiles":["x","x","x"]},{"name":"First","birth":"19990815","height":181,"phone":"01012345678","nickname":"user9","bio":"자기소개","profiles":["x","x","x"]}]}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_guestswithsearch_검색_페이징_게스트_반환"><a class="link" href="#_guestswithsearch_검색_페이징_게스트_반환">guestsWithSearch (검색 페이징 게스트 반환)</a></h3>
+<div class="sect3">
+<h4 id="_request_11"><a class="link" href="#_request_11">REQUEST</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /admin/guests?search%5Bvalue%5D=Second&amp;draw=1&amp;start=0&amp;length=10 HTTP/1.1
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY3MzYxMjczNCwiZXhwIjoxNjczNjE0NTM0fQ.FcYuY5A11qQj_qzOaXyGLgXHQe6oh6tfkX4KGvlWQLs
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>draw</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">몇번째 draw</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>start</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">시작(offset)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>length</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">길이(limit)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>search[value]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">검색값</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_response_11"><a class="link" href="#_response_11">RESPONSE</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
 Content-Length: 746
 
 {"draw":1,"recordsTotal":5,"recordsFiltered":5,"data":[{"name":"Second","birth":"19990815","height":181,"phone":"01012345678","nickname":"user10","bio":"자기소개","profiles":["x","x","x"]},{"name":"Second","birth":"19990815","height":181,"phone":"01012345678","nickname":"user11","bio":"자기소개","profiles":["x","x","x"]},{"name":"Second","birth":"19990815","height":181,"phone":"01012345678","nickname":"user12","bio":"자기소개","profiles":["x","x","x"]},{"name":"Second","birth":"19990815","height":181,"phone":"01012345678","nickname":"user13","bio":"자기소개","profiles":["x","x","x"]},{"name":"Second","birth":"19990815","height":181,"phone":"01012345678","nickname":"user14","bio":"자기소개","profiles":["x","x","x"]}]}</code></pre>
@@ -1117,17 +1161,17 @@ Content-Length: 746
 <div class="sect2">
 <h3 id="_approval_심사_승인"><a class="link" href="#_approval_심사_승인">approval (심사 승인)</a></h3>
 <div class="sect3">
-<h4 id="_request_11"><a class="link" href="#_request_11">REQUEST</a></h4>
+<h4 id="_request_12"><a class="link" href="#_request_12">REQUEST</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /admin/approval/testNickname HTTP/1.1
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY3MzI3OTM4OCwiZXhwIjoxNjczMjgxMTg4fQ._PuAxvy_GcgUReUlUH3uRHW26JpqYcdOHd6o5Xy9RRM
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY3MzYxMjczNCwiZXhwIjoxNjczNjE0NTM0fQ.FcYuY5A11qQj_qzOaXyGLgXHQe6oh6tfkX4KGvlWQLs
 Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_11"><a class="link" href="#_response_11">RESPONSE</a></h4>
+<h4 id="_response_12"><a class="link" href="#_response_12">RESPONSE</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 302 Found
@@ -1140,17 +1184,17 @@ Location: /admin</code></pre>
 <div class="sect2">
 <h3 id="_reject_심사_거절"><a class="link" href="#_reject_심사_거절">reject (심사 거절)</a></h3>
 <div class="sect3">
-<h4 id="_request_12"><a class="link" href="#_request_12">REQUEST</a></h4>
+<h4 id="_request_13"><a class="link" href="#_request_13">REQUEST</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ http --form POST 'http://localhost:8080/admin/reject/testNickname' \
-    'accessToken:eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY3MzI3OTM4NywiZXhwIjoxNjczMjgxMTg3fQ.S01YWgwP1fHCKDNSrJtJDSDlvoISRq0XinFClFC9Hcw' \
+    'accessToken:eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pblByb3ZpZGVySWQiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY3MzYxMjczMywiZXhwIjoxNjczNjE0NTMzfQ.Ln6OAAYVKGqaasmZw9tV__N9V1NtCdxH0CT1fPd3ELA' \
     'reason=프로필이 부적절합니다.'</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_12"><a class="link" href="#_response_12">RESPONSE</a></h4>
+<h4 id="_response_13"><a class="link" href="#_response_13">RESPONSE</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 302 Found
@@ -1168,17 +1212,17 @@ Location: /admin</code></pre>
 <div class="sect2">
 <h3 id="_user_유저_정보"><a class="link" href="#_user_유저_정보">user (유저 정보)</a></h3>
 <div class="sect3">
-<h4 id="_request_13"><a class="link" href="#_request_13">REQUEST</a></h4>
+<h4 id="_request_14"><a class="link" href="#_request_14">REQUEST</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/user HTTP/1.1
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjczMjc5NDAxLCJleHAiOjE2NzMyODEyMDF9.ox0qK1mJG3oUWLhTjPpcBFTlX6B4HEj3OcJ_p5V_DUA
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjczNjEyNzQ1LCJleHAiOjE2NzM2MTQ1NDV9.schZ-MEorFQ4qINBfBHHmG_GbM_OiybDvBEzb1WHhrQ
 Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_13"><a class="link" href="#_response_13">RESPONSE</a></h4>
+<h4 id="_response_14"><a class="link" href="#_response_14">RESPONSE</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
@@ -1193,17 +1237,17 @@ Content-Length: 70
 <div class="sect2">
 <h3 id="_get_feed_피드_얻기"><a class="link" href="#_get_feed_피드_얻기">get-feed (피드 얻기)</a></h3>
 <div class="sect3">
-<h4 id="_request_14"><a class="link" href="#_request_14">REQUEST</a></h4>
+<h4 id="_request_15"><a class="link" href="#_request_15">REQUEST</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/feed HTTP/1.1
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjczMjc5NDAxLCJleHAiOjE2NzMyODEyMDF9.ox0qK1mJG3oUWLhTjPpcBFTlX6B4HEj3OcJ_p5V_DUA
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjczNjEyNzQ1LCJleHAiOjE2NzM2MTQ1NDV9.schZ-MEorFQ4qINBfBHHmG_GbM_OiybDvBEzb1WHhrQ
 Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_14"><a class="link" href="#_response_14">RESPONSE</a></h4>
+<h4 id="_response_15"><a class="link" href="#_response_15">RESPONSE</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
@@ -1218,12 +1262,12 @@ Content-Length: 56
 <div class="sect2">
 <h3 id="_feed_피드_추가"><a class="link" href="#_feed_피드_추가">feed (피드 추가)</a></h3>
 <div class="sect3">
-<h4 id="_request_15"><a class="link" href="#_request_15">REQUEST</a></h4>
+<h4 id="_request_16"><a class="link" href="#_request_16">REQUEST</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ http --multipart POST 'http://localhost:8080/api/feed' \
     'feed'@'test.PNG' \
-    'accessToken:eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjczMjc5NDAxLCJleHAiOjE2NzMyODEyMDF9.ox0qK1mJG3oUWLhTjPpcBFTlX6B4HEj3OcJ_p5V_DUA'</code></pre>
+    'accessToken:eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjczNjEyNzQ1LCJleHAiOjE2NzM2MTQ1NDV9.schZ-MEorFQ4qINBfBHHmG_GbM_OiybDvBEzb1WHhrQ'</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
@@ -1246,7 +1290,7 @@ Content-Length: 56
 </table>
 </div>
 <div class="sect3">
-<h4 id="_response_15"><a class="link" href="#_response_15">RESPONSE</a></h4>
+<h4 id="_response_16"><a class="link" href="#_response_16">RESPONSE</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK</code></pre>
@@ -1257,24 +1301,24 @@ Content-Length: 56
 <div class="sect2">
 <h3 id="_partner_파트너_매칭"><a class="link" href="#_partner_파트너_매칭">partner (파트너 매칭)</a></h3>
 <div class="sect3">
-<h4 id="_request_16"><a class="link" href="#_request_16">REQUEST</a></h4>
+<h4 id="_request_17"><a class="link" href="#_request_17">REQUEST</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/partner HTTP/1.1
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjczMjc5NDAxLCJleHAiOjE2NzMyODEyMDF9.ox0qK1mJG3oUWLhTjPpcBFTlX6B4HEj3OcJ_p5V_DUA
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjczNjEyNzQ1LCJleHAiOjE2NzM2MTQ1NDV9.schZ-MEorFQ4qINBfBHHmG_GbM_OiybDvBEzb1WHhrQ
 Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_16"><a class="link" href="#_response_16">RESPONSE</a></h4>
+<h4 id="_response_17"><a class="link" href="#_response_17">RESPONSE</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 169
+Content-Length: 207
 
-[{"profile":"https://amazon.com/DEFAULT_PROFILE.png","bio":"자기소개","feed":[]},{"profile":"https://amazon.com/DEFAULT_PROFILE.png","bio":"자기소개","feed":[]}]</code></pre>
+[{"nickname":"test3","profile":"https://amazon.com/DEFAULT_PROFILE.png","bio":"자기소개","feed":[]},{"nickname":"test2","profile":"https://amazon.com/DEFAULT_PROFILE.png","bio":"자기소개","feed":[]}]</code></pre>
 </div>
 </div>
 </div>
@@ -1282,12 +1326,12 @@ Content-Length: 169
 <div class="sect2">
 <h3 id="_like_좋아요_전송"><a class="link" href="#_like_좋아요_전송">like (좋아요 전송)</a></h3>
 <div class="sect3">
-<h4 id="_request_17"><a class="link" href="#_request_17">REQUEST</a></h4>
+<h4 id="_request_18"><a class="link" href="#_request_18">REQUEST</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/like HTTP/1.1
 Content-Type: application/json
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjczMjc5NDAxLCJleHAiOjE2NzMyODEyMDF9.ox0qK1mJG3oUWLhTjPpcBFTlX6B4HEj3OcJ_p5V_DUA
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX3Rlc3QiLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjczNjEyNzQ1LCJleHAiOjE2NzM2MTQ1NDV9.schZ-MEorFQ4qINBfBHHmG_GbM_OiybDvBEzb1WHhrQ
 Content-Length: 20
 Host: localhost:8080
 
@@ -1296,7 +1340,7 @@ Host: localhost:8080
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_17"><a class="link" href="#_response_17">RESPONSE</a></h4>
+<h4 id="_response_18"><a class="link" href="#_response_18">RESPONSE</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK</code></pre>
@@ -1312,17 +1356,17 @@ Host: localhost:8080
 <div class="sect2">
 <h3 id="_rooms_전체_채팅방_조회"><a class="link" href="#_rooms_전체_채팅방_조회">rooms (전체 채팅방 조회)</a></h3>
 <div class="sect3">
-<h4 id="_request_18"><a class="link" href="#_request_18">REQUEST</a></h4>
+<h4 id="_request_19"><a class="link" href="#_request_19">REQUEST</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /chat/rooms HTTP/1.1
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX2phc29uIiwicm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTY3MzI3OTM5NCwiZXhwIjoxNjczMjgxMTk0fQ.eNcb0odrpCt0O05jfKXWjWdMh0pEsULF5-VnB5w9nbU
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX2phc29uIiwicm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTY3MzYxMjc0MCwiZXhwIjoxNjczNjE0NTQwfQ.WLovC6isiBFEtlR56AG3STogCpQ3G7Csn4EpFWFgBZo
 Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_18"><a class="link" href="#_response_18">RESPONSE</a></h4>
+<h4 id="_response_19"><a class="link" href="#_response_19">RESPONSE</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
@@ -1337,24 +1381,24 @@ Content-Length: 175
 <div class="sect2">
 <h3 id="_room_특정_채팅방_조회"><a class="link" href="#_room_특정_채팅방_조회">room (특정 채팅방 조회)</a></h3>
 <div class="sect3">
-<h4 id="_request_19"><a class="link" href="#_request_19">REQUEST</a></h4>
+<h4 id="_request_20"><a class="link" href="#_request_20">REQUEST</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /chat/room/2 HTTP/1.1
-accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX2phc29uIiwicm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTY3MzI3OTM5NCwiZXhwIjoxNjczMjgxMTk0fQ.eNcb0odrpCt0O05jfKXWjWdMh0pEsULF5-VnB5w9nbU
+accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm92aWRlcklkX2phc29uIiwicm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTY3MzYxMjc0MCwiZXhwIjoxNjczNjE0NTQwfQ.WLovC6isiBFEtlR56AG3STogCpQ3G7Csn4EpFWFgBZo
 Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_19"><a class="link" href="#_response_19">RESPONSE</a></h4>
+<h4 id="_response_20"><a class="link" href="#_response_20">RESPONSE</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
 Content-Length: 240
 
-{"profile":"https://amazon.com/DEFAULT_PROFILE.png","roomName":"jason","remainingTime":72,"messages":[{"nickname":"gu","content":"안녕","createdAt":"오전 0:49"},{"nickname":"gu","content":"이름이 뭐야?","createdAt":"오전 0:49"}]}</code></pre>
+{"profile":"https://amazon.com/DEFAULT_PROFILE.png","roomName":"jason","remainingTime":72,"messages":[{"nickname":"gu","content":"안녕","createdAt":"오후 9:25"},{"nickname":"gu","content":"이름이 뭐야?","createdAt":"오후 9:25"}]}</code></pre>
 </div>
 </div>
 </div>
@@ -1365,7 +1409,7 @@ Content-Length: 240
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-01-10 00:48:26 +0900
+Last updated 2023-01-13 21:24:29 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

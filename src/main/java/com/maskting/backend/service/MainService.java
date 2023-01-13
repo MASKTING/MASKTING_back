@@ -220,7 +220,7 @@ public class MainService {
     }
 
     private PartnerResponse getPartnerResponse(User partner) {
-        return new PartnerResponse(getProfile(partner), partner.getBio(),
+        return new PartnerResponse(partner.getNickname(), getProfile(partner), partner.getBio(),
                 getFeeds(partner));
     }
 

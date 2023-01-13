@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class PartnerResponse {
 
+    private String nickname;
 
     private String profile;
 

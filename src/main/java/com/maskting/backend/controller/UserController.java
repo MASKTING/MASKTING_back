@@ -58,4 +58,9 @@ public class UserController {
         userService.reSignup(user, reSignupRequest);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/screening")
+    public ResponseEntity<?> getScreeningResult(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user) {
+        return ResponseEntity.ok(userService.getScreeningResult(user));
+    }
 }

@@ -283,4 +283,23 @@ public class UserService {
             s3Uploader.delete(profile.getName());
         }
     }
+
+    public String getScreeningResult(org.springframework.security.core.userdetails.User userDetail) {
+        User user = getUserByProviderId(userDetail);
+        return getResultByUserType(user);
+    }
+
+    private String getResultByUserType(User user) {
+        if (user.getRoleType().equals(RoleType.USER)){
+            return ScreeningResult.PASS.getName();
+        }
+        if (isWait(user)) {
+            return ScreeningResult.WAIT.getName();
+        }
+        return ScreeningResult.FAIl.getName();
+    }
+
+    private boolean isWait(User user) {
+        return user.getRoleType().equals(RoleType.GUEST) && user.isSort();
+    }
 }

@@ -102,6 +102,19 @@ include::{snippets}/user/re-signup(post)/request-parts.adoc[]
 
 include::{snippets}/user/re-signup(post)/http-response.adoc[]
 
+=== screening (심사 결과 반환)
+- pass(통과) -> 홈으로
+- wait(대기) -> 알람(대기중) 띄우고 페이지 그대로
+- fail(실패) -> 실패 페이지로
+
+==== REQUEST
+
+include::{snippets}/user/screening/http-request.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/user/screening/http-response.adoc[]
+
 ## Admin
 
 //=== home (관리자 홈)

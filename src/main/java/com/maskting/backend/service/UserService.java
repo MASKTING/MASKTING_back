@@ -273,14 +273,33 @@ public class UserService {
     public void reSignup(org.springframework.security.core.userdetails.User userDetail, ReSignupRequest reSignupRequest) throws IOException {
         User user = getUserByProviderId(userDetail);
         user.reUpdate(reSignupRequest);
-        //이미지 삭제 후 다시 넣기
         deleteProfiles(user);
         user.addProfiles(getProfiles(reSignupRequest.getProfiles()));
+        user.updateSort();
     }
 
     private void deleteProfiles(User user) {
         for (Profile profile : user.getProfiles()) {
             s3Uploader.delete(profile.getName());
         }
+    }
+
+    public String getScreeningResult(org.springframework.security.core.userdetails.User userDetail) {
+        User user = getUserByProviderId(userDetail);
+        return getResultByUserType(user);
+    }
+
+    private String getResultByUserType(User user) {
+        if (user.getRoleType().equals(RoleType.USER)){
+            return ScreeningResult.PASS.getName();
+        }
+        if (isWait(user)) {
+            return ScreeningResult.WAIT.getName();
+        }
+        return ScreeningResult.FAIl.getName();
+    }
+
+    private boolean isWait(User user) {
+        return user.getRoleType().equals(RoleType.GUEST) && user.isSort();
     }
 }

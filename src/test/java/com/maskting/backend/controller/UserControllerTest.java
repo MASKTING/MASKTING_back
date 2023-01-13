@@ -42,7 +42,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import javax.servlet.http.Cookie;
-import javax.validation.constraints.NotBlank;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.List;
@@ -425,5 +424,22 @@ class UserControllerTest {
                 .path(path)
                 .name(name)
                 .build();
+    }
+
+    @Test
+    @DisplayName("심사 결과 반환")
+    @WithAuthUser(id = "providerId_" + "test", role = "ROLE_GUEST")
+    void getScreeningResult() throws Exception {
+        User guest = userFactory.createGuest("test", "test");
+        userRepository.save(guest);
+
+        MvcResult mvcResult = mockMvc.perform(
+                get(pre + "/screening")
+                        .header("accessToken", jwtUtil.createAccessToken(guest.getProviderId(), "ROLE_GUEST")))
+                .andExpect(status().isOk())
+                .andDo(document("user/screening"))
+                .andReturn();
+
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("wait"));
     }
 }

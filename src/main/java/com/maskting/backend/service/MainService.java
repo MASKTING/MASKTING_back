@@ -12,6 +12,7 @@ import com.maskting.backend.repository.FeedRepository;
 import com.maskting.backend.repository.UserRepository;
 import com.maskting.backend.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -92,8 +93,16 @@ public class MainService {
     }
 
     private void updateUserMatching(User user, List<User> matches) {
-        user.updateMatches(matches);
+        user.updateMatches(getPartners(matches));
         user.updateLatest();
+    }
+
+    private List<User> getPartners(List<User> matches) {
+        List<User> partners = new ArrayList<>();
+        for (User match : matches) {
+            partners.add((User) Hibernate.unproxy(match));
+        }
+        return partners;
     }
 
     private List<PartnerInfo> calculateScore(User user, List<User> partners) {

@@ -93,7 +93,7 @@ public class User extends BaseTimeEntity{
     private User match;
 
     @OneToMany(mappedBy = "match")
-    private List<User> matches;
+    private List<User> matches = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EXCLUSION_ID")
@@ -174,7 +174,6 @@ public class User extends BaseTimeEntity{
     }
 
     public void updateMatches(List<User> partners) {
-        matches = new ArrayList<>();
         for (User user : partners) {
             matches.add(user);
             user.updateMatch(this);

@@ -8,6 +8,7 @@ import com.maskting.backend.domain.User;
 import com.maskting.backend.dto.request.SendLikeRequest;
 import com.maskting.backend.factory.UserFactory;
 import com.maskting.backend.repository.FeedRepository;
+import com.maskting.backend.repository.FollowRepository;
 import com.maskting.backend.repository.UserRepository;
 import com.maskting.backend.util.JwtUtil;
 import com.maskting.backend.util.S3MockConfig;
@@ -67,6 +68,9 @@ class MainControllerTest {
     private FeedRepository feedRepository;
 
     @Autowired
+    private FollowRepository followRepository;
+
+    @Autowired
     ObjectMapper objectMapper;
 
     @BeforeEach
@@ -82,6 +86,7 @@ class MainControllerTest {
     void tearDown() {
         s3Mock.stop();
         feedRepository.deleteAll();
+        followRepository.deleteAll();
         userRepository.deleteAll();
     }
 
@@ -212,6 +217,6 @@ class MainControllerTest {
                 .andExpect(status().isOk())
                 .andDo(document("main/like"));
 
-        assertTrue(user.getLikes().contains(partner));
+        assertNotNull(followRepository.findByFollowingAndFollower(user.getId(), partner.getId()));
     }
 }

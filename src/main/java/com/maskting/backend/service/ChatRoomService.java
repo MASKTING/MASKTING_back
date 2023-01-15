@@ -104,7 +104,7 @@ public class ChatRoomService {
     private com.maskting.backend.domain.User getPartner(Long id, ChatRoom chatRoom) {
         return chatRoom.getChatUsers()
                 .stream()
-                .filter(r -> r.getId() != id)
+                .filter(r -> r.getUser().getId() != id)
                 .findFirst()
                 .orElseThrow()
                 .getUser();

@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
@@ -104,12 +103,11 @@ public class User extends BaseTimeEntity{
 
     private boolean latest;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "LIKE_ID")
-    private User like;
+    @OneToMany(mappedBy = "following")
+    private List<Follow> following = new ArrayList<>();
 
-    @OneToMany(mappedBy = "like")
-    private List<User> likes = new ArrayList<>();
+    @OneToMany(mappedBy = "follower")
+    private List<Follow> follower = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     private List<ChatUser> chatUsers = new ArrayList<>();
@@ -200,13 +198,8 @@ public class User extends BaseTimeEntity{
         exclusion = user;
     }
 
-    public void addLike(User receiver) {
-        likes.add(receiver);
-        receiver.updateLike(this);
-    }
-
-    public void updateLike(User user) {
-        like = user;
+    public void addLike(Follow follow) {
+        following.add(follow);
     }
 
     public void updateRejection(String reason) {

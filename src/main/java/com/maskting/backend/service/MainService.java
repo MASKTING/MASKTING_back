@@ -9,6 +9,7 @@ import com.maskting.backend.dto.request.ChatMessageRequest;
 import com.maskting.backend.dto.response.*;
 import com.maskting.backend.dto.request.FeedRequest;
 import com.maskting.backend.repository.FeedRepository;
+import com.maskting.backend.repository.FollowRepository;
 import com.maskting.backend.repository.UserRepository;
 import com.maskting.backend.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,6 @@ import org.hibernate.Hibernate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -32,6 +32,7 @@ public class MainService {
     private final ChatRoomService chatRoomService;
     private final ChatUserService chatUserService;
     private final ChatService chatService;
+    private final FollowRepository followRepository;
 
     @Transactional
     public Feed addFeed(org.springframework.security.core.userdetails.User userDetail, FeedRequest feedRequest) throws IOException {
@@ -248,12 +249,28 @@ public class MainService {
         User sender = getUserByProviderId(userDetail);
         User receiver = userRepository.findByNickname(nickname).orElseThrow(NoNicknameException::new);
 
-        if (existLike(sender, receiver))
+        if (existLike(sender, receiver)) {
             throw new ExistLikeException();
-        sender.addLike(receiver);
-
-        if (isChatable(sender, receiver))
+        }
+        processLike(sender, receiver);
+        if (isChatable(sender, receiver)) {
             openChat(sender, receiver);
+        }
+
+    }
+
+    private void processLike(User sender, User receiver) {
+        Follow follow = buildLike(sender, receiver);
+        sender.addLike(follow);
+        follow.updateUser(sender, receiver);
+        followRepository.save(follow);
+    }
+
+    private Follow buildLike(User sender, User receiver) {
+        return Follow.builder()
+                .following(sender)
+                .follower(receiver)
+                .build();
     }
 
     private void openChat(User sender, User receiver) {
@@ -264,11 +281,11 @@ public class MainService {
     }
 
     private boolean existLike(User sender, User receiver) {
-        return sender.getLikes().contains(receiver);
+        return followRepository.findByFollowingAndFollower(sender.getId(), receiver.getId()).isPresent();
     }
 
     private boolean isChatable(User sender, User receiver) {
-        return receiver.getLikes().contains(sender);
+        return followRepository.findByFollowingAndFollower(receiver.getId(), sender.getId()).isPresent();
     }
 
     public UserResponse getUser(org.springframework.security.core.userdetails.User userDetail) {

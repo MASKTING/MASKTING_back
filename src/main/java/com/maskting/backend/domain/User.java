@@ -93,12 +93,11 @@ public class User extends BaseTimeEntity{
     @OneToMany(mappedBy = "passiveMatcher")
     private List<Matcher> passiveMatcher = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "EXCLUSION_ID")
-    private User exclusion;
+    @OneToMany(mappedBy = "activeExclusioner")
+    private List<Exclusion> activeExclusioner = new ArrayList<>();
 
-    @OneToMany(mappedBy = "exclusion")
-    private List<User> exclusions = new ArrayList<>();
+    @OneToMany(mappedBy = "passiveExclusioner")
+    private List<Exclusion> passiveExclusioner = new ArrayList<>();
 
     private boolean latest;
 

@@ -32,6 +32,7 @@ public class MainService {
     private final ChatService chatService;
     private final FollowRepository followRepository;
     private final MatcherRepository matcherRepository;
+    private final ExclusionRepository exclusionRepository;
 
     @Transactional
     public Feed addFeed(org.springframework.security.core.userdetails.User userDetail, FeedRequest feedRequest) throws IOException {
@@ -91,9 +92,26 @@ public class MainService {
     }
 
     private void addExclusions(User user) {
-        if (!user.getMatches().isEmpty()) {
-            user.updateExclusions(user.getMatches());
+        List<Matcher> matchers = user.getActiveMatcher();
+        if (!matchers.isEmpty()) {
+            updateExclusions(matchers);
         }
+    }
+
+
+    private void updateExclusions(List<Matcher> matchers) {
+        for (Matcher matcher : matchers) {
+            Exclusion exclusion = buildExclusion(matcher);
+            exclusion.updateExclusions();
+            exclusionRepository.save(exclusion);
+        }
+    }
+
+    private Exclusion buildExclusion(Matcher matcher) {
+        return Exclusion.builder()
+                .activeExclusioner(matcher.getActiveMatcher())
+                .passiveExclusioner(matcher.getPassiveMatcher())
+                .build();
     }
 
     private void updateUserMatching(User user, List<User> partners) {
@@ -221,8 +239,8 @@ public class MainService {
                             .map(PartnerLocation::getName)
                             .collect(Collectors.toList())
                         , user.getGender()
-                        , user.getExclusions()
-                                .stream()
+                        , user.getActiveExclusioner().stream()
+                                .map(Exclusion::getActiveExclusioner)
                                 .map(User::getId)
                                 .collect(Collectors.toList())
                 );
@@ -275,7 +293,6 @@ public class MainService {
 
     private void processLike(User sender, User receiver) {
         Follow follow = buildLike(sender, receiver);
-        sender.addLike(follow);
         follow.updateUser(sender, receiver);
         followRepository.save(follow);
     }

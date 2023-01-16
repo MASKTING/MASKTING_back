@@ -87,12 +87,11 @@ public class User extends BaseTimeEntity{
     @OneToMany(mappedBy = "user")
     private List<Feed> feeds = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MATCH_ID")
-    private User match;
+    @OneToMany(mappedBy = "activeMatcher")
+    private List<Matcher> activeMatcher = new ArrayList<>();
 
-    @OneToMany(mappedBy = "match")
-    private List<User> matches = new ArrayList<>();
+    @OneToMany(mappedBy = "passiveMatcher")
+    private List<Matcher> passiveMatcher = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EXCLUSION_ID")
@@ -171,35 +170,8 @@ public class User extends BaseTimeEntity{
         }
     }
 
-    public void updateMatches(List<User> partners) {
-        for (User user : partners) {
-            matches.add(user);
-            user.updateMatch(this);
-        }
-    }
-
-    private void updateMatch(User user) {
-        match = user;
-    }
-
     public void updateLatest() {
         latest = !latest;
-    }
-
-    public void updateExclusions(List<User> matches) {
-        for (User user : matches) {
-            exclusions.add(user);
-            user.updateExclusion(this);
-            user.updateMatch(null);
-        }
-    }
-
-    private void updateExclusion(User user) {
-        exclusion = user;
-    }
-
-    public void addLike(Follow follow) {
-        following.add(follow);
     }
 
     public void updateRejection(String reason) {

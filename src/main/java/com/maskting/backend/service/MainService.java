@@ -8,9 +8,7 @@ import com.maskting.backend.domain.*;
 import com.maskting.backend.dto.request.ChatMessageRequest;
 import com.maskting.backend.dto.response.*;
 import com.maskting.backend.dto.request.FeedRequest;
-import com.maskting.backend.repository.FeedRepository;
-import com.maskting.backend.repository.FollowRepository;
-import com.maskting.backend.repository.UserRepository;
+import com.maskting.backend.repository.*;
 import com.maskting.backend.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
@@ -33,6 +31,7 @@ public class MainService {
     private final ChatUserService chatUserService;
     private final ChatService chatService;
     private final FollowRepository followRepository;
+    private final MatcherRepository matcherRepository;
 
     @Transactional
     public Feed addFeed(org.springframework.security.core.userdetails.User userDetail, FeedRequest feedRequest) throws IOException {
@@ -81,10 +80,14 @@ public class MainService {
                 matches.add(partners.get(getIndex(partnerInfos, i)));
             }
             updateUserMatching(user, matches);
-            return matches; 
+            return matches;
         }
-        matches.addAll(user.getMatches());
+        matches.addAll(getMatchers(user));
         return matches;
+    }
+
+    private List<User> getMatchers(User user) {
+        return user.getActiveMatcher().stream().map(Matcher::getPassiveMatcher).collect(Collectors.toList());
     }
 
     private void addExclusions(User user) {
@@ -93,17 +96,28 @@ public class MainService {
         }
     }
 
-    private void updateUserMatching(User user, List<User> matches) {
-        user.updateMatches(getPartners(matches));
+    private void updateUserMatching(User user, List<User> partners) {
+        List<Matcher> matchers = getPartners(user, partners);
+        for (Matcher matcher : matchers) {
+            matcher.updateMatchers();
+            matcherRepository.save(matcher);
+        }
         user.updateLatest();
     }
 
-    private List<User> getPartners(List<User> matches) {
-        List<User> partners = new ArrayList<>();
-        for (User match : matches) {
-            partners.add((User) Hibernate.unproxy(match));
+    private List<Matcher> getPartners(User user, List<User> partners) {
+        List<Matcher> matchers = new ArrayList<>();
+        for (User partner : partners) {
+            matchers.add(buildMatch(user, partner));
         }
-        return partners;
+        return matchers;
+    }
+
+    private Matcher buildMatch(User user, User partner) {
+        return Matcher.builder()
+                .activeMatcher(user)
+                .passiveMatcher((User) Hibernate.unproxy(partner))
+                .build();
     }
 
     private List<PartnerInfo> calculateScore(User user, List<User> partners) {

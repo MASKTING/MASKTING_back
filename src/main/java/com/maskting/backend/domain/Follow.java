@@ -24,8 +24,6 @@ public class Follow {
     private User follower;
 
     public void updateUser(User sender, User receiver) {
-        following = sender;
-        follower = receiver;
         sender.getFollowing().add(this);
         receiver.getFollower().add(this);
     }

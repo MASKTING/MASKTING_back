@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
@@ -88,28 +87,25 @@ public class User extends BaseTimeEntity{
     @OneToMany(mappedBy = "user")
     private List<Feed> feeds = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MATCH_ID")
-    private User match;
+    @OneToMany(mappedBy = "activeMatcher")
+    private List<Matcher> activeMatcher = new ArrayList<>();
 
-    @OneToMany(mappedBy = "match")
-    private List<User> matches;
+    @OneToMany(mappedBy = "passiveMatcher")
+    private List<Matcher> passiveMatcher = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "EXCLUSION_ID")
-    private User exclusion;
+    @OneToMany(mappedBy = "activeExclusioner")
+    private List<Exclusion> activeExclusioner = new ArrayList<>();
 
-    @OneToMany(mappedBy = "exclusion")
-    private List<User> exclusions = new ArrayList<>();
+    @OneToMany(mappedBy = "passiveExclusioner")
+    private List<Exclusion> passiveExclusioner = new ArrayList<>();
 
     private boolean latest;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "LIKE_ID")
-    private User like;
+    @OneToMany(mappedBy = "following")
+    private List<Follow> following = new ArrayList<>();
 
-    @OneToMany(mappedBy = "like")
-    private List<User> likes = new ArrayList<>();
+    @OneToMany(mappedBy = "follower")
+    private List<Follow> follower = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     private List<ChatUser> chatUsers = new ArrayList<>();
@@ -173,41 +169,8 @@ public class User extends BaseTimeEntity{
         }
     }
 
-    public void updateMatches(List<User> partners) {
-        matches = new ArrayList<>();
-        for (User user : partners) {
-            matches.add(user);
-            user.updateMatch(this);
-        }
-    }
-
-    private void updateMatch(User user) {
-        match = user;
-    }
-
     public void updateLatest() {
         latest = !latest;
-    }
-
-    public void updateExclusions(List<User> matches) {
-        for (User user : matches) {
-            exclusions.add(user);
-            user.updateExclusion(this);
-            user.updateMatch(null);
-        }
-    }
-
-    private void updateExclusion(User user) {
-        exclusion = user;
-    }
-
-    public void addLike(User receiver) {
-        likes.add(receiver);
-        receiver.updateLike(this);
-    }
-
-    public void updateLike(User user) {
-        like = user;
     }
 
     public void updateRejection(String reason) {

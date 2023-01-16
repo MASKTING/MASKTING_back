@@ -7,8 +7,7 @@ import com.maskting.backend.domain.PartnerLocation;
 import com.maskting.backend.domain.User;
 import com.maskting.backend.dto.request.SendLikeRequest;
 import com.maskting.backend.factory.UserFactory;
-import com.maskting.backend.repository.FeedRepository;
-import com.maskting.backend.repository.UserRepository;
+import com.maskting.backend.repository.*;
 import com.maskting.backend.util.JwtUtil;
 import com.maskting.backend.util.S3MockConfig;
 import io.findify.s3mock.S3Mock;
@@ -27,6 +26,7 @@ import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
@@ -67,6 +67,15 @@ class MainControllerTest {
     private FeedRepository feedRepository;
 
     @Autowired
+    private FollowRepository followRepository;
+
+    @Autowired
+    private MatcherRepository matcherRepository;
+
+    @Autowired
+    private ExclusionRepository exclusionRepository;
+
+    @Autowired
     ObjectMapper objectMapper;
 
     @BeforeEach
@@ -82,6 +91,9 @@ class MainControllerTest {
     void tearDown() {
         s3Mock.stop();
         feedRepository.deleteAll();
+        followRepository.deleteAll();
+        matcherRepository.deleteAll();
+        exclusionRepository.deleteAll();
         userRepository.deleteAll();
     }
 
@@ -167,14 +179,15 @@ class MainControllerTest {
         User partner2 = getPartner("test2", "산책", "게임");
         User partner3 = getPartner("test3", "산책", "음악");
 
-        mockMvc.perform(
+        MvcResult mvcResult = mockMvc.perform(
                 get(pre + "/partner")
                         .header("accessToken", jwtUtil.createAccessToken(user.getProviderId(), "ROLE_USER")))
                 .andExpect(status().isOk())
-                .andDo(document("main/partner"));
-
-        assertEquals(partner3, user.getMatches().get(0));
-        assertEquals(partner2, user.getMatches().get(1));
+                .andDo(document("main/partner"))
+                .andReturn();
+        System.out.println(mvcResult.getResponse().getContentAsString());
+        assertEquals(partner3, user.getActiveMatcher().get(0).getPassiveMatcher());
+        assertEquals(partner2, user.getActiveMatcher().get(1).getPassiveMatcher());
     }
 
     private User getPartner(String nickname, String interest1, String interest2) {
@@ -212,6 +225,6 @@ class MainControllerTest {
                 .andExpect(status().isOk())
                 .andDo(document("main/like"));
 
-        assertTrue(user.getLikes().contains(partner));
+        assertNotNull(followRepository.findByFollowingAndFollower(user.getId(), partner.getId()));
     }
 }

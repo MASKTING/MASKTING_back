@@ -6,9 +6,7 @@ import com.maskting.backend.dto.response.PartnerResponse;
 import com.maskting.backend.dto.response.S3Response;
 import com.maskting.backend.dto.response.UserResponse;
 import com.maskting.backend.factory.UserFactory;
-import com.maskting.backend.repository.FeedRepository;
-import com.maskting.backend.repository.FollowRepository;
-import com.maskting.backend.repository.UserRepository;
+import com.maskting.backend.repository.*;
 import com.maskting.backend.util.S3Uploader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -58,6 +56,9 @@ class MainServiceTest {
 
     @Mock
     FollowRepository followRepository;
+
+    @Mock
+    MatcherRepository matcherRepository;
 
     @BeforeEach
     void setUp() {

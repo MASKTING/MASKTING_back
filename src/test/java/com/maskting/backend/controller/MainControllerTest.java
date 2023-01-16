@@ -73,6 +73,9 @@ class MainControllerTest {
     private MatcherRepository matcherRepository;
 
     @Autowired
+    private ExclusionRepository exclusionRepository;
+
+    @Autowired
     ObjectMapper objectMapper;
 
     @BeforeEach
@@ -90,6 +93,7 @@ class MainControllerTest {
         feedRepository.deleteAll();
         followRepository.deleteAll();
         matcherRepository.deleteAll();
+        exclusionRepository.deleteAll();
         userRepository.deleteAll();
     }
 

@@ -60,6 +60,9 @@ class MainServiceTest {
     @Mock
     MatcherRepository matcherRepository;
 
+    @Mock
+    ExclusionRepository exclusionRepository;
+
     @BeforeEach
     void setUp() {
         userFactory = new UserFactory();

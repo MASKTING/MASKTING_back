@@ -226,5 +226,6 @@ class MainControllerTest {
                 .andDo(document("main/like"));
 
         assertNotNull(followRepository.findByFollowingAndFollower(user.getId(), partner.getId()));
+        assertEquals(partner, user.getActiveExclusioner().get(0).getPassiveExclusioner());
     }
 }

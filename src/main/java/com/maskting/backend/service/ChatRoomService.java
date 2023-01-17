@@ -50,7 +50,6 @@ public class ChatRoomService {
     private void addChatRoomsResponse(com.maskting.backend.domain.User user, List<ChatRoomsResponse> chatRoomResponses, List<Long> chatRoomId) {
         for (Long id : chatRoomId) {
             ChatRoom chatRoom = chatRoomRepository.findById(id).orElseThrow();
-            ChatMessage chatMessage = getLastChatMessage(chatRoom);
             com.maskting.backend.domain.User partner = getPartner(user.getId(), chatRoom);
 
             chatRoomResponses.add(buildChatRoomsResponse(id, chatRoom, partner));
@@ -59,20 +58,30 @@ public class ChatRoomService {
 
     private ChatRoomsResponse buildChatRoomsResponse(Long id, ChatRoom chatRoom, com.maskting.backend.domain.User partner) {
         ChatMessage chatMessage = getLastChatMessage(chatRoom);
+        int remainingTime = Math.max(getRemainingTime(chatRoom), 0);
 
         return ChatRoomsResponse.builder()
                 .profile(partner.getProfiles().get(0).getPath())
                 .roomId(id)
                 .roomName(partner.getNickname())
-                .remainingTime(getRemainingTime(chatRoom))
+                .remainingTime(remainingTime)
                 .lastMessage(chatMessage.getContent())
                 .lastUpdatedAt(getLastUpdatedAt(chatMessage))
+                .update(isChatRoomUpdate(chatRoom, partner))
                 .build();
+    }
+
+    private boolean isChatRoomUpdate(ChatRoom chatRoom, com.maskting.backend.domain.User partner) {
+        return chatRoom.getChatMessages().stream()
+                .anyMatch(chatMessage1 -> (chatMessage1.getUser().getId() == partner.getId()) && !chatMessage1.isChecked());
     }
 
     private String getLastUpdatedAt(ChatMessage chatMessage) {
         LocalDateTime createdAt = chatMessage.getCreatedAt();
         long until = createdAt.until(LocalDateTime.now(), ChronoUnit.HOURS);
+        if (until < 1) {
+            return createdAt.until(LocalDateTime.now(), ChronoUnit.MINUTES) + "분 전";
+        }
         if (until < DAY) {
             return until + "시간 전";
         }
@@ -110,14 +119,31 @@ public class ChatRoomService {
                 .getUser();
     }
 
+    @Transactional
     public ChatRoomResponse getChatRoom(Long roomId, User userDetail) {
         ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow();
-        com.maskting.backend.domain.User partner = getPartner(getUser(userDetail).getId(), chatRoom);
+        com.maskting.backend.domain.User user = getUser(userDetail);
+        com.maskting.backend.domain.User partner = getPartner(user.getId(), chatRoom);
         List<ChatMessage> chatMessages = getChatMessages(chatRoom);
         List<ChatMessageResponse> chatRoomResponses = new ArrayList<>();
 
+        updateChatMessage(chatRoom, user);
         addChatRoomResponse(chatMessages, chatRoomResponses);
         return buildChatRoomResponse(chatRoom, partner, chatRoomResponses);
+    }
+
+    private void updateChatMessage(ChatRoom chatRoom, com.maskting.backend.domain.User user) {
+        List<ChatMessage> chatMessages = getPartnerChatMessage(chatRoom, user);
+        for (ChatMessage chatMessage : chatMessages) {
+            chatMessage.updateChecked();
+        }
+    }
+
+    private List<ChatMessage> getPartnerChatMessage(ChatRoom chatRoom, com.maskting.backend.domain.User user) {
+        return chatRoom.getChatMessages()
+                .stream()
+                .filter(chatMessage -> (chatMessage.getUser().getId() != user.getId() && !chatMessage.isChecked()))
+                .collect(Collectors.toList());
     }
 
     private void addChatRoomResponse(List<ChatMessage> chatMessages, List<ChatMessageResponse> chatRoomResponses) {
@@ -145,10 +171,19 @@ public class ChatRoomService {
     private StringBuilder getCreatedAt(List<ChatMessage> chatMessages, int i) {
         StringBuilder createdAt = new StringBuilder();
         LocalTime localTime = getCreatedTimes(chatMessages).get(i).toLocalTime();
-        int hour = localTime.getHour();
+        int hour = localTime.getHour() + 9;
 
-        createdAt.append(getType(hour) + " " + passNoon(hour) + ":" + localTime.getMinute());
+        createdAt.append(getType(hour) + " " + passNoon(hour) + ":" + getMinute(localTime));
         return createdAt;
+    }
+
+    private String getMinute(LocalTime localTime) {
+        StringBuilder minute = new StringBuilder();
+        if (localTime.getMinute() < 10){
+            minute.append("0");
+        }
+        minute.append(localTime.getMinute());
+        return minute.toString();
     }
 
     private List<LocalDateTime> getCreatedTimes(List<ChatMessage> chatMessages) {

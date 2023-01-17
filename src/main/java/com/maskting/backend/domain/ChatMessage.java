@@ -28,4 +28,7 @@ public class ChatMessage extends BaseTimeEntity{
 
     private boolean checked;
 
+    public void updateChecked() {
+        checked = !checked;
+    }
 }

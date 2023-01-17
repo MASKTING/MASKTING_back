@@ -98,7 +98,6 @@ public class MainService {
         }
     }
 
-
     private void updateExclusions(List<Matcher> matchers) {
         for (Matcher matcher : matchers) {
             Exclusion exclusion = buildExclusion(matcher);
@@ -287,14 +286,36 @@ public class MainService {
         processLike(sender, receiver);
         if (isChatable(sender, receiver)) {
             openChat(sender, receiver);
+            deleteFollow(sender, receiver);
+            deleteFollow(receiver, sender);
+            addExclusion(sender, receiver);
+            addExclusion(receiver, sender);
         }
 
+    }
+
+    private void deleteFollow(User sender, User receiver) {
+        followRepository.delete(followRepository.findByFollowingAndFollower(sender.getId(), receiver.getId()).get());
+    }
+
+    private void addExclusion(User sender, User receiver) {
+        Exclusion exclusion = buildExclusion(sender, receiver);
+        exclusion.updateExclusions();
+        exclusionRepository.save(exclusion);
+    }
+
+    private Exclusion buildExclusion(User sender, User receiver) {
+        return Exclusion.builder()
+                .activeExclusioner(sender)
+                .passiveExclusioner(receiver)
+                .build();
     }
 
     private void processLike(User sender, User receiver) {
         Follow follow = buildLike(sender, receiver);
         follow.updateUser(sender, receiver);
         followRepository.save(follow);
+        addExclusion(sender, receiver);
     }
 
     private Follow buildLike(User sender, User receiver) {

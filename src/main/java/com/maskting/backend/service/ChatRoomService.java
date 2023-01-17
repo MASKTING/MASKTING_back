@@ -50,7 +50,6 @@ public class ChatRoomService {
     private void addChatRoomsResponse(com.maskting.backend.domain.User user, List<ChatRoomsResponse> chatRoomResponses, List<Long> chatRoomId) {
         for (Long id : chatRoomId) {
             ChatRoom chatRoom = chatRoomRepository.findById(id).orElseThrow();
-            ChatMessage chatMessage = getLastChatMessage(chatRoom);
             com.maskting.backend.domain.User partner = getPartner(user.getId(), chatRoom);
 
             chatRoomResponses.add(buildChatRoomsResponse(id, chatRoom, partner));
@@ -59,12 +58,13 @@ public class ChatRoomService {
 
     private ChatRoomsResponse buildChatRoomsResponse(Long id, ChatRoom chatRoom, com.maskting.backend.domain.User partner) {
         ChatMessage chatMessage = getLastChatMessage(chatRoom);
+        int remainingTime = Math.max(getRemainingTime(chatRoom), 0);
 
         return ChatRoomsResponse.builder()
                 .profile(partner.getProfiles().get(0).getPath())
                 .roomId(id)
                 .roomName(partner.getNickname())
-                .remainingTime(getRemainingTime(chatRoom))
+                .remainingTime(remainingTime)
                 .lastMessage(chatMessage.getContent())
                 .lastUpdatedAt(getLastUpdatedAt(chatMessage))
                 .build();

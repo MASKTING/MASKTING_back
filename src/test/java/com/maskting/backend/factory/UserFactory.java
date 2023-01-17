@@ -47,7 +47,7 @@ public class UserFactory {
                 .activeExclusioner(new ArrayList<>())
                 .passiveExclusioner(new ArrayList<>())
                 .following(new ArrayList<>())
-                .following(new ArrayList<>())
+                .follower(new ArrayList<>())
                 .providerId("providerId_" + nickname)
                 .providerType(ProviderType.GOOGLE)
                 .sort(sort)

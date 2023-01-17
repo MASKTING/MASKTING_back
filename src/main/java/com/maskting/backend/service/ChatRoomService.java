@@ -67,7 +67,13 @@ public class ChatRoomService {
                 .remainingTime(remainingTime)
                 .lastMessage(chatMessage.getContent())
                 .lastUpdatedAt(getLastUpdatedAt(chatMessage))
+                .update(isChatRoomUpdate(chatRoom, partner))
                 .build();
+    }
+
+    private boolean isChatRoomUpdate(ChatRoom chatRoom, com.maskting.backend.domain.User partner) {
+        return chatRoom.getChatMessages().stream()
+                .anyMatch(chatMessage1 -> (chatMessage1.getUser().getId() == partner.getId()) && !chatMessage1.isChecked());
     }
 
     private String getLastUpdatedAt(ChatMessage chatMessage) {

@@ -19,4 +19,6 @@ public class ChatRoomsResponse {
     private String lastMessage;
 
     private String lastUpdatedAt;
+
+    private boolean update;
 }

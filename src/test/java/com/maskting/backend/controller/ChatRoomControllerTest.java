@@ -24,6 +24,7 @@ import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
@@ -107,22 +108,25 @@ class ChatRoomControllerTest {
         );
         chatService.saveChatMessage(new ChatMessageRequest(chatRoom2.getId(), user.getNickname(), "room2 마지막 메시지"));
 
-        ChatUser chatUserInRoom1 = chatUserRepository.save(new ChatUser(1L, user, chatRoom1));
-        ChatUser chatPartner1 = chatUserRepository.save(new ChatUser(2L, partner1, chatRoom1));
-        ChatUser chatUserInRoom2 = chatUserRepository.save(new ChatUser(3L, user, chatRoom2));
-        ChatUser chatPartner2 = chatUserRepository.save(new ChatUser(4L, partner2, chatRoom2));
+        ChatUser chatUserInRoom1 = chatUserRepository.save(new ChatUser(10L, user, chatRoom1));
+        ChatUser chatPartner1 = chatUserRepository.save(new ChatUser(20L, partner1, chatRoom1));
+        ChatUser chatUserInRoom2 = chatUserRepository.save(new ChatUser(30L, user, chatRoom2));
+        ChatUser chatPartner2 = chatUserRepository.save(new ChatUser(40L, partner2, chatRoom2));
         chatRoom1.addUser(chatUserInRoom1, chatPartner1);
         chatRoom2.addUser(chatUserInRoom2, chatPartner2);
 
-        mockMvc.perform(
+        MvcResult mvcResult = mockMvc.perform(
                 get(pre + "/rooms")
                         .header("accessToken", jwtUtil.createAccessToken(user.getProviderId(), "ROLE_USER")))
                 .andExpect(status().isOk())
-                .andExpect(result -> result.getResponse().getContentAsString().contains(chatRoom1.getId().toString()))
-                .andExpect(result -> result.getResponse().getContentAsString().contains(partner1.getNickname()))
-                .andExpect(result -> result.getResponse().getContentAsString().contains(chatRoom2.getId().toString()))
-                .andExpect(result -> result.getResponse().getContentAsString().contains(partner2.getNickname()))
-                .andDo(document("chat/rooms"));
+                .andDo(document("chat/rooms"))
+                .andReturn();
+
+        assertTrue(mvcResult.getResponse().getContentAsString().contains(chatRoom1.getId().toString()));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains(partner1.getNickname()));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains(chatRoom2.getId().toString()));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains(partner2.getNickname()));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("\"update\":false"));
     }
 
     @Test

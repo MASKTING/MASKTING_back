@@ -148,10 +148,19 @@ public class ChatRoomService {
     private StringBuilder getCreatedAt(List<ChatMessage> chatMessages, int i) {
         StringBuilder createdAt = new StringBuilder();
         LocalTime localTime = getCreatedTimes(chatMessages).get(i).toLocalTime();
-        int hour = localTime.getHour();
+        int hour = localTime.getHour() + 9;
 
-        createdAt.append(getType(hour) + " " + passNoon(hour) + ":" + localTime.getMinute());
+        createdAt.append(getType(hour) + " " + passNoon(hour) + ":" + getMinute(localTime));
         return createdAt;
+    }
+
+    private String getMinute(LocalTime localTime) {
+        StringBuilder minute = new StringBuilder();
+        if (localTime.getMinute() < 10){
+            minute.append("0");
+        }
+        minute.append(localTime.getMinute());
+        return minute.toString();
     }
 
     private List<LocalDateTime> getCreatedTimes(List<ChatMessage> chatMessages) {

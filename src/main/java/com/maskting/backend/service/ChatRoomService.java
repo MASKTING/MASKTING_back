@@ -73,6 +73,9 @@ public class ChatRoomService {
     private String getLastUpdatedAt(ChatMessage chatMessage) {
         LocalDateTime createdAt = chatMessage.getCreatedAt();
         long until = createdAt.until(LocalDateTime.now(), ChronoUnit.HOURS);
+        if (until < 1) {
+            return createdAt.until(LocalDateTime.now(), ChronoUnit.MINUTES) + "분 전";
+        }
         if (until < DAY) {
             return until + "시간 전";
         }

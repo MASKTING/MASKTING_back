@@ -119,14 +119,31 @@ public class ChatRoomService {
                 .getUser();
     }
 
+    @Transactional
     public ChatRoomResponse getChatRoom(Long roomId, User userDetail) {
         ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow();
-        com.maskting.backend.domain.User partner = getPartner(getUser(userDetail).getId(), chatRoom);
+        com.maskting.backend.domain.User user = getUser(userDetail);
+        com.maskting.backend.domain.User partner = getPartner(user.getId(), chatRoom);
         List<ChatMessage> chatMessages = getChatMessages(chatRoom);
         List<ChatMessageResponse> chatRoomResponses = new ArrayList<>();
 
+        updateChatMessage(chatRoom, user);
         addChatRoomResponse(chatMessages, chatRoomResponses);
         return buildChatRoomResponse(chatRoom, partner, chatRoomResponses);
+    }
+
+    private void updateChatMessage(ChatRoom chatRoom, com.maskting.backend.domain.User user) {
+        List<ChatMessage> chatMessages = getPartnerChatMessage(chatRoom, user);
+        for (ChatMessage chatMessage : chatMessages) {
+            chatMessage.updateChecked();
+        }
+    }
+
+    private List<ChatMessage> getPartnerChatMessage(ChatRoom chatRoom, com.maskting.backend.domain.User user) {
+        return chatRoom.getChatMessages()
+                .stream()
+                .filter(chatMessage -> (chatMessage.getUser().getId() != user.getId() && !chatMessage.isChecked()))
+                .collect(Collectors.toList());
     }
 
     private void addChatRoomResponse(List<ChatMessage> chatMessages, List<ChatMessageResponse> chatRoomResponses) {

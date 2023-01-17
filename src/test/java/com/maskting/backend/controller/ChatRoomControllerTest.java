@@ -154,5 +154,24 @@ class ChatRoomControllerTest {
                 .andExpect(result -> result.getResponse().getContentAsString().contains("안녕"))
                 .andExpect(result -> result.getResponse().getContentAsString().contains("이름이 뭐야?"))
                 .andDo(document("chat/room"));
+
+        checkChatMessageChecked(user);
     }
+
+    private void checkChatMessageChecked(User user) {
+        List<ChatMessage> chatMessages = chatMessageRepository.findAll();
+        for (ChatMessage chatMessage : chatMessages) {
+            check(user, chatMessage);
+        }
+    }
+
+    private void check(User user, ChatMessage chatMessage) {
+        if (chatMessage.getUser().getId() != user.getId()) {
+            assertTrue(chatMessage.isChecked());
+        }
+        if (chatMessage.getUser().getId() == user.getId()) {
+            assertFalse(chatMessage.isChecked());
+        }
+    }
+
 }

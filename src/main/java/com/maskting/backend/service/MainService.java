@@ -73,6 +73,7 @@ public class MainService {
         List<User> matches = new ArrayList<>();
         
         if (!user.isLatest()) {
+            deleteExistingMatcher(user);
             addExclusions(user);
             List<User> partners = getPartners(user);
             List<PartnerInfo> partnerInfos = calculateScore(user, partners);
@@ -85,6 +86,13 @@ public class MainService {
         }
         matches.addAll(getMatchers(user));
         return matches;
+    }
+
+    private void deleteExistingMatcher(User user) {
+        List<Matcher> existingMatchers = user.getActiveMatcher();
+        for (Matcher matcher : existingMatchers) {
+            matcherRepository.delete(matcher);
+        }
     }
 
     private List<User> getMatchers(User user) {

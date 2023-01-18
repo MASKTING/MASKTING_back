@@ -1,15 +1,10 @@
 package com.maskting.backend.controller;
 
 import com.maskting.backend.auth.WithAuthUser;
-import com.maskting.backend.domain.ChatRoom;
-import com.maskting.backend.domain.ChatUser;
-import com.maskting.backend.domain.User;
+import com.maskting.backend.domain.*;
 import com.maskting.backend.dto.request.ChatMessageRequest;
 import com.maskting.backend.factory.UserFactory;
-import com.maskting.backend.repository.ChatMessageRepository;
-import com.maskting.backend.repository.ChatRoomRepository;
-import com.maskting.backend.repository.ChatUserRepository;
-import com.maskting.backend.repository.UserRepository;
+import com.maskting.backend.repository.*;
 import com.maskting.backend.service.ChatService;
 import com.maskting.backend.util.JwtUtil;
 import org.junit.jupiter.api.AfterEach;
@@ -29,6 +24,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
@@ -171,6 +167,40 @@ class ChatRoomControllerTest {
         }
         if (chatMessage.getUser().getId() == user.getId()) {
             assertFalse(chatMessage.isChecked());
+        }
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("채팅방 나가기(상대 메시지 모두 check)")
+    @WithAuthUser(id = "providerId_" + "jason", role = "ROLE_USER")
+    void updateChatMessage() throws Exception {
+        User user = userRepository.save(userFactory.createUser("홍길동", "jason"));
+        User partner = userRepository.save(userFactory.createUser("짱구", "gu"));
+
+        ChatRoom chatRoom = chatRoomRepository.save(new ChatRoom(1L, new ArrayList<>(), new ArrayList<>()));
+        chatService.saveChatMessage(new ChatMessageRequest(chatRoom.getId(), partner.getNickname(), "안녕"));
+        chatService.saveChatMessage(new ChatMessageRequest(chatRoom.getId(), partner.getNickname(), "이름이 뭐야?"));
+
+        ChatUser chatUser = chatUserRepository.save(new ChatUser(1L, user, chatRoom));
+        ChatUser chatPartner = chatUserRepository.save(new ChatUser(2L, partner, chatRoom));
+        chatRoom.addUser(chatUser, chatPartner);
+
+        mockMvc.perform(
+                post(pre + "/room/" + chatRoom.getId() + "/out")
+                        .header("accessToken", jwtUtil.createAccessToken(user.getProviderId(), "ROLE_USER")))
+                .andExpect(status().isOk())
+                .andDo(document("chat/out"));
+
+        checkPartnerMessage(user);
+    }
+
+    private void checkPartnerMessage(User user) {
+        List<ChatMessage> chatMessages = chatMessageRepository.findAll();
+        for (ChatMessage chatMessage : chatMessages) {
+            if (chatMessage.getUser().getId() != user.getId()) {
+                assertTrue(chatMessage.isChecked());
+            }
         }
     }
 

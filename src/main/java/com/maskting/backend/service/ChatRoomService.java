@@ -1,12 +1,10 @@
 package com.maskting.backend.service;
 
-import com.maskting.backend.domain.BaseTimeEntity;
-import com.maskting.backend.domain.ChatMessage;
-import com.maskting.backend.domain.ChatRoom;
-import com.maskting.backend.domain.ChatUser;
+import com.maskting.backend.domain.*;
 import com.maskting.backend.dto.response.ChatMessageResponse;
 import com.maskting.backend.dto.response.ChatRoomResponse;
 import com.maskting.backend.dto.response.ChatRoomsResponse;
+import com.maskting.backend.dto.response.PartnerResponse;
 import com.maskting.backend.repository.ChatRoomRepository;
 import com.maskting.backend.repository.ChatUserRepository;
 import com.maskting.backend.repository.UserRepository;
@@ -230,5 +228,44 @@ public class ChatRoomService {
 
     private com.maskting.backend.domain.User getUser(User userDetail) {
         return userRepository.findByProviderId(userDetail.getUsername());
+    }
+
+    public List<PartnerResponse> getFollowers(User userDetail) {
+        com.maskting.backend.domain.User user = getUser(userDetail);
+        List<com.maskting.backend.domain.User> followers = getFollowers(user);
+
+        List<PartnerResponse> partnerResponses = new ArrayList<>();
+        for (com.maskting.backend.domain.User follower : followers) {
+            partnerResponses.add(getPartnerResponse(follower));
+        }
+        return partnerResponses;
+    }
+
+    private List<com.maskting.backend.domain.User> getFollowers(com.maskting.backend.domain.User user) {
+        return user.getFollower()
+                .stream()
+                .map(Follow::getFollowing)
+                .collect(Collectors.toList());
+    }
+
+    private PartnerResponse getPartnerResponse(com.maskting.backend.domain.User follower) {
+        return new PartnerResponse(follower.getNickname(), getProfile(follower), follower.getBio(), getFeeds(follower));
+    }
+
+    private String getProfile(com.maskting.backend.domain.User follower) {
+        return follower.getProfiles().get(0).getPath();
+    }
+
+    private List<String> getFeeds(com.maskting.backend.domain.User partner) {
+        return partner.getFeeds().stream()
+                .map(Feed::getPath)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void updateChatMessage(Long roomId, User userDetail) {
+        com.maskting.backend.domain.User user = getUser(userDetail);
+        ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow();
+        updateChatMessage(chatRoom, user);
     }
 }

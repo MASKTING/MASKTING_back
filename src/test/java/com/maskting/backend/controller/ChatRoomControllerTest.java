@@ -1,15 +1,10 @@
 package com.maskting.backend.controller;
 
 import com.maskting.backend.auth.WithAuthUser;
-import com.maskting.backend.domain.ChatRoom;
-import com.maskting.backend.domain.ChatUser;
-import com.maskting.backend.domain.User;
+import com.maskting.backend.domain.*;
 import com.maskting.backend.dto.request.ChatMessageRequest;
 import com.maskting.backend.factory.UserFactory;
-import com.maskting.backend.repository.ChatMessageRepository;
-import com.maskting.backend.repository.ChatRoomRepository;
-import com.maskting.backend.repository.ChatUserRepository;
-import com.maskting.backend.repository.UserRepository;
+import com.maskting.backend.repository.*;
 import com.maskting.backend.service.ChatService;
 import com.maskting.backend.util.JwtUtil;
 import org.junit.jupiter.api.AfterEach;
@@ -29,6 +24,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
@@ -66,6 +62,9 @@ class ChatRoomControllerTest {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Autowired
+    private FollowRepository followRepository;
+
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
@@ -79,6 +78,7 @@ class ChatRoomControllerTest {
         chatMessageRepository.deleteAll();
         chatUserRepository.deleteAll();
         chatRoomRepository.deleteAll();
+        followRepository.deleteAll();
         userRepository.deleteAll();
     }
 
@@ -174,4 +174,72 @@ class ChatRoomControllerTest {
         }
     }
 
+    @Test
+    @Transactional
+    @DisplayName("채팅방 나가기(상대 메시지 모두 check)")
+    @WithAuthUser(id = "providerId_" + "jason", role = "ROLE_USER")
+    void updateChatMessage() throws Exception {
+        User user = userRepository.save(userFactory.createUser("홍길동", "jason"));
+        User partner = userRepository.save(userFactory.createUser("짱구", "gu"));
+
+        ChatRoom chatRoom = chatRoomRepository.save(new ChatRoom(1L, new ArrayList<>(), new ArrayList<>()));
+        chatService.saveChatMessage(new ChatMessageRequest(chatRoom.getId(), partner.getNickname(), "안녕"));
+        chatService.saveChatMessage(new ChatMessageRequest(chatRoom.getId(), partner.getNickname(), "이름이 뭐야?"));
+
+        ChatUser chatUser = chatUserRepository.save(new ChatUser(1L, user, chatRoom));
+        ChatUser chatPartner = chatUserRepository.save(new ChatUser(2L, partner, chatRoom));
+        chatRoom.addUser(chatUser, chatPartner);
+
+        mockMvc.perform(
+                post(pre + "/room/" + chatRoom.getId() + "/out")
+                        .header("accessToken", jwtUtil.createAccessToken(user.getProviderId(), "ROLE_USER")))
+                .andExpect(status().isOk())
+                .andDo(document("chat/out"));
+
+        checkPartnerMessage(user);
+    }
+
+    private void checkPartnerMessage(User user) {
+        List<ChatMessage> chatMessages = chatMessageRepository.findAll();
+        for (ChatMessage chatMessage : chatMessages) {
+            if (chatMessage.getUser().getId() != user.getId()) {
+                assertTrue(chatMessage.isChecked());
+            }
+        }
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("팔로워들 반환")
+    @WithAuthUser(id = "providerId_" + "jason", role = "ROLE_USER")
+    void getFollowers() throws Exception {
+        User user = userRepository.save(userFactory.createUser("홍길동", "jason"));
+        User partner1 = userRepository.save(userFactory.createUser("짱구", "gu"));
+        User partner2 = userRepository.save(userFactory.createUser("철수", "su"));
+        saveFollow(user, partner1);
+        saveFollow(user, partner2);
+
+        MvcResult mvcResult = mockMvc.perform(
+                get(pre + "/follower")
+                        .header("accessToken", jwtUtil.createAccessToken(user.getProviderId(), "ROLE_USER")))
+                .andExpect(status().isOk())
+                .andDo(document("chat/follower"))
+                .andReturn();
+
+        assertTrue(mvcResult.getResponse().getContentAsString().contains(partner1.getNickname()));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains(partner2.getNickname()));
+    }
+
+    private void saveFollow(User user, User partner1) {
+        Follow follow = buildFollow(user, partner1);
+        follow.updateUser(partner1, user);
+        followRepository.save(follow);
+    }
+
+    private Follow buildFollow(User user, User partner) {
+        return Follow.builder()
+                .following(partner)
+                .follower(user)
+                .build();
+    }
 }

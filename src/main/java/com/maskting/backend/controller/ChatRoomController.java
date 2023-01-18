@@ -24,4 +24,9 @@ public class ChatRoomController {
         return ResponseEntity.ok(chatRoomService.getChatRoom(roomId, user));
     }
 
+    @PostMapping("/room/{roomId}/out")
+    public ResponseEntity<?> updateChatMessage(@PathVariable Long roomId, @AuthenticationPrincipal User user) {
+        chatRoomService.updateChatMessage(roomId, user);
+        return ResponseEntity.ok().build();
+    }
 }

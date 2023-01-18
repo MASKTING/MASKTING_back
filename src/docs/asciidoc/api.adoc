@@ -246,3 +246,23 @@ include::{snippets}/chat/room/http-request.adoc[]
 ==== RESPONSE
 
 include::{snippets}/chat/room//http-response.adoc[]
+
+=== out (채팅방 나가기(상대 메시지 check))
+
+==== REQUEST
+
+include::{snippets}/chat/out/http-request.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/chat/out//http-response.adoc[]
+
+=== 팔로워 리스트
+
+==== REQUEST
+
+include::{snippets}/chat/follower/http-request.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/chat/follower//http-response.adoc[]

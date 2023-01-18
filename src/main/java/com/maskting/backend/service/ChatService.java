@@ -39,9 +39,6 @@ public class ChatService {
     }
 
     private User findUser(ChatMessageRequest message) {
-        if (message.getSender().equals("System")) {
-            return null;
-        }
         return userRepository.findByNickname(message.getSender()).orElseThrow();
     }
 

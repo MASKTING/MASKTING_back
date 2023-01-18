@@ -62,6 +62,9 @@ class ChatRoomControllerTest {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Autowired
+    private FollowRepository followRepository;
+
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
@@ -75,6 +78,7 @@ class ChatRoomControllerTest {
         chatMessageRepository.deleteAll();
         chatUserRepository.deleteAll();
         chatRoomRepository.deleteAll();
+        followRepository.deleteAll();
         userRepository.deleteAll();
     }
 
@@ -204,4 +208,38 @@ class ChatRoomControllerTest {
         }
     }
 
+    @Test
+    @Transactional
+    @DisplayName("팔로워들 반환")
+    @WithAuthUser(id = "providerId_" + "jason", role = "ROLE_USER")
+    void getFollowers() throws Exception {
+        User user = userRepository.save(userFactory.createUser("홍길동", "jason"));
+        User partner1 = userRepository.save(userFactory.createUser("짱구", "gu"));
+        User partner2 = userRepository.save(userFactory.createUser("철수", "su"));
+        saveFollow(user, partner1);
+        saveFollow(user, partner2);
+
+        MvcResult mvcResult = mockMvc.perform(
+                get(pre + "/follower")
+                        .header("accessToken", jwtUtil.createAccessToken(user.getProviderId(), "ROLE_USER")))
+                .andExpect(status().isOk())
+                .andDo(document("chat/follower"))
+                .andReturn();
+
+        assertTrue(mvcResult.getResponse().getContentAsString().contains(partner1.getNickname()));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains(partner2.getNickname()));
+    }
+
+    private void saveFollow(User user, User partner1) {
+        Follow follow = buildFollow(user, partner1);
+        follow.updateUser(partner1, user);
+        followRepository.save(follow);
+    }
+
+    private Follow buildFollow(User user, User partner) {
+        return Follow.builder()
+                .following(partner)
+                .follower(user)
+                .build();
+    }
 }

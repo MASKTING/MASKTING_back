@@ -239,7 +239,7 @@ public class MainService {
                             .collect(Collectors.toList())
                         , user.getGender()
                         , user.getActiveExclusioner().stream()
-                                .map(Exclusion::getActiveExclusioner)
+                                .map(Exclusion::getPassiveExclusioner)
                                 .map(User::getId)
                                 .collect(Collectors.toList())
                 );

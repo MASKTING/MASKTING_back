@@ -29,4 +29,9 @@ public class ChatRoomController {
         chatRoomService.updateChatMessage(roomId, user);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/follower")
+    public ResponseEntity<?> getFollowers(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(chatRoomService.getFollowers(user));
+    }
 }

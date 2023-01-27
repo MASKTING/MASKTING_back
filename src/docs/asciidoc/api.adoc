@@ -44,6 +44,26 @@ include::{snippets}/user/check-nickname-fail/httpie-request.adoc[]
 
 include::{snippets}/user/check-nickname-fail/http-response.adoc[]
 
+=== sms 전송
+
+==== REQUEST
+
+include::{snippets}/user/sms/httpie-request.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/user/sms/http-response.adoc[]
+
+=== sms 확인
+
+==== REQUEST
+
+include::{snippets}/user/check-sms/httpie-request.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/user/check-sms/http-response.adoc[]
+
 === User signup (회원가입)
 
 ==== REQUEST

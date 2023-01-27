@@ -1,20 +1,24 @@
 package com.maskting.backend.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.maskting.backend.domain.User;
+import com.maskting.backend.dto.request.CheckSmsRequest;
 import com.maskting.backend.dto.request.ReSignupRequest;
 import com.maskting.backend.dto.request.SignupRequest;
+import com.maskting.backend.service.SmsService;
 import com.maskting.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,10 +26,22 @@ import java.io.IOException;
 public class UserController {
 
     private final UserService userService;
+    private final SmsService smsService;
 
     @GetMapping("/check-nickname")
     public ResponseEntity<?> checkNickname(String nickname) {
         return ResponseEntity.ok(userService.checkNickname(nickname));
+    }
+
+    @PostMapping("/sms")
+    public ResponseEntity<?> sendSms(String phoneNumber) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException, URISyntaxException {
+        smsService.sendSms(phoneNumber);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/check-sms")
+    public ResponseEntity<?> checkSms(@RequestBody CheckSmsRequest checkSmsRequest) {
+        return ResponseEntity.ok(smsService.checkVerificationNumber(checkSmsRequest));
     }
 
     @PostMapping("/signup")

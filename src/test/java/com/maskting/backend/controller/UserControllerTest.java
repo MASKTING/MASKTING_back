@@ -3,6 +3,7 @@ package com.maskting.backend.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maskting.backend.auth.WithAuthUser;
 import com.maskting.backend.domain.*;
+import com.maskting.backend.dto.request.CheckSmsRequest;
 import com.maskting.backend.dto.request.ReSignupRequest;
 import com.maskting.backend.dto.request.SignupRequest;
 import com.maskting.backend.dto.response.S3Response;
@@ -165,6 +166,26 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andDo(document("user/sms",
                         preprocessRequest(prettyPrint())));
+    }
+
+    @Test
+    @DisplayName("인증번호 체크")
+    void checkSms() throws Exception {
+        String phoneNumber = "01012345678";
+        String randomNumber = "123456";
+        String content = objectMapper.writeValueAsString(new CheckSmsRequest(phoneNumber, randomNumber));
+        verificationNumberRepository.save(new VerificationNumber(phoneNumber, randomNumber));
+
+        MvcResult mvcResult = mockMvc.perform(
+                        post(pre + "/check-sms")
+                                .content(content)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(document("user/check-sms",
+                        preprocessRequest(prettyPrint())))
+                .andReturn();
+
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("true"));
     }
 
     @Test

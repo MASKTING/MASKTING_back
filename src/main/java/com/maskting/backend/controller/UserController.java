@@ -2,6 +2,7 @@ package com.maskting.backend.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.maskting.backend.domain.User;
+import com.maskting.backend.dto.request.CheckSmsRequest;
 import com.maskting.backend.dto.request.ReSignupRequest;
 import com.maskting.backend.dto.request.SignupRequest;
 import com.maskting.backend.service.SmsService;
@@ -36,6 +37,11 @@ public class UserController {
     public ResponseEntity<?> sendSms(String phoneNumber) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException, URISyntaxException {
         smsService.sendSms(phoneNumber);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/check-sms")
+    public ResponseEntity<?> checkSms(@RequestBody CheckSmsRequest checkSmsRequest) {
+        return ResponseEntity.ok(smsService.checkVerificationNumber(checkSmsRequest));
     }
 
     @PostMapping("/signup")

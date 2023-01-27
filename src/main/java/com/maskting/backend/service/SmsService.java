@@ -3,9 +3,11 @@ package com.maskting.backend.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maskting.backend.domain.VerificationNumber;
+import com.maskting.backend.dto.request.CheckSmsRequest;
 import com.maskting.backend.dto.request.MessageRequest;
 import com.maskting.backend.dto.request.SmsRequest;
 import com.maskting.backend.dto.response.SmsResponse;
+import com.maskting.backend.repository.UserRepository;
 import com.maskting.backend.repository.VerificationNumberRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.binary.Base64;
@@ -49,6 +51,7 @@ public class SmsService {
     @Value("${naver.cloud.sms.senderNumber}")
     private String senderNumber;
 
+    private final UserRepository userRepository;
     private final VerificationNumberRepository verificationNumberRepository;
 
     @Transactional
@@ -130,4 +133,8 @@ public class SmsService {
         return ThreadLocalRandom.current().nextInt(START_BOUNDARY, END_BOUNDARY);
     }
 
+    public boolean checkVerificationNumber(CheckSmsRequest checkSmsRequest) {
+        VerificationNumber verificationNumber = verificationNumberRepository.findById(checkSmsRequest.getPhoneNumber()).orElseThrow();
+        return checkSmsRequest.getVerificationNumber().equals(verificationNumber.getValue());
+    }
 }

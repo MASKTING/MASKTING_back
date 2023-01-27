@@ -51,7 +51,9 @@ public class SecurityConfig {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .authorizeRequests()
-                .antMatchers("/", "/api/user/check-nickname", "/api/user/signup", "/api/auth/silent-refresh", "/favicon.ico").permitAll()
+                .antMatchers("/", "/api/user/check-nickname", "/api/user/signup",
+                        "/api/user/sms", "/api/user/check-sms",
+                        "/api/auth/silent-refresh", "/favicon.ico").permitAll()
 //                .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/app/**").permitAll()
                 .antMatchers("/admin/**").permitAll()

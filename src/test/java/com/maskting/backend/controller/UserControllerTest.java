@@ -2,10 +2,7 @@ package com.maskting.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maskting.backend.auth.WithAuthUser;
-import com.maskting.backend.domain.Profile;
-import com.maskting.backend.domain.ProviderType;
-import com.maskting.backend.domain.RefreshToken;
-import com.maskting.backend.domain.User;
+import com.maskting.backend.domain.*;
 import com.maskting.backend.dto.request.ReSignupRequest;
 import com.maskting.backend.dto.request.SignupRequest;
 import com.maskting.backend.dto.response.S3Response;
@@ -14,6 +11,7 @@ import com.maskting.backend.factory.UserFactory;
 import com.maskting.backend.repository.ProfileRepository;
 import com.maskting.backend.repository.RefreshTokenRepository;
 import com.maskting.backend.repository.UserRepository;
+import com.maskting.backend.repository.VerificationNumberRepository;
 import com.maskting.backend.util.CookieUtil;
 import com.maskting.backend.util.JwtUtil;
 import com.maskting.backend.util.S3MockConfig;
@@ -95,6 +93,9 @@ class UserControllerTest {
     private ObjectMapper objectMapper;
 
     @Autowired
+    private VerificationNumberRepository verificationNumberRepository;
+
+    @Autowired
     S3Mock s3Mock;
 
     @BeforeEach
@@ -112,6 +113,7 @@ class UserControllerTest {
         profileRepository.deleteAll();
         userRepository.deleteAll();
         refreshTokenRepository.deleteAll();
+        verificationNumberRepository.deleteAll();
         s3Mock.stop();
     }
 
@@ -150,6 +152,19 @@ class UserControllerTest {
                 .andReturn();
 
         assertTrue(mvcResult.getResponse().getContentAsString().contains(result));
+    }
+
+    @Test
+    @DisplayName("인증번호 전송")
+    void sendSms() throws Exception {
+        String phoneNumber = "01077544263";
+
+        mockMvc.perform(
+                        post(pre + "/sms")
+                                .param("phoneNumber", phoneNumber))
+                .andExpect(status().isOk())
+                .andDo(document("user/sms",
+                        preprocessRequest(prettyPrint())));
     }
 
     @Test

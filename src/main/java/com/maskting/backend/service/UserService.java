@@ -280,6 +280,7 @@ public class UserService {
         return reSignupResponse;
     }
 
+    @Transactional
     public void reSignup(org.springframework.security.core.userdetails.User userDetail, ReSignupRequest reSignupRequest) throws IOException {
         User user = getUserByProviderId(userDetail);
         user.reUpdate(reSignupRequest);

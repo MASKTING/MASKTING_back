@@ -274,7 +274,7 @@ public class MainService {
     }
 
     private String getProfile(User partner) {
-        return partner.getProfiles().get(0).getPath();
+        return partner.getProfiles().get(ProfileType.MASK_PROFILE.getValue()).getPath();
     }
 
     private List<String> getFeeds(User partner) {

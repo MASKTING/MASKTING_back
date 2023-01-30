@@ -88,6 +88,9 @@ public class SignupRequest {
     @NotNull
     private String bio;
 
+    @NotNull
+    private boolean certification;
+
     private List<Integer> partnerBodyTypes;
 
     private List<MultipartFile> profiles;

@@ -59,7 +59,7 @@ public class ChatRoomService {
         int remainingTime = Math.max(getRemainingTime(chatRoom), 0);
 
         return ChatRoomsResponse.builder()
-                .profile(partner.getProfiles().get(0).getPath())
+                .profile(partner.getProfiles().get(ProfileType.MASK_PROFILE.getValue()).getPath())
                 .roomId(id)
                 .roomName(partner.getNickname())
                 .remainingTime(remainingTime)
@@ -152,7 +152,7 @@ public class ChatRoomService {
 
     private ChatRoomResponse buildChatRoomResponse(ChatRoom chatRoom, com.maskting.backend.domain.User partner, List<ChatMessageResponse> chatRoomResponses) {
         return ChatRoomResponse.builder()
-                .profile(partner.getProfiles().get(0).getPath())
+                .profile(partner.getProfiles().get(ProfileType.MASK_PROFILE.getValue()).getPath())
                 .roomName(partner.getNickname())
                 .remainingTime(getRemainingTime(chatRoom))
                 .messages(chatRoomResponses)
@@ -253,7 +253,7 @@ public class ChatRoomService {
     }
 
     private String getProfile(com.maskting.backend.domain.User follower) {
-        return follower.getProfiles().get(0).getPath();
+        return follower.getProfiles().get(ProfileType.MASK_PROFILE.getValue()).getPath();
     }
 
     private List<String> getFeeds(com.maskting.backend.domain.User partner) {

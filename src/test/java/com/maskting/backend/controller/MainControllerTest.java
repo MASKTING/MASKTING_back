@@ -107,10 +107,10 @@ class MainControllerTest {
 
         mockMvc.perform(
                 get(pre + "/user")
-                        .header("accessToken", jwtUtil.createAccessToken(user.getProviderId(), "ROLE_USER")))
+                        .header("accessToken", jwtUtil.createAccessToken(user.getProviderId(), "ROLE_" + user.getRoleType().toString())))
                 .andExpect(status().isOk())
-                .andExpect(result -> result.getResponse().getContentAsString().contains("닉네임"))
-                .andExpect(result -> result.getResponse().getContentAsString().contains("amazon"))
+                .andExpect(result -> assertTrue(result.getResponse().getContentAsString().contains("test")))
+                .andExpect(result -> assertTrue(result.getResponse().getContentAsString().contains("MASK_PROFILE")))
                 .andDo(document("main/user"));
     }
 

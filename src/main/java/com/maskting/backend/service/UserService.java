@@ -1,6 +1,7 @@
 package com.maskting.backend.service;
 
 import com.maskting.backend.common.exception.ExistNicknameException;
+import com.maskting.backend.common.exception.NoCertificationException;
 import com.maskting.backend.common.exception.NoProfileException;
 import com.maskting.backend.domain.*;
 import com.maskting.backend.dto.request.ReSignupRequest;
@@ -32,8 +33,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UserService {
-    private static final int DEFAULT_PROFILE = 0;
-    private static final int MASK_PROFILE = 1;
 
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
@@ -49,10 +48,21 @@ public class UserService {
 
     @Transactional
     public User joinUser(SignupRequest signupRequest) throws IOException {
+        checkCertification(signupRequest);
+        checkNickname(signupRequest);
+        return userRepository.save(createUser(signupRequest, getProviderType(signupRequest), getProfiles(signupRequest.getProfiles())));
+    }
+
+    private void checkNickname(SignupRequest signupRequest) {
         if (userRepository.findByNickname(signupRequest.getNickname()).isPresent()) {
             throw new ExistNicknameException();
         }
-        return userRepository.save(createUser(signupRequest, getProviderType(signupRequest), getProfiles(signupRequest.getProfiles())));
+    }
+
+    private void checkCertification(SignupRequest signupRequest) {
+        if (!signupRequest.isCertification()) {
+            throw new NoCertificationException();
+        }
     }
 
     private List<Profile> getProfiles(List<MultipartFile> profiles) throws IOException {
@@ -265,11 +275,12 @@ public class UserService {
 
     private ReSignupResponse getReSignupResponse(User user) {
         ReSignupResponse reSignupResponse = modelMapper.map(user, ReSignupResponse.class);
-        reSignupResponse.setProfile(user.getProfiles().get(DEFAULT_PROFILE).getPath());
-        reSignupResponse.setMaskProfile(user.getProfiles().get(MASK_PROFILE).getPath());
+        reSignupResponse.setProfile(user.getProfiles().get(ProfileType.DEFAULT_PROFILE.getValue()).getPath());
+        reSignupResponse.setMaskProfile(user.getProfiles().get(ProfileType.MASK_PROFILE.getValue()).getPath());
         return reSignupResponse;
     }
 
+    @Transactional
     public void reSignup(org.springframework.security.core.userdetails.User userDetail, ReSignupRequest reSignupRequest) throws IOException {
         User user = getUserByProviderId(userDetail);
         user.reUpdate(reSignupRequest);

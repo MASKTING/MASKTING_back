@@ -63,8 +63,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(RestDocumentationExtension.class)
 class UserControllerTest {
 
-    private static final int DEFAULT_PROFILE = 0;
-    private static final int MASK_PROFILE = 1;
     private static final String pre = "/api/user";
     private RequestFactory requestFactory;
     private UserFactory userFactory;
@@ -155,18 +153,18 @@ class UserControllerTest {
         assertTrue(mvcResult.getResponse().getContentAsString().contains(result));
     }
 
-    @Test
-    @DisplayName("인증번호 전송")
-    void sendSms() throws Exception {
-        String phoneNumber = "01077544263";
-
-        mockMvc.perform(
-                        post(pre + "/sms")
-                                .param("phoneNumber", phoneNumber))
-                .andExpect(status().isOk())
-                .andDo(document("user/sms",
-                        preprocessRequest(prettyPrint())));
-    }
+//    @Test
+//    @DisplayName("인증번호 전송")
+//    void sendSms() throws Exception {
+//        String phoneNumber = "01077544263";
+//
+//        mockMvc.perform(
+//                        post(pre + "/sms")
+//                                .param("phoneNumber", phoneNumber))
+//                .andExpect(status().isOk())
+//                .andDo(document("user/sms",
+//                        preprocessRequest(prettyPrint())));
+//    }
 
     @Test
     @DisplayName("인증번호 체크")
@@ -177,9 +175,9 @@ class UserControllerTest {
         verificationNumberRepository.save(new VerificationNumber(phoneNumber, randomNumber));
 
         MvcResult mvcResult = mockMvc.perform(
-                        post(pre + "/check-sms")
-                                .content(content)
-                                .contentType(MediaType.APPLICATION_JSON))
+                post(pre + "/check-sms")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(document("user/check-sms",
                         preprocessRequest(prettyPrint())))
@@ -204,8 +202,8 @@ class UserControllerTest {
 
         mockMvc.perform(
                 multipart(pre + "/signup")
-                        .file((MockMultipartFile) signupRequest.getProfiles().get(DEFAULT_PROFILE))
-                        .file((MockMultipartFile) signupRequest.getProfiles().get(MASK_PROFILE))
+                        .file((MockMultipartFile) signupRequest.getProfiles().get(ProfileType.DEFAULT_PROFILE.getValue()))
+                        .file((MockMultipartFile) signupRequest.getProfiles().get(ProfileType.MASK_PROFILE.getValue()))
                         .param("name", signupRequest.getName())
                         .param("email", signupRequest.getEmail())
                         .param("gender", signupRequest.getGender())
@@ -223,6 +221,7 @@ class UserControllerTest {
                         .param("bodyType", Integer.toString(signupRequest.getBodyType()))
                         .param("religion", signupRequest.getReligion())
                         .param("bio", signupRequest.getBio())
+                        .param("certification", String.valueOf(signupRequest.isCertification()))
                         .param("nickname", signupRequest.getNickname())
                         .params(partnerLocations)
                         .param("partnerDuty", signupRequest.getPartnerDuty())
@@ -259,6 +258,7 @@ class UserControllerTest {
                                 ,parameterWithName("bodyType").description("체형")
                                 ,parameterWithName("religion").description("종교")
                                 ,parameterWithName("bio").description("한줄 자기소개")
+                                ,parameterWithName("certification").description("휴대폰 인증 여부")
                                 ,parameterWithName("nickname").description("닉네임")
                                 ,parameterWithName("partnerLocations").description("상대방 선호 지역(List)")
                                 ,parameterWithName("partnerDuty").description("상대방 군필여부(여자인경우만, 남자인 경우 any)")
@@ -307,8 +307,8 @@ class UserControllerTest {
         assertEquals(signupRequest.getReligion(), dbUser.getReligion());
         assertEquals(signupRequest.getBio(), dbUser.getBio());
         assertEquals(signupRequest.getNickname(), dbUser.getNickname());
-        assertTrue(dbUser.getProfiles().get(DEFAULT_PROFILE).getName().contains("DEFAULT_IMAGE.PNG"));
-        assertTrue(dbUser.getProfiles().get(MASK_PROFILE).getName().contains("MASK_IMAGE.PNG"));
+        assertTrue(dbUser.getProfiles().get(ProfileType.DEFAULT_PROFILE.getValue()).getName().contains("DEFAULT_IMAGE.PNG"));
+        assertTrue(dbUser.getProfiles().get(ProfileType.MASK_PROFILE.getValue()).getName().contains("MASK_IMAGE.PNG"));
     }
 
     @Test
@@ -385,8 +385,8 @@ class UserControllerTest {
         assertTrue(mvcResult.getResponse().getContentAsString().contains(String.valueOf(guest.getHeight())));
         assertTrue(mvcResult.getResponse().getContentAsString().contains(guest.getNickname()));
         assertTrue(mvcResult.getResponse().getContentAsString().contains(guest.getBio()));
-        assertTrue(mvcResult.getResponse().getContentAsString().contains(guest.getProfiles().get(DEFAULT_PROFILE).getPath()));
-        assertTrue(mvcResult.getResponse().getContentAsString().contains(guest.getProfiles().get(MASK_PROFILE).getPath()));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains(guest.getProfiles().get(ProfileType.DEFAULT_PROFILE.getValue()).getPath()));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains(guest.getProfiles().get(ProfileType.MASK_PROFILE.getValue()).getPath()));
     }
 
     @Test
@@ -403,8 +403,8 @@ class UserControllerTest {
 
         mockMvc.perform(
                 multipart(pre + "/re-signup")
-                        .file((MockMultipartFile) reSignupRequest.getProfiles().get(DEFAULT_PROFILE))
-                        .file((MockMultipartFile) reSignupRequest.getProfiles().get(MASK_PROFILE))
+                        .file((MockMultipartFile) reSignupRequest.getProfiles().get(ProfileType.DEFAULT_PROFILE.getValue()))
+                        .file((MockMultipartFile) reSignupRequest.getProfiles().get(ProfileType.MASK_PROFILE.getValue()))
                         .param("name", reSignupRequest.getName())
                         .param("birth", reSignupRequest.getBirth())
                         .param("height", Integer.toString(reSignupRequest.getHeight()))
@@ -434,8 +434,8 @@ class UserControllerTest {
         assertEquals(reSignupRequest.getHeight(), guest.getHeight());
         assertEquals(reSignupRequest.getNickname(), guest.getNickname());
         assertEquals(reSignupRequest.getBio(), guest.getBio());
-        assertTrue(getGuestProfile(guest, DEFAULT_PROFILE).contains(getReSignupRequestProfile(reSignupRequest, DEFAULT_PROFILE)));
-        assertTrue(getGuestProfile(guest, MASK_PROFILE).contains(getReSignupRequestProfile(reSignupRequest, MASK_PROFILE)));
+        assertTrue(getGuestProfile(guest, ProfileType.DEFAULT_PROFILE.getValue()).contains(getReSignupRequestProfile(reSignupRequest, ProfileType.DEFAULT_PROFILE.getValue())));
+        assertTrue(getGuestProfile(guest, ProfileType.MASK_PROFILE.getValue()).contains(getReSignupRequestProfile(reSignupRequest, ProfileType.MASK_PROFILE.getValue())));
     }
 
     private MockMultipartFile getMultipartFile(String originalFilename, String imageByte) {

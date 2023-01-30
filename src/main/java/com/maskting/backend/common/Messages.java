@@ -15,4 +15,5 @@ public class Messages {
     public static final String NO_NICKNAME = "그런 닉네임의 유저는 없습니다.";
     public static final String EXIST_LIKE = "이미 좋아요를 했습니다.";
     public static final String EXIST_NICKNAME = "해당 닉네임을 가진 유저가 있습니다.";
+    public static final String NO_CERTIFICATION = "인증이 되지 않았습니다";
 }

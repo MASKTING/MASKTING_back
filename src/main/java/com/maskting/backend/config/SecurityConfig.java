@@ -3,6 +3,7 @@ package com.maskting.backend.config;
 import com.maskting.backend.config.oauth.OAuth2AccessDeniedHandler;
 import com.maskting.backend.config.oauth.OAuth2AuthenticationFailureHandler;
 import com.maskting.backend.config.oauth.OAuth2AuthenticationSuccessHandler;
+import com.maskting.backend.domain.RoleType;
 import com.maskting.backend.service.oauth.OAuth2UserService;
 import com.maskting.backend.common.exception.oauth.CustomAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
@@ -40,39 +41,43 @@ public class SecurityConfig {
         http
                 .cors()
                 .and()
-                    .csrf().disable()
-                    .formLogin().disable()
-                    .httpBasic().disable()
-                    .exceptionHandling()
-                    .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-                    .accessDeniedHandler(oAuth2AccessDeniedHandler)
+                .csrf().disable()
+                .formLogin().disable()
+                .httpBasic().disable()
+                .exceptionHandling()
+                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                .accessDeniedHandler(oAuth2AccessDeniedHandler)
                 .and()
-                    .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                    .authorizeRequests()
+                .authorizeRequests()
                 .antMatchers("/", "/api/user/check-nickname", "/api/user/signup",
                         "/api/user/sms", "/api/user/check-sms",
-                        "/api/auth/silent-refresh", "/favicon.ico").permitAll()
-//                .antMatchers("/admin/**").hasRole("ADMIN")
+                        "/api/auth/silent-refresh", "/favicon.ico", "/api/token").permitAll()
                 .antMatchers("/app/**").permitAll()
                 .antMatchers("/admin/**").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/api/user/rejection", "/api/user/re-signup", "/api/user/screening")
+                    .hasRole(RoleType.GUEST.name())
+//              .antMatchers("/admin/**").hasRole(RoleType.ADMIN.name())
+                .antMatchers("/api/user/logout")
+                    .hasAnyRole(RoleType.GUEST.name(), RoleType.USER.name(), RoleType.ADMIN.name())
+                .anyRequest().hasAnyRole(RoleType.USER.name(), RoleType.ADMIN.name())
                 .and()
-                    .oauth2Login()
-                    .authorizationEndpoint()
-                    .baseUri("/api/oauth2")
+                .oauth2Login()
+                .authorizationEndpoint()
+                .baseUri("/api/oauth2")
                 .and()
-                    .redirectionEndpoint()
-                    .baseUri("/*/oauth2/code/*")
+                .redirectionEndpoint()
+                .baseUri("/*/oauth2/code/*")
                 .and()
-                    .userInfoEndpoint()
-                    .userService(oAuth2UserService)
+                .userInfoEndpoint()
+                .userService(oAuth2UserService)
                 .and()
-                    .successHandler(oAuth2AuthenticationSuccessHandler)
-                    .failureHandler(oAuth2AuthenticationFailureHandler)
+                .successHandler(oAuth2AuthenticationSuccessHandler)
+                .failureHandler(oAuth2AuthenticationFailureHandler)
                 .and()
-                    .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

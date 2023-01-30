@@ -12,7 +12,6 @@ import com.maskting.backend.common.exception.NoRefreshTokenException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -47,6 +46,9 @@ public class AuthService {
     }
 
     private String getRole(User user) {
+        if (user.getRoleType() == RoleType.GUEST) {
+            return "ROLE_GUEST";
+        }
         return user.getRoleType() == RoleType.USER ? "ROLE_USER" : "ROLE_ADMIN";
     }
 

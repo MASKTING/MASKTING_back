@@ -14,7 +14,7 @@ public class ChatRoomsResponse {
 
     private String roomName;
 
-    private int remainingTime;
+    private String remainingTime;
 
     private String lastMessage;
 

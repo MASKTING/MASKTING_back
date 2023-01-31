@@ -17,7 +17,7 @@ public class ChatRoomResponse {
 
     private String roomName;
 
-    private int remainingTime;
+    private String remainingTime;
 
     private List<ChatMessageResponse> messages;
 

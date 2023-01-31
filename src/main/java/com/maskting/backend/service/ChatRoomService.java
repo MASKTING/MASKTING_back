@@ -12,13 +12,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,13 +54,12 @@ public class ChatRoomService {
 
     private ChatRoomsResponse buildChatRoomsResponse(Long id, ChatRoom chatRoom, com.maskting.backend.domain.User partner) {
         ChatMessage chatMessage = getLastChatMessage(chatRoom);
-        int remainingTime = Math.max(getRemainingTime(chatRoom), 0);
 
         return ChatRoomsResponse.builder()
                 .profile(partner.getProfiles().get(ProfileType.MASK_PROFILE.getValue()).getPath())
                 .roomId(id)
                 .roomName(partner.getNickname())
-                .remainingTime(remainingTime)
+                .remainingTime(getRemainingTime(chatRoom))
                 .lastMessage(chatMessage.getContent())
                 .lastUpdatedAt(getLastUpdatedAt(chatMessage))
                 .update(isChatRoomUpdate(chatRoom, partner))
@@ -104,8 +101,36 @@ public class ChatRoomService {
                 .get();
     }
 
-    private int getRemainingTime(ChatRoom chatRoom) {
-        return (3 * DAY) - (int) chatRoom.getCreatedAt().until(LocalDateTime.now(), ChronoUnit.HOURS);
+    private String getRemainingTime(ChatRoom chatRoom) {
+        long createAt = chatRoom.getCreatedAt().atZone(ZoneOffset.UTC).toInstant().toEpochMilli();
+        long standard = chatRoom.getCreatedAt().minusDays(3).atZone(ZoneOffset.UTC).toInstant().toEpochMilli();
+        long differenceInMillis =  createAt - standard;
+
+        return "" +  getHours(differenceInMillis)
+                + ":" + getMinutes(differenceInMillis) +
+                ":" + getSeconds(differenceInMillis);
+    }
+
+    private long getHours(long differenceInMillis) {
+        long days = (differenceInMillis / (24 * 60 * 60 * 1000L)) % 365;
+        long hours = (differenceInMillis / (60 * 60 * 1000L)) % 24;
+        hours = convertToHours(days, hours);
+        return hours;
+    }
+
+    private long getMinutes(long differenceInMillis) {
+        return (differenceInMillis / (60 * 1000L)) % 60;
+    }
+
+    private long getSeconds(long differenceInMillis) {
+        return (differenceInMillis / 1000) % 60;
+    }
+
+    private long convertToHours(long days, long hours) {
+        if (days > 0){
+            hours += DAY * days;
+        }
+        return hours;
     }
 
     private com.maskting.backend.domain.User getPartner(Long id, ChatRoom chatRoom) {

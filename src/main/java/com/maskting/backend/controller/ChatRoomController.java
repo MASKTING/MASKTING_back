@@ -34,4 +34,10 @@ public class ChatRoomController {
     public ResponseEntity<?> getFollowers(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok(chatRoomService.getFollowers(user));
     }
+
+    @PostMapping("/reject/{nickname}")
+    public ResponseEntity<?> rejectFollower(@PathVariable String nickname, @AuthenticationPrincipal User user) {
+        chatRoomService.rejectFollower(nickname, user);
+        return ResponseEntity.ok().build();
+    }
 }

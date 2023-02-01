@@ -1,13 +1,12 @@
 package com.maskting.backend.service;
 
+import com.maskting.backend.common.exception.NoNicknameException;
 import com.maskting.backend.domain.*;
 import com.maskting.backend.dto.response.ChatMessageResponse;
 import com.maskting.backend.dto.response.ChatRoomResponse;
 import com.maskting.backend.dto.response.ChatRoomsResponse;
 import com.maskting.backend.dto.response.PartnerResponse;
-import com.maskting.backend.repository.ChatRoomRepository;
-import com.maskting.backend.repository.ChatUserRepository;
-import com.maskting.backend.repository.UserRepository;
+import com.maskting.backend.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
@@ -29,6 +28,8 @@ public class ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
     private final UserRepository userRepository;
     private final ChatUserRepository chatUserRepository;
+    private final FollowRepository followRepository;
+    private final ExclusionRepository exclusionRepository;
 
     public ChatRoom createRoom() {
         return chatRoomRepository.save(new ChatRoom());
@@ -104,9 +105,13 @@ public class ChatRoomService {
     private String getRemainingTime(ChatRoom chatRoom) {
         long createAt = chatRoom.getCreatedAt().atZone(ZoneOffset.UTC).toInstant().toEpochMilli();
         long standard = chatRoom.getCreatedAt().minusDays(3).atZone(ZoneOffset.UTC).toInstant().toEpochMilli();
-        long differenceInMillis =  createAt - standard;
-
-        return "" +  getHours(differenceInMillis)
+        long now = LocalDateTime.now().atZone(ZoneOffset.UTC).toInstant().toEpochMilli();
+        long differenceInMillis =  createAt - standard - (now - createAt);
+        long hours = getHours(differenceInMillis);
+        if (hours < 0){
+            return "00:00:00";
+        }
+        return "" + hours
                 + ":" + getMinutes(differenceInMillis) +
                 ":" + getSeconds(differenceInMillis);
     }
@@ -292,5 +297,21 @@ public class ChatRoomService {
         com.maskting.backend.domain.User user = getUser(userDetail);
         ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow();
         updateChatMessage(chatRoom, user);
+    }
+
+    @Transactional
+    public void rejectFollower(String nickname, User userDetail) {
+        com.maskting.backend.domain.User user = getUser(userDetail);
+        com.maskting.backend.domain.User partner = userRepository.findByNickname(nickname).orElseThrow(NoNicknameException::new);
+
+        followRepository.delete(followRepository.findByFollowingAndFollower(partner.getId(), user.getId()).orElseThrow());
+        exclusionRepository.save(buildExclusion(user, partner));
+        exclusionRepository.save(buildExclusion(partner, user));
+    }
+
+    private Exclusion buildExclusion(com.maskting.backend.domain.User active, com.maskting.backend.domain.User passive) {
+        return Exclusion.builder()
+                .activeExclusioner(active)
+                .passiveExclusioner(passive).build();
     }
 }

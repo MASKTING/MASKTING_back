@@ -242,4 +242,24 @@ class ChatRoomControllerTest {
                 .follower(user)
                 .build();
     }
+
+    @Test
+    @Transactional
+    @DisplayName("좋아요 거절")
+    @WithAuthUser(id = "providerId_" + "jason", role = "ROLE_USER")
+    void rejectFollower() throws Exception {
+        User user = userRepository.save(userFactory.createUser("홍길동", "jason"));
+        User partner1 = userRepository.save(userFactory.createUser("짱구", "gu"));
+        User partner2 = userRepository.save(userFactory.createUser("철수", "su"));
+        saveFollow(user, partner1);
+        saveFollow(user, partner2);
+
+        mockMvc.perform(
+                post(pre + "/reject/" + partner1.getNickname())
+                        .header("accessToken", jwtUtil.createAccessToken(user.getProviderId(), "ROLE_USER")))
+                .andExpect(status().isOk())
+                .andDo(document("chat/reject"));
+
+        assertEquals(1, followRepository.findAll().size());
+    }
 }

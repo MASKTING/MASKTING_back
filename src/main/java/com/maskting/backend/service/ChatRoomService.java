@@ -105,9 +105,13 @@ public class ChatRoomService {
     private String getRemainingTime(ChatRoom chatRoom) {
         long createAt = chatRoom.getCreatedAt().atZone(ZoneOffset.UTC).toInstant().toEpochMilli();
         long standard = chatRoom.getCreatedAt().minusDays(3).atZone(ZoneOffset.UTC).toInstant().toEpochMilli();
-        long differenceInMillis =  createAt - standard;
-
-        return "" +  getHours(differenceInMillis)
+        long now = LocalDateTime.now().atZone(ZoneOffset.UTC).toInstant().toEpochMilli();
+        long differenceInMillis =  createAt - standard - (now - createAt);
+        long hours = getHours(differenceInMillis);
+        if (hours < 0){
+            return "00:00:00";
+        }
+        return "" + hours
                 + ":" + getMinutes(differenceInMillis) +
                 ":" + getSeconds(differenceInMillis);
     }

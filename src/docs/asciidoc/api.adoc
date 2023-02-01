@@ -46,13 +46,14 @@ include::{snippets}/user/check-nickname-fail/http-response.adoc[]
 
 === sms 전송
 
-==== REQUEST
-
-include::{snippets}/user/sms/httpie-request.adoc[]
-
-==== RESPONSE
-
-include::{snippets}/user/sms/http-response.adoc[]
+잠깐 주석 처리
+//==== REQUEST
+//
+//include::{snippets}/user/sms/httpie-request.adoc[]
+//
+//==== RESPONSE
+//
+//include::{snippets}/user/sms/http-response.adoc[]
 
 === sms 확인
 
@@ -286,3 +287,13 @@ include::{snippets}/chat/follower/http-request.adoc[]
 ==== RESPONSE
 
 include::{snippets}/chat/follower//http-response.adoc[]
+
+=== 좋아요 거절
+
+==== REQUEST
+
+include::{snippets}/chat/reject/http-request.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/chat/reject//http-response.adoc[]

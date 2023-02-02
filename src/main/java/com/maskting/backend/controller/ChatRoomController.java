@@ -40,4 +40,9 @@ public class ChatRoomController {
         chatRoomService.rejectFollower(nickname, user);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/profiles")
+    public ResponseEntity<?> getFinalProfiles(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(chatRoomService.getFinalProfiles(user));
+    }
 }

@@ -2,10 +2,7 @@ package com.maskting.backend.service;
 
 import com.maskting.backend.common.exception.NoNicknameException;
 import com.maskting.backend.domain.*;
-import com.maskting.backend.dto.response.ChatMessageResponse;
-import com.maskting.backend.dto.response.ChatRoomResponse;
-import com.maskting.backend.dto.response.ChatRoomsResponse;
-import com.maskting.backend.dto.response.PartnerResponse;
+import com.maskting.backend.dto.response.*;
 import com.maskting.backend.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
@@ -285,10 +282,10 @@ public class ChatRoomService {
     }
 
     private PartnerResponse getPartnerResponse(com.maskting.backend.domain.User follower) {
-        return new PartnerResponse(follower.getNickname(), getProfile(follower), follower.getBio(), getFeeds(follower));
+        return new PartnerResponse(follower.getNickname(), getMaskProfile(follower), follower.getBio(), getFeeds(follower));
     }
 
-    private String getProfile(com.maskting.backend.domain.User follower) {
+    private String getMaskProfile(com.maskting.backend.domain.User follower) {
         return follower.getProfiles().get(ProfileType.MASK_PROFILE.getValue()).getPath();
     }
 
@@ -319,5 +316,14 @@ public class ChatRoomService {
         return Exclusion.builder()
                 .activeExclusioner(active)
                 .passiveExclusioner(passive).build();
+    }
+
+    public FinalProfileResponse getFinalProfiles(User userDetail) {
+        com.maskting.backend.domain.User user = getUser(userDetail);
+        List<Profile> profiles = user.getProfiles();
+        return FinalProfileResponse.builder()
+                .maskProfile(profiles.get(ProfileType.MASK_PROFILE.getValue()).getPath())
+                .defaultProfile(profiles.get(ProfileType.DEFAULT_PROFILE.getValue()).getPath())
+                .build();
     }
 }

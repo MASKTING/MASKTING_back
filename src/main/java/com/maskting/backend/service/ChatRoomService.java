@@ -108,12 +108,18 @@ public class ChatRoomService {
         long now = LocalDateTime.now().atZone(ZoneOffset.UTC).toInstant().toEpochMilli();
         long differenceInMillis =  createAt - standard - (now - createAt);
         long hours = getHours(differenceInMillis);
-        if (hours < 0){
+        long minutes = getMinutes(differenceInMillis);
+        long seconds = getSeconds(differenceInMillis);
+        if (isNegative(hours, minutes, seconds)){
             return "00:00:00";
         }
         return "" + hours
-                + ":" + getMinutes(differenceInMillis) +
-                ":" + getSeconds(differenceInMillis);
+                + ":" + minutes +
+                ":" + seconds;
+    }
+
+    private boolean isNegative(long hours, long minutes, long seconds) {
+        return hours < 0 || minutes < 0 || seconds < 0;
     }
 
     private long getHours(long differenceInMillis) {

@@ -262,4 +262,20 @@ class ChatRoomControllerTest {
 
         assertEquals(1, followRepository.findAll().size());
     }
+
+    @Test
+    @Transactional
+    @DisplayName("최종 프로필(본인) 사진 반환")
+    @WithAuthUser(id = "providerId_" + "jason", role = "ROLE_USER")
+    void getFinalProfiles() throws Exception {
+        User user = userRepository.save(userFactory.createUser("홍길동", "jason"));
+
+        mockMvc.perform(
+                get(pre + "/profiles")
+                        .header("accessToken", jwtUtil.createAccessToken(user.getProviderId(), "ROLE_USER")))
+                .andExpect(status().isOk())
+                .andExpect(result -> assertTrue(result.getResponse().getContentAsString().contains("MASK")))
+                .andExpect(result -> assertTrue(result.getResponse().getContentAsString().contains("DEFAULT")))
+                .andDo(document("chat/profiles"));
+    }
 }

@@ -297,3 +297,13 @@ include::{snippets}/chat/reject/http-request.adoc[]
 ==== RESPONSE
 
 include::{snippets}/chat/reject//http-response.adoc[]
+
+=== 최종 프로필(본인) 사진 반환
+
+==== REQUEST
+
+include::{snippets}/chat/profiles/http-request.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/chat/profiles/http-response.adoc[]

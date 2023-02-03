@@ -2,6 +2,7 @@ package com.maskting.backend.service;
 
 import com.maskting.backend.common.exception.NoNicknameException;
 import com.maskting.backend.domain.*;
+import com.maskting.backend.dto.request.FinalDecisionRequest;
 import com.maskting.backend.dto.response.*;
 import com.maskting.backend.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -183,13 +184,23 @@ public class ChatRoomService {
         }
     }
 
-    private ChatRoomResponse buildChatRoomResponse(ChatRoom chatRoom, com.maskting.backend.domain.User partner, List<ChatMessageResponse> chatRoomResponses) {
+    private ChatRoomResponse buildChatRoomResponse(ChatRoom chatRoom, com.maskting.backend.domain.User partner,
+                                                   List<ChatMessageResponse> chatRoomResponses) {
         return ChatRoomResponse.builder()
                 .profile(partner.getProfiles().get(ProfileType.MASK_PROFILE.getValue()).getPath())
                 .roomName(partner.getNickname())
                 .remainingTime(getRemainingTime(chatRoom))
                 .messages(chatRoomResponses)
+                .result(chatRoom.getResult().name())
+                .myDecision(getChatUserByPartner(chatRoom, partner).getDecision().name())
                 .build();
+    }
+
+    private ChatUser getChatUserByPartner(ChatRoom chatRoom, com.maskting.backend.domain.User partner) {
+        return chatRoom.getChatUsers()
+                .stream()
+                .filter(chatUser -> chatUser.getUser().getId() != partner.getId())
+                .findFirst().orElseThrow();
     }
 
     private ChatMessageResponse buildChatMessageResponse(List<ChatMessage> chatMessages, int i, StringBuilder createdAt) {
@@ -325,5 +336,53 @@ public class ChatRoomService {
                 .maskProfile(profiles.get(ProfileType.MASK_PROFILE.getValue()).getPath())
                 .defaultProfile(profiles.get(ProfileType.DEFAULT_PROFILE.getValue()).getPath())
                 .build();
+    }
+
+    @Transactional
+    public void decideFinalDecision(Long roomId, User userDetail, FinalDecisionRequest finalDecisionRequest) {
+        com.maskting.backend.domain.User user = getUser(userDetail);
+        ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow();
+        ChatUser chatUser = getChatUser(user, chatRoom);
+        updateDecision(chatUser, finalDecisionRequest);
+        updateRoomResult(user, chatRoom, chatUser);
+    }
+
+    private void updateRoomResult(com.maskting.backend.domain.User user, ChatRoom chatRoom, ChatUser chatUser) {
+        ChatUserDecision partnerDecision = getPartnerDecision(user, chatRoom);
+        if (!partnerDecision.equals(ChatUserDecision.STILL)) {
+            if (chatUser.getDecision() == ChatUserDecision.YES && partnerDecision == ChatUserDecision.YES) {
+                chatRoom.updateResult(ChatRoomResult.MATCH);
+                return;
+            }
+            chatRoom.updateResult(ChatRoomResult.FAIl);
+        }
+    }
+
+    private ChatUserDecision getPartnerDecision(com.maskting.backend.domain.User user, ChatRoom chatRoom) {
+        return getPartnerChatUserByUser(user, chatRoom).getDecision();
+    }
+
+    private void updateDecision(ChatUser chatUser, FinalDecisionRequest finalDecisionRequest) {
+        if (finalDecisionRequest.getDecision().equals(ChatUserDecision.YES.name())) {
+            chatUser.updateDecision(ChatUserDecision.YES);
+            return;
+        }
+        chatUser.updateDecision(ChatUserDecision.NO);
+    }
+
+    private ChatUser getPartnerChatUserByUser(com.maskting.backend.domain.User user, ChatRoom chatRoom) {
+        return chatRoom.getChatUsers()
+                .stream()
+                .filter(chatUser -> chatUser.getId() != user.getId())
+                .findFirst()
+                .orElseThrow();
+    }
+
+    private ChatUser getChatUser(com.maskting.backend.domain.User user, ChatRoom chatRoom) {
+        return chatRoom.getChatUsers()
+                .stream()
+                .filter(chatUser -> chatUser.getUser().getId() == user.getId())
+                .findFirst()
+                .orElseThrow();
     }
 }

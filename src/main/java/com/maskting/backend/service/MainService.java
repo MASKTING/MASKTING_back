@@ -337,6 +337,7 @@ public class MainService {
         ChatRoom chatRoom = chatRoomService.createRoom();
         chatRoom.addUser(chatUserService.createChatUser(sender, chatRoom), chatUserService.createChatUser(receiver, chatRoom));
         ChatMessageRequest message = new ChatMessageRequest(chatRoom.getId(), "System", "앞으로 72시간 대화를 나누며 서로를 알아갈 수 있어요.");
+        chatRoom.updateResult(ChatRoomResult.STILL);
         chatService.saveChatMessage(message);
     }
 

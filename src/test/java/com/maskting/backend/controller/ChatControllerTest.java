@@ -2,6 +2,7 @@ package com.maskting.backend.controller;
 
 import com.maskting.backend.config.StompFrameHandlerImpl;
 import com.maskting.backend.domain.ChatRoom;
+import com.maskting.backend.domain.ChatRoomResult;
 import com.maskting.backend.domain.User;
 import com.maskting.backend.dto.request.ChatMessageRequest;
 import com.maskting.backend.factory.UserFactory;
@@ -67,7 +68,7 @@ class ChatControllerTest {
         userFactory = new UserFactory();
         messages = new LinkedBlockingDeque<>();
         userRepository.save(userFactory.createUser("홍길동", "jason"));
-        chatRoomRepository.save(new ChatRoom(1L, new ArrayList<>(), new ArrayList<>()));
+        chatRoomRepository.save(new ChatRoom(1L, new ArrayList<>(), new ArrayList<>(), ChatRoomResult.STILL));
     }
 
     @AfterEach

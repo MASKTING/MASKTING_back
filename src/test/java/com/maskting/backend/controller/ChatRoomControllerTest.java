@@ -1,8 +1,10 @@
 package com.maskting.backend.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maskting.backend.auth.WithAuthUser;
 import com.maskting.backend.domain.*;
 import com.maskting.backend.dto.request.ChatMessageRequest;
+import com.maskting.backend.dto.request.FinalDecisionRequest;
 import com.maskting.backend.factory.UserFactory;
 import com.maskting.backend.repository.*;
 import com.maskting.backend.service.ChatService;
@@ -15,6 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.ActiveProfiles;
@@ -65,6 +68,9 @@ class ChatRoomControllerTest {
     @Autowired
     private FollowRepository followRepository;
 
+    @Autowired
+    ObjectMapper objectMapper;
+
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
@@ -108,10 +114,10 @@ class ChatRoomControllerTest {
         );
         chatService.saveChatMessage(new ChatMessageRequest(chatRoom2.getId(), user.getNickname(), "room2 마지막 메시지"));
 
-        ChatUser chatUserInRoom1 = chatUserRepository.save(new ChatUser(10L, user, chatRoom1));
-        ChatUser chatPartner1 = chatUserRepository.save(new ChatUser(20L, partner1, chatRoom1));
-        ChatUser chatUserInRoom2 = chatUserRepository.save(new ChatUser(30L, user, chatRoom2));
-        ChatUser chatPartner2 = chatUserRepository.save(new ChatUser(40L, partner2, chatRoom2));
+        ChatUser chatUserInRoom1 = chatUserRepository.save(createChatUser(user, chatRoom1, 10L));
+        ChatUser chatPartner1 = chatUserRepository.save(createChatUser(partner1, chatRoom1, 20L));
+        ChatUser chatUserInRoom2 = chatUserRepository.save(createChatUser(user, chatRoom2, 30L));
+        ChatUser chatPartner2 = chatUserRepository.save(createChatUser(partner2, chatRoom2, 40L));
         chatRoom1.addUser(chatUserInRoom1, chatPartner1);
         chatRoom2.addUser(chatUserInRoom2, chatPartner2);
 
@@ -137,12 +143,12 @@ class ChatRoomControllerTest {
         User user = userRepository.save(userFactory.createUser("홍길동", "jason"));
         User partner = userRepository.save(userFactory.createUser("짱구", "gu"));
 
-        ChatRoom chatRoom = chatRoomRepository.save(new ChatRoom(1L, new ArrayList<>(), new ArrayList<>()));
+        ChatRoom chatRoom = chatRoomRepository.save(createChatRoom());
         chatService.saveChatMessage(new ChatMessageRequest(chatRoom.getId(), partner.getNickname(), "안녕"));
         chatService.saveChatMessage(new ChatMessageRequest(chatRoom.getId(), partner.getNickname(), "이름이 뭐야?"));
 
-        ChatUser chatUser = chatUserRepository.save(new ChatUser(1L, user, chatRoom));
-        ChatUser chatPartner = chatUserRepository.save(new ChatUser(2L, partner, chatRoom));
+        ChatUser chatUser = chatUserRepository.save(createChatUser(user, chatRoom, 1L));
+        ChatUser chatPartner = chatUserRepository.save(createChatUser(partner, chatRoom, 2L));
         chatRoom.addUser(chatUser, chatPartner);
 
         mockMvc.perform(
@@ -156,6 +162,14 @@ class ChatRoomControllerTest {
                 .andDo(document("chat/room"));
 
         checkChatMessageChecked(user);
+    }
+
+    private ChatUser createChatUser(User user, ChatRoom chatRoom, long id) {
+        return new ChatUser(id, user, chatRoom, ChatUserDecision.STILL);
+    }
+
+    private ChatRoom createChatRoom() {
+        return new ChatRoom(1L, new ArrayList<>(), new ArrayList<>(), ChatRoomResult.STILL);
     }
 
     private void checkChatMessageChecked(User user) {
@@ -182,12 +196,12 @@ class ChatRoomControllerTest {
         User user = userRepository.save(userFactory.createUser("홍길동", "jason"));
         User partner = userRepository.save(userFactory.createUser("짱구", "gu"));
 
-        ChatRoom chatRoom = chatRoomRepository.save(new ChatRoom(1L, new ArrayList<>(), new ArrayList<>()));
+        ChatRoom chatRoom = chatRoomRepository.save(createChatRoom());
         chatService.saveChatMessage(new ChatMessageRequest(chatRoom.getId(), partner.getNickname(), "안녕"));
         chatService.saveChatMessage(new ChatMessageRequest(chatRoom.getId(), partner.getNickname(), "이름이 뭐야?"));
 
-        ChatUser chatUser = chatUserRepository.save(new ChatUser(1L, user, chatRoom));
-        ChatUser chatPartner = chatUserRepository.save(new ChatUser(2L, partner, chatRoom));
+        ChatUser chatUser = chatUserRepository.save(createChatUser(user, chatRoom, 1L));
+        ChatUser chatPartner = chatUserRepository.save(createChatUser(partner, chatRoom, 2L));
         chatRoom.addUser(chatUser, chatPartner);
 
         mockMvc.perform(
@@ -277,5 +291,35 @@ class ChatRoomControllerTest {
                 .andExpect(result -> assertTrue(result.getResponse().getContentAsString().contains("MASK")))
                 .andExpect(result -> assertTrue(result.getResponse().getContentAsString().contains("DEFAULT")))
                 .andDo(document("chat/profiles"));
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("최종 결정")
+    @WithAuthUser(id = "providerId_" + "jason", role = "ROLE_USER")
+    void decideFinalDecision() throws Exception {
+        User user = userRepository.save(userFactory.createUser("홍길동", "jason"));
+        User partner = userRepository.save(userFactory.createUser("짱구", "gu"));
+
+        ChatRoom chatRoom = chatRoomRepository.save(createChatRoom());
+        chatService.saveChatMessage(new ChatMessageRequest(chatRoom.getId(), partner.getNickname(), "안녕"));
+        chatService.saveChatMessage(new ChatMessageRequest(chatRoom.getId(), partner.getNickname(), "이름이 뭐야?"));
+
+        ChatUser chatUser = chatUserRepository.save(createChatUser(user, chatRoom, 1L));
+        ChatUser chatPartner = chatUserRepository.save(createChatUser(partner, chatRoom, 2L));
+        chatPartner.updateDecision(ChatUserDecision.YES);
+        chatRoom.addUser(chatUser, chatPartner);
+        String content = objectMapper.writeValueAsString(new FinalDecisionRequest(ChatUserDecision.YES.name()));
+
+        assertEquals(ChatRoomResult.STILL, chatRoom.getResult());
+        mockMvc.perform(
+                post(pre + "/room/" + chatRoom.getId() + "/decision")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("accessToken", jwtUtil.createAccessToken(user.getProviderId(), "ROLE_USER")))
+                .andExpect(status().isOk())
+                .andDo(document("chat/decision"));
+
+        assertEquals(ChatRoomResult.MATCH, chatRoom.getResult());
     }
 }

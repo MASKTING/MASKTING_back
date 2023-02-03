@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +24,9 @@ public class ChatRoom extends BaseTimeEntity{
 
     @OneToMany(mappedBy = "chatRoom")
     private List<ChatMessage> chatMessages = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    private ChatRoomResult result;
 
     public void addUser(ChatUser sendUser, ChatUser receiveUser) {
         chatUsers.add(sendUser);

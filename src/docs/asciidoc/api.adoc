@@ -307,3 +307,16 @@ include::{snippets}/chat/profiles/http-request.adoc[]
 ==== RESPONSE
 
 include::{snippets}/chat/profiles/http-response.adoc[]
+
+=== 최종 결정
+
+==== REQUEST
+
+- 가면 공개할거면: "YES"
+- 공개하지 않을거면: "NO"
+
+include::{snippets}/chat/decision/http-request.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/chat/decision/http-response.adoc[]

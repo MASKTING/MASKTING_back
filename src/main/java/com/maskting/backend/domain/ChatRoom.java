@@ -36,4 +36,8 @@ public class ChatRoom extends BaseTimeEntity{
     public void addMessage(ChatMessage message) {
         chatMessages.add(message);
     }
+
+    public void updateResult(ChatRoomResult result) {
+        this.result = result;
+    }
 }

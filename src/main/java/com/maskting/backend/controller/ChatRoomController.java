@@ -1,5 +1,6 @@
 package com.maskting.backend.controller;
 
+import com.maskting.backend.dto.request.FinalDecisionRequest;
 import com.maskting.backend.service.ChatRoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -44,5 +45,12 @@ public class ChatRoomController {
     @GetMapping("/profiles")
     public ResponseEntity<?> getFinalProfiles(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok(chatRoomService.getFinalProfiles(user));
+    }
+
+    @PostMapping("/room/{roomId}/decision")
+    public ResponseEntity<?> decideFinalDecision(@PathVariable Long roomId, @AuthenticationPrincipal User user,
+                                                 @RequestBody FinalDecisionRequest finalDecisionRequest) {
+        chatRoomService.decideFinalDecision(roomId, user, finalDecisionRequest);
+        return ResponseEntity.ok().build();
     }
 }

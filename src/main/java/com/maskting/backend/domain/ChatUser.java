@@ -25,4 +25,8 @@ public class ChatUser {
 
     @Enumerated(EnumType.STRING)
     private ChatUserDecision decision;
+
+    public void updateDecision(ChatUserDecision decision) {
+        this.decision = decision;
+    }
 }

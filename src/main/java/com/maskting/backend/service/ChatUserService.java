@@ -2,6 +2,7 @@ package com.maskting.backend.service;
 
 import com.maskting.backend.domain.ChatRoom;
 import com.maskting.backend.domain.ChatUser;
+import com.maskting.backend.domain.ChatUserDecision;
 import com.maskting.backend.domain.User;
 import com.maskting.backend.repository.ChatUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class ChatUserService {
         return ChatUser.builder()
                 .user(user)
                 .chatRoom(chatRoom)
+                .decision(ChatUserDecision.STILL)
                 .build();
     }
 

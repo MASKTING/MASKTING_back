@@ -19,6 +19,10 @@ public class ChatRoomResponse {
 
     private String remainingTime;
 
+    private String result;
+
+    private String myDecision;
+
     private List<ChatMessageResponse> messages;
 
 }

@@ -183,13 +183,23 @@ public class ChatRoomService {
         }
     }
 
-    private ChatRoomResponse buildChatRoomResponse(ChatRoom chatRoom, com.maskting.backend.domain.User partner, List<ChatMessageResponse> chatRoomResponses) {
+    private ChatRoomResponse buildChatRoomResponse(ChatRoom chatRoom, com.maskting.backend.domain.User partner,
+                                                   List<ChatMessageResponse> chatRoomResponses) {
         return ChatRoomResponse.builder()
                 .profile(partner.getProfiles().get(ProfileType.MASK_PROFILE.getValue()).getPath())
                 .roomName(partner.getNickname())
                 .remainingTime(getRemainingTime(chatRoom))
                 .messages(chatRoomResponses)
+                .result(chatRoom.getResult().name())
+                .myDecision(getChatUserByPartner(chatRoom, partner).getDecision().name())
                 .build();
+    }
+
+    private ChatUser getChatUserByPartner(ChatRoom chatRoom, com.maskting.backend.domain.User partner) {
+        return chatRoom.getChatUsers()
+                .stream()
+                .filter(chatUser -> chatUser.getUser().getId() != partner.getId())
+                .findFirst().orElseThrow();
     }
 
     private ChatMessageResponse buildChatMessageResponse(List<ChatMessage> chatMessages, int i, StringBuilder createdAt) {

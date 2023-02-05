@@ -300,11 +300,7 @@ class ChatRoomControllerTest {
     void decideFinalDecision() throws Exception {
         User user = userRepository.save(userFactory.createUser("홍길동", "jason"));
         User partner = userRepository.save(userFactory.createUser("짱구", "gu"));
-
         ChatRoom chatRoom = chatRoomRepository.save(createChatRoom());
-        chatService.saveChatMessage(new ChatMessageRequest(chatRoom.getId(), partner.getNickname(), "안녕"));
-        chatService.saveChatMessage(new ChatMessageRequest(chatRoom.getId(), partner.getNickname(), "이름이 뭐야?"));
-
         ChatUser chatUser = chatUserRepository.save(createChatUser(user, chatRoom, 1L));
         ChatUser chatPartner = chatUserRepository.save(createChatUser(partner, chatRoom, 2L));
         chatPartner.updateDecision(ChatUserDecision.YES);
@@ -321,5 +317,30 @@ class ChatRoomControllerTest {
                 .andDo(document("chat/decision"));
 
         assertEquals(ChatRoomResult.MATCH, chatRoom.getResult());
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("최종 매칭 정보 반환")
+    @WithAuthUser(id = "providerId_" + "jason", role = "ROLE_USER")
+    void getFinalMatchingInfo() throws Exception {
+        User user = userRepository.save(userFactory.createUser("홍길동", "jason"));
+        User partner = userRepository.save(userFactory.createUser("짱구", "gu"));
+        ChatRoom chatRoom = chatRoomRepository.save(createChatRoom());
+        ChatUser chatUser = chatUserRepository.save(createChatUser(user, chatRoom, 1L));
+        ChatUser chatPartner = chatUserRepository.save(createChatUser(partner, chatRoom, 2L));
+        chatPartner.updateDecision(ChatUserDecision.YES);
+        chatRoom.addUser(chatUser, chatPartner);
+
+        assertEquals(ChatRoomResult.STILL, chatRoom.getResult());
+        mockMvc.perform(
+                get(pre + "/room/" + chatRoom.getId() + "/matching")
+                        .header("accessToken", jwtUtil.createAccessToken(user.getProviderId(), "ROLE_USER")))
+                .andExpect(status().isOk())
+                .andExpect(result -> assertTrue(result.getResponse().getContentAsString().contains("DEFAULT")))
+                .andExpect(result -> assertFalse(result.getResponse().getContentAsString().contains("MASK")))
+                .andExpect(result -> assertTrue(result.getResponse().getContentAsString().contains(partner.getNickname())))
+                .andExpect(result -> assertTrue(result.getResponse().getContentAsString().contains(partner.getPhone())))
+                .andDo(document("chat/matching"));
     }
 }

@@ -320,3 +320,13 @@ include::{snippets}/chat/decision/http-request.adoc[]
 ==== RESPONSE
 
 include::{snippets}/chat/decision/http-response.adoc[]
+
+=== 최종 매칭 정보 반환
+
+==== REQUEST
+
+include::{snippets}/chat/matching/http-request.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/chat/matching/http-response.adoc[]

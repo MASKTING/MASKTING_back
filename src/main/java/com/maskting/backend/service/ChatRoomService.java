@@ -45,7 +45,7 @@ public class ChatRoomService {
     private void addChatRoomsResponse(com.maskting.backend.domain.User user, List<ChatRoomsResponse> chatRoomResponses, List<Long> chatRoomId) {
         for (Long id : chatRoomId) {
             ChatRoom chatRoom = chatRoomRepository.findById(id).orElseThrow();
-            com.maskting.backend.domain.User partner = getPartner(user.getId(), chatRoom);
+            com.maskting.backend.domain.User partner = getPartnerByUser(user.getId(), chatRoom);
 
             chatRoomResponses.add(buildChatRoomsResponse(id, chatRoom, partner));
         }
@@ -142,7 +142,7 @@ public class ChatRoomService {
         return hours;
     }
 
-    private com.maskting.backend.domain.User getPartner(Long id, ChatRoom chatRoom) {
+    private com.maskting.backend.domain.User getPartnerByUser(Long id, ChatRoom chatRoom) {
         return chatRoom.getChatUsers()
                 .stream()
                 .filter(r -> r.getUser().getId() != id)
@@ -155,7 +155,7 @@ public class ChatRoomService {
     public ChatRoomResponse getChatRoom(Long roomId, User userDetail) {
         ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow();
         com.maskting.backend.domain.User user = getUser(userDetail);
-        com.maskting.backend.domain.User partner = getPartner(user.getId(), chatRoom);
+        com.maskting.backend.domain.User partner = getPartnerByUser(user.getId(), chatRoom);
         List<ChatMessage> chatMessages = getChatMessages(chatRoom);
         List<ChatMessageResponse> chatRoomResponses = new ArrayList<>();
 
@@ -384,5 +384,22 @@ public class ChatRoomService {
                 .filter(chatUser -> chatUser.getUser().getId() == user.getId())
                 .findFirst()
                 .orElseThrow();
+    }
+
+    public FinalMatchingResponse getFinalMatchingInfo(Long roomId, User userDetail) {
+        com.maskting.backend.domain.User user = getUser(userDetail);
+        ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow();
+        com.maskting.backend.domain.User partner = getPartnerByUser(user.getId(), chatRoom);
+        return FinalMatchingResponse
+                .builder()
+                .myProfile(getProfile(user))
+                .partnerProfile(getProfile(partner))
+                .partnerNickname(partner.getNickname())
+                .partnerNumber(partner.getPhone())
+                .build();
+    }
+
+    private String getProfile(com.maskting.backend.domain.User partner) {
+        return partner.getProfiles().get(ProfileType.DEFAULT_PROFILE.getValue()).getPath();
     }
 }

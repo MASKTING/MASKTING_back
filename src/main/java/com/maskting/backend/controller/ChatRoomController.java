@@ -53,4 +53,9 @@ public class ChatRoomController {
         chatRoomService.decideFinalDecision(roomId, user, finalDecisionRequest);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/room/{roomId}/matching")
+    public ResponseEntity<?> getFinalMatchingInfo(@PathVariable Long roomId, @AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(chatRoomService.getFinalMatchingInfo(roomId, user));
+    }
 }

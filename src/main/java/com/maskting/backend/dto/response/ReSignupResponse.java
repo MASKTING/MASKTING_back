@@ -12,10 +12,24 @@ import lombok.Setter;
 public class ReSignupResponse {
 
     private String name;
+
     private String birth;
+
     private int height;
+
     private String nickname;
+
     private String bio;
-    private String profile;
-    private String maskProfile;
+
+    private String profilePath;
+
+    private byte[] profile;
+
+    private String profileType;
+
+    private String maskProfilePath;
+
+    private byte[] maskProfile;
+
+    private String maskProfileType;
 }

@@ -1,15 +1,14 @@
 package com.maskting.backend.util;
 
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
 import com.maskting.backend.dto.response.S3Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -67,5 +66,11 @@ public class S3Uploader {
 
     public void delete(String name) {
         amazonS3Client.deleteObject(bucket, name);
+    }
+
+    public byte[] download(String fileUrl) throws IOException {
+        S3Object s3Object = amazonS3Client.getObject(new GetObjectRequest(bucket, fileUrl));
+        S3ObjectInputStream objectContent = s3Object.getObjectContent();
+        return IOUtils.toByteArray(objectContent);
     }
 }

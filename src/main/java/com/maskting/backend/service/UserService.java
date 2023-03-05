@@ -268,16 +268,40 @@ public class UserService {
         return userRepository.findByProviderId(userDetail.getUsername());
     }
 
-    public ReSignupResponse getReSignupInfo(org.springframework.security.core.userdetails.User userDetail) {
+    public ReSignupResponse getReSignupInfo(org.springframework.security.core.userdetails.User userDetail) throws IOException {
         User user = getUserByProviderId(userDetail);
         return getReSignupResponse(user);
     }
 
-    private ReSignupResponse getReSignupResponse(User user) {
+    private ReSignupResponse getReSignupResponse(User user) throws IOException {
         ReSignupResponse reSignupResponse = modelMapper.map(user, ReSignupResponse.class);
-        reSignupResponse.setProfile(user.getProfiles().get(ProfileType.DEFAULT_PROFILE.getValue()).getPath());
-        reSignupResponse.setMaskProfile(user.getProfiles().get(ProfileType.MASK_PROFILE.getValue()).getPath());
+        List<Profile> profiles = user.getProfiles();
+        updateProfile(reSignupResponse, profiles);
         return reSignupResponse;
+    }
+
+    private void updateProfile(ReSignupResponse reSignupResponse, List<Profile> profiles) throws IOException {
+        reSignupResponse.setProfilePath(getS3Path(profiles, ProfileType.DEFAULT_PROFILE));
+        String s3ProfileName = getS3Name(profiles, ProfileType.DEFAULT_PROFILE);
+        reSignupResponse.setProfile(s3Uploader.download(s3ProfileName));
+        reSignupResponse.setProfileType(getImageType(s3ProfileName));
+        reSignupResponse.setMaskProfilePath(getS3Path(profiles, ProfileType.MASK_PROFILE));
+        String s3MaskProfileName = getS3Name(profiles, ProfileType.MASK_PROFILE);
+        reSignupResponse.setMaskProfile((s3Uploader.download(s3MaskProfileName)));
+        reSignupResponse.setMaskProfileType(getImageType(s3MaskProfileName));
+    }
+
+    private String getImageType(String s3ProfileName) {
+        String[] split = s3ProfileName.split("\\.");
+        return split[split.length - 1];
+    }
+
+    private String getS3Path(List<Profile> profiles, ProfileType profileType) {
+        return profiles.get(profileType.getValue()).getPath();
+    }
+
+    private String getS3Name(List<Profile> profiles, ProfileType profileType) {
+        return profiles.get(profileType.getValue()).getName();
     }
 
     @Transactional
@@ -291,6 +315,7 @@ public class UserService {
 
     private void deleteProfiles(User user) {
         for (Profile profile : user.getProfiles()) {
+            profileRepository.delete(profile);
             s3Uploader.delete(profile.getName());
         }
     }
